@@ -1,0 +1,6 @@
+app/config/config.php
+logs/
+.DS_Store
+error_log
+.idea/
+.vscode/
