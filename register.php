@@ -68,18 +68,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($checkSlug->fetch()) {
                     $error = 'This subdomain is already in use by another agency';
                 } else {
-                    // Look up plan limits from saas_plans
-                    $planStmt = $pdo->prepare("SELECT * FROM saas_plans WHERE name = :name LIMIT 1");
-                    $planStmt->execute(['name' => $planName]);
-                    $planData = $planStmt->fetch();
-                    
                     $maxOffers = 100;
                     $maxPublishers = 100;
                     $maxAdvertisers = 20;
-                    if ($planData) {
-                        $maxOffers = $planData['offers_limit'] === 'Unlimited' ? 999999 : (int)$planData['offers_limit'];
-                        $maxPublishers = $planData['publishers_limit'] === 'Unlimited' ? 999999 : (int)$planData['publishers_limit'];
-                        $maxAdvertisers = $planData['advertisers_limit'] === 'Unlimited' ? 999999 : (int)$planData['advertisers_limit'];
+
+                    try {
+                        $planStmt = $pdo->prepare("SELECT * FROM saas_plans WHERE name = :name LIMIT 1");
+                        $planStmt->execute(['name' => $planName]);
+                        $planData = $planStmt->fetch();
+                        
+                        if ($planData) {
+                            $maxOffers = $planData['offers_limit'] === 'Unlimited' ? 999999 : (int)$planData['offers_limit'];
+                            $maxPublishers = $planData['publishers_limit'] === 'Unlimited' ? 999999 : (int)$planData['publishers_limit'];
+                            $maxAdvertisers = $planData['advertisers_limit'] === 'Unlimited' ? 999999 : (int)$planData['advertisers_limit'];
+                        }
+                    } catch (Exception $e) {
+                        // Fallback limits if table is missing
+                        if ($planName === 'Professional') {
+                            $maxOffers = 500;
+                            $maxPublishers = 500;
+                            $maxAdvertisers = 100;
+                        } elseif ($planName === 'Enterprise') {
+                            $maxOffers = 999999;
+                            $maxPublishers = 999999;
+                            $maxAdvertisers = 999999;
+                        }
                     }
 
                     // Database Transaction to set up new workspace
@@ -985,7 +998,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
 
                 <?php if (is_root_domain()): 
-                    $plans = $pdo->query("SELECT * FROM saas_plans ORDER BY id ASC")->fetchAll();
+                    try {
+                        $plans = $pdo->query("SELECT * FROM saas_plans ORDER BY id ASC")->fetchAll();
+                    } catch (Exception $e) {
+                        // Safe fallback if table doesn't exist on server yet
+                        $plans = [
+                            [
+                                'name' => 'Starter',
+                                'price' => '$99/mo',
+                                'color' => '#60a5fa',
+                                'offers_limit' => '100',
+                                'publishers_limit' => '100',
+                                'advertisers_limit' => '20'
+                            ],
+                            [
+                                'name' => 'Professional',
+                                'price' => '$299/mo',
+                                'color' => '#c084fc',
+                                'offers_limit' => '500',
+                                'publishers_limit' => '500',
+                                'advertisers_limit' => '100'
+                            ],
+                            [
+                                'name' => 'Enterprise',
+                                'price' => '$999/mo',
+                                'color' => '#34d399',
+                                'offers_limit' => 'Unlimited',
+                                'publishers_limit' => 'Unlimited',
+                                'advertisers_limit' => 'Unlimited'
+                            ]
+                        ];
+                    }
                 ?>
                     <div class="form-header">
                         <h2>Create your agency account</h2>
