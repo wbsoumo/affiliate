@@ -255,7 +255,7 @@ $offers = $recentOffers->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Edit Advertiser | Admin Panel | GVS Icon Media</title>
+    <title>Edit Advertiser | Admin Panel | Taskbazi</title>
     
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -1194,7 +1194,7 @@ $offers = $recentOffers->fetchAll(PDO::FETCH_ASSOC);
         <div class="float-right d-none d-sm-inline">
             <strong>Admin Panel v3.0</strong>
         </div>
-        <strong>Copyright &copy; <?php echo date('Y'); ?> <a href="#">GVS Icon Media</a>.</strong> All rights reserved.
+        <strong>Copyright &copy; <?php echo date('Y'); ?> <a href="#">Taskbazi</a>.</strong> All rights reserved.
     </footer>
 </div>
 

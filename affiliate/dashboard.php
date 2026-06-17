@@ -203,7 +203,7 @@ $todayClicks = $todayStmt->fetchColumn();
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Dashboard | GVS Icon Media</title>
+    <title>Dashboard | Taskbazi</title>
     
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -426,7 +426,7 @@ $todayClicks = $todayStmt->fetchColumn();
         <a href="dashboard.php" class="brand-link text-center">
             <span class="brand-text font-weight-light" style="font-size: 1.5rem;">
                 <i class="fas fa-rocket mr-2"></i>
-                <strong>GVS Icon Media</strong>
+                <strong>Taskbazi</strong>
             </span>
         </a>
 

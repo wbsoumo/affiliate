@@ -665,6 +665,31 @@ CREATE TABLE `users` (
   CONSTRAINT `users_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
+-- -----------------------------------------------------
+-- Table structure for table `saas_plans`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `saas_plans`;
+CREATE TABLE `saas_plans` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `name` VARCHAR(50) NOT NULL UNIQUE,
+  `price` VARCHAR(50) NOT NULL,
+  `offers_limit` VARCHAR(50) NOT NULL,
+  `publishers_limit` VARCHAR(50) NOT NULL,
+  `advertisers_limit` VARCHAR(50) NOT NULL,
+  `description` TEXT,
+  `color` VARCHAR(20) DEFAULT '#60a5fa',
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Seed default plans
+INSERT INTO `saas_plans` (`name`, `price`, `offers_limit`, `publishers_limit`, `advertisers_limit`, `description`, `color`)
+VALUES 
+('Starter', '$99/mo', '100', '100', '20', 'Great for starting out or testing workflows.', '#60a5fa'),
+('Professional', '$299/mo', '500', '500', '100', 'Designed for growing affiliate networks.', '#c084fc'),
+('Enterprise', '$999/mo', 'Unlimited', 'Unlimited', 'Unlimited', 'Uncapped limits and VIP support for large operations.', '#34d399')
+ON DUPLICATE KEY UPDATE `price` = VALUES(`price`);
+
 SET FOREIGN_KEY_CHECKS = 1;
 -- =====================================================
 -- Phase 1: Seed SaaS Super Admin and Default Tenant

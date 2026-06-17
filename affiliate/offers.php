@@ -207,7 +207,7 @@ $topOffers = $topStmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Offers | GVS Icon Media</title>
+    <title>Offers | Taskbazi</title>
     
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -517,7 +517,7 @@ $topOffers = $topStmt->fetchAll(PDO::FETCH_ASSOC);
         <a href="dashboard.php" class="brand-link text-center">
             <span class="brand-text font-weight-light" style="font-size: 1.5rem;">
                 <i class="fas fa-rocket mr-2"></i>
-                <strong>GVS Icon Media</strong>
+                <strong>Taskbazi</strong>
             </span>
         </a>
 
@@ -1012,9 +1012,9 @@ $topOffers = $topStmt->fetchAll(PDO::FETCH_ASSOC);
     <!-- Footer -->
     <footer class="main-footer">
         <div class="float-right d-none d-sm-inline">
-            <strong>GVS Icon Media v3.0</strong>
+            <strong>Taskbazi v3.0</strong>
         </div>
-        <strong>Copyright &copy; <?php echo date('Y'); ?> <a href="#">GVS Icon Media</a>.</strong> All rights reserved.
+        <strong>Copyright &copy; <?php echo date('Y'); ?> <a href="#">Taskbazi</a>.</strong> All rights reserved.
     </footer>
 </div>
 

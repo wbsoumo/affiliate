@@ -1,6 +1,6 @@
 # Multi-Tenant SaaS Affiliate Tracking Platform Upgrade
 
-This project transforms a legacy single-tenant procedural PHP affiliate system (GVS Icon Media) into a robust, multi-tenant SaaS tracking platform. Multiple independent network customers run their isolated dashboards (`/admin`, `/affiliate`, `/advertiser`) on separate subdomains or custom domains resolved dynamically via hostnames, while a global super admin controls all configurations from `/superadmin`.
+This project transforms a legacy single-tenant procedural PHP affiliate system (Taskbazi) into a robust, multi-tenant SaaS tracking platform. Multiple independent network customers run their isolated dashboards (`/admin`, `/affiliate`, `/advertiser`) on separate subdomains or custom domains resolved dynamically via hostnames, while a global super admin controls all configurations from `/superadmin`.
 
 ---
 

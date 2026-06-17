@@ -892,7 +892,7 @@ $totalProfit = $summary['total_revenue_all'] - $summary['total_payout_all'];
             </div>
         </div>
     </div>
-    <footer class="main-footer"><strong>Copyright &copy; <?php echo date('Y'); ?> GVS Icon Media.</strong> All rights reserved.</footer>
+    <footer class="main-footer"><strong>Copyright &copy; <?php echo date('Y'); ?> Taskbazi.</strong> All rights reserved.</footer>
 </div>
 
 <!-- Scripts -->

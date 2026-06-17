@@ -259,7 +259,7 @@ if (!empty($_GET['action']) && !empty($_GET['id'])) {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Campaign Management | Advertiser Panel | GVS Icon Media</title>
+    <title>Campaign Management | Advertiser Panel | Taskbazi</title>
     
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -1066,7 +1066,7 @@ if (!empty($_GET['action']) && !empty($_GET['id'])) {
         <div class="float-right d-none d-sm-inline">
             <strong>Advertiser Panel v3.0</strong>
         </div>
-        <strong>Copyright &copy; <?php echo date('Y'); ?> GVS Icon Media.</strong> All rights reserved.
+        <strong>Copyright &copy; <?php echo date('Y'); ?> Taskbazi.</strong> All rights reserved.
     </footer>
 </div>
 
