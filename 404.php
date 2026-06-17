@@ -1,5 +1,7 @@
 <?php
-define('APP_INIT', true);
+if (!defined('APP_INIT')) {
+    define('APP_INIT', true);
+}
 require_once __DIR__ . '/app/config/database.php';
 
 // Check if user is logged in to customize the experience
