@@ -1,6 +1,7 @@
 <?php
 /**
- * Taskbazi SaaS Affiliate Tracker - Premium High-Tech Landing Page
+ * Taskbazi SaaS Affiliate Tracker - Enterprise Landing Page
+ * Inspired by Affise and Offer18
  * Light Mode & Fully Responsive
  * PHP 7.1+
  */
@@ -23,7 +24,7 @@ try {
             'publishers_limit' => '100',
             'advertisers_limit' => '20',
             'description' => 'Great for starting out or testing workflows.',
-            'color' => '#3b82f6'
+            'color' => '#2563eb'
         ],
         [
             'name' => 'Professional',
@@ -51,7 +52,7 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Taskbazi · High-Tech Performance Affiliate Tracking Platform</title>
+    <title>Taskbazi · Enterprise Affiliate Tracking & Partner Marketing Platform</title>
     <!-- Google Fonts: Outfit (Brand/Headers) & Inter (Body) -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <!-- Font Awesome 6 -->
@@ -64,11 +65,12 @@ try {
             --text-dark: #0f172a;
             --text-medium: #334155;
             --text-light: #64748b;
-            --primary: #4f46e5;
-            --primary-light: #e0e7ff;
-            --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #2563eb 100%);
+            --primary: #2563eb;
+            --primary-light: #eff6ff;
+            --primary-gradient: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
             --border-color: rgba(226, 232, 240, 0.8);
             --shadow-premium: 0 20px 40px -15px rgba(15, 23, 42, 0.05);
+            --shadow-card: 0 10px 30px -10px rgba(15, 23, 42, 0.03);
             --font-display: 'Outfit', sans-serif;
             --font-sans: 'Inter', sans-serif;
         }
@@ -102,7 +104,7 @@ try {
         /* HEADER / NAVIGATION */
         header {
             border-bottom: 1px solid var(--border-color);
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(12px);
             position: sticky;
             top: 0;
@@ -122,7 +124,7 @@ try {
             align-items: center;
             gap: 10px;
             font-family: var(--font-display);
-            font-size: 24px;
+            font-size: 26px;
             font-weight: 900;
             color: var(--text-dark);
             text-decoration: none;
@@ -130,7 +132,7 @@ try {
 
         .logo i {
             color: var(--primary);
-            filter: drop-shadow(0 4px 6px rgba(79, 70, 229, 0.2));
+            filter: drop-shadow(0 4px 6px rgba(37, 99, 235, 0.2));
         }
 
         .nav-links {
@@ -162,7 +164,7 @@ try {
             align-items: center;
             justify-content: center;
             gap: 8px;
-            padding: 12px 24px;
+            padding: 12px 26px;
             border-radius: 100px;
             font-weight: 700;
             text-decoration: none;
@@ -186,12 +188,12 @@ try {
         .btn-primary {
             background: var(--primary-gradient);
             color: white;
-            box-shadow: 0 8px 16px rgba(79, 70, 229, 0.2);
+            box-shadow: 0 8px 16px rgba(37, 99, 235, 0.15);
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 12px 20px rgba(79, 70, 229, 0.35);
+            box-shadow: 0 12px 20px rgba(37, 99, 235, 0.3);
         }
 
         /* MOBILE MENU TOGGLE */
@@ -204,20 +206,15 @@ try {
 
         /* HERO SECTION */
         .hero {
-            padding: 80px 0 100px;
-            position: relative;
-            background: radial-gradient(circle at top right, rgba(99, 102, 241, 0.05) 0%, transparent 60%);
+            padding: 90px 0 120px;
+            background: radial-gradient(circle at top right, rgba(37, 99, 235, 0.05) 0%, transparent 60%);
         }
 
         .hero-grid {
             display: grid;
-            grid-template-columns: 1.1fr 0.9fr;
+            grid-template-columns: 1.05fr 0.95fr;
             gap: 48px;
             align-items: center;
-        }
-
-        .hero-content {
-            text-align: left;
         }
 
         .hero-badge {
@@ -236,16 +233,16 @@ try {
 
         .hero-title {
             font-family: var(--font-display);
-            font-size: clamp(36px, 5.5vw, 56px);
+            font-size: clamp(38px, 6vw, 62px);
             font-weight: 900;
-            line-height: 1.15;
+            line-height: 1.12;
             color: var(--text-dark);
             margin-bottom: 24px;
             letter-spacing: -0.03em;
         }
 
         .gradient-text {
-            background: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%);
+            background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -262,10 +259,8 @@ try {
             display: flex;
             gap: 16px;
             flex-wrap: wrap;
-            margin-bottom: 40px;
         }
 
-        /* Float animation */
         .floating-mockup {
             position: relative;
             width: 100%;
@@ -275,8 +270,8 @@ try {
         .floating-mockup img {
             width: 100%;
             height: auto;
-            border-radius: 20px;
-            box-shadow: 0 30px 60px -15px rgba(15, 23, 42, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.05);
+            border-radius: 24px;
+            box-shadow: 0 30px 60px -15px rgba(15, 23, 42, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.04);
         }
 
         @keyframes floatAnim {
@@ -284,34 +279,292 @@ try {
             50% { transform: translateY(-10px); }
         }
 
-        /* LIVE TELEMETRY CONSOLE */
-        .telemetry-section {
-            background: var(--bg-white);
-            border-top: 1px solid var(--border-color);
-            border-bottom: 1px solid var(--border-color);
-            padding: 80px 0;
+        /* TRUSTED BY & METRICS */
+        .metrics-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-top: 60px;
         }
 
-        .telemetry-grid {
+        .metric-card {
+            background: var(--bg-white);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 24px;
+            text-align: center;
+            box-shadow: var(--shadow-premium);
+        }
+
+        .metric-num {
+            font-family: var(--font-display);
+            font-size: 38px;
+            font-weight: 900;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+            line-height: 1;
+        }
+
+        .metric-label {
+            color: var(--text-light);
+            font-size: 12px;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        /* SECTION HEADERS */
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-header h2 {
+            font-family: var(--font-display);
+            font-size: 38px;
+            font-weight: 900;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+
+        .section-header p {
+            color: var(--text-light);
+            font-size: 16px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* INTERACTIVE SOLUTIONS SEGMENT TABS (Affise/Offer18 style) */
+        .solutions-section {
+            background: var(--bg-white);
+            padding: 100px 0;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .tabs-header {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 48px;
+        }
+
+        .tab-btn {
+            background-color: var(--bg-main);
+            border: 1.5px solid var(--border-color);
+            color: var(--text-medium);
+            padding: 14px 28px;
+            border-radius: 100px;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: white;
+            box-shadow: 0 8px 16px rgba(37, 99, 235, 0.15);
+        }
+
+        .tab-content {
+            display: none;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .tab-content.active {
             display: grid;
-            grid-template-columns: 1fr 1.2fr;
-            gap: 48px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .tab-info h3 {
+            font-family: var(--font-display);
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 16px;
+        }
+
+        .tab-info p {
+            color: var(--text-light);
+            font-size: 15px;
+            margin-bottom: 24px;
+            line-height: 1.7;
+        }
+
+        .tab-features-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .tab-features-list li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-medium);
+        }
+
+        .tab-features-list li i {
+            color: var(--primary);
+        }
+
+        .tab-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: var(--shadow-premium), 0 0 0 1px rgba(0,0,0,0.03);
+        }
+
+        /* COMPREHENSIVE PRODUCT FEATURES GRID */
+        .features-section {
+            padding: 100px 0;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+        }
+
+        .feature-card {
+            background: var(--bg-white);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: var(--shadow-card);
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(37, 99, 235, 0.25);
+            box-shadow: 0 20px 45px -10px rgba(37, 99, 235, 0.08);
+        }
+
+        .feat-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            background: var(--primary-light);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 24px;
+        }
+
+        .feat-title {
+            font-family: var(--font-display);
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+        }
+
+        .feat-desc {
+            color: var(--text-medium);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* DETAILED WORKFLOW MATRIX */
+        .workflow-section {
+            background: var(--bg-white);
+            padding: 100px 0;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .workflow-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
             align-items: center;
         }
 
+        .workflow-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 24px;
+            box-shadow: var(--shadow-premium), 0 0 0 1px rgba(0,0,0,0.03);
+        }
+
+        .steps-container {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .step-item {
+            display: flex;
+            gap: 20px;
+        }
+
+        .step-num {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            color: var(--primary);
+            font-family: var(--font-display);
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .step-info h3 {
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 6px;
+        }
+
+        .step-info p {
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+        /* LIVE TELEMETRY CONSOLE WIDGET */
         .console-container {
             background-color: #0f172a;
             border-radius: 16px;
             padding: 24px;
             font-family: 'Courier New', Courier, monospace;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.18);
             color: #38bdf8;
             font-size: 13px;
-            height: 320px;
+            height: 340px;
             display: flex;
             flex-direction: column;
             overflow: hidden;
             border: 1px solid rgba(255,255,255,0.05);
+            margin-top: 40px;
         }
 
         .console-header {
@@ -332,12 +585,7 @@ try {
             gap: 6px;
         }
 
-        .dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-        }
-
+        .dot { width: 8px; height: 8px; border-radius: 50%; }
         .dot-red { background-color: #ef4444; }
         .dot-yellow { background-color: #f59e0b; }
         .dot-green { background-color: #10b981; }
@@ -351,15 +599,12 @@ try {
             scrollbar-width: none;
         }
 
-        .console-body::-webkit-scrollbar {
-            display: none;
-        }
+        .console-body::-webkit-scrollbar { display: none; }
 
         .log-line {
             line-height: 1.4;
             animation: consoleLineFade 0.4s ease forwards;
         }
-
         .log-time { color: #64748b; }
         .log-success { color: #4ade80; }
         .log-info { color: #fb7185; }
@@ -369,159 +614,72 @@ try {
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* STATS COUNTERS */
-        .stats-bar {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 24px;
-            margin-top: 60px;
-        }
-
-        .stat-card {
-            background: var(--bg-white);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 24px;
-            text-align: center;
-            box-shadow: var(--shadow-premium);
-        }
-
-        .stat-num {
-            font-family: var(--font-display);
-            font-size: 36px;
-            font-weight: 900;
-            color: var(--text-dark);
-            line-height: 1;
-            margin-bottom: 6px;
-        }
-
-        .stat-desc {
-            color: var(--text-light);
-            font-size: 13px;
-            text-transform: uppercase;
-            font-weight: 700;
-            letter-spacing: 1px;
-        }
-
-        /* FEATURES SECTION */
-        .features {
+        /* SYSTEM COMPARISON MATRIX */
+        .comparison-section {
             padding: 100px 0;
         }
 
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 32px;
-            margin-top: 48px;
-        }
-
-        .feature-card {
-            background: var(--bg-white);
-            border: 1px solid var(--border-color);
-            border-radius: 24px;
-            padding: 40px 32px;
-            transition: all 0.3s;
-            box-shadow: var(--shadow-premium);
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(99, 102, 241, 0.3);
-            box-shadow: 0 20px 40px -10px rgba(79, 70, 229, 0.08);
-        }
-
-        .feature-icon {
-            width: 56px;
-            height: 56px;
-            border-radius: 16px;
-            background: var(--primary-light);
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            margin-bottom: 24px;
-            box-shadow: 0 8px 16px rgba(79, 70, 229, 0.05);
-        }
-
-        .feature-title {
-            font-family: var(--font-display);
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--text-dark);
-            margin-bottom: 12px;
-        }
-
-        .feature-desc {
-            color: var(--text-medium);
-            font-size: 14px;
-            line-height: 1.6;
-        }
-
-        /* HOW IT WORKS / SYSTEM FLOW */
-        .system-workflow {
-            background: var(--bg-white);
-            border-top: 1px solid var(--border-color);
-            border-bottom: 1px solid var(--border-color);
-            padding: 100px 0;
-        }
-
-        .workflow-grid {
-            display: grid;
-            grid-template-columns: 0.9fr 1.1fr;
-            gap: 60px;
-            align-items: center;
-        }
-
-        .workflow-image img {
+        .comparison-table {
             width: 100%;
-            height: auto;
-            border-radius: 24px;
-            box-shadow: var(--shadow-premium), 0 0 0 1px rgba(0, 0, 0, 0.03);
+            border-collapse: collapse;
+            background: var(--bg-white);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-premium);
+            border: 1px solid var(--border-color);
+            margin-top: 40px;
         }
 
-        .workflow-steps {
-            display: flex;
-            flex-direction: column;
-            gap: 32px;
+        .comparison-table th, .comparison-table td {
+            padding: 20px 24px;
+            text-align: left;
         }
 
-        .step-item {
-            display: flex;
-            gap: 20px;
-        }
-
-        .step-number {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--primary-light);
-            color: var(--primary);
+        .comparison-table th {
+            background-color: var(--text-dark);
+            color: white;
             font-family: var(--font-display);
-            font-weight: 800;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            flex-shrink: 0;
+            font-size: 15px;
+            font-weight: 700;
         }
 
-        .step-content h3 {
-            font-family: var(--font-display);
-            font-size: 18px;
+        .comparison-table td {
+            border-bottom: 1px solid var(--border-color);
+            font-size: 14px;
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table tr:hover td {
+            background-color: var(--bg-main);
+        }
+
+        .compare-label {
             font-weight: 700;
             color: var(--text-dark);
-            margin-bottom: 8px;
+            width: 30%;
         }
 
-        .step-content p {
-            font-size: 14px;
+        .compare-taskbazi {
+            font-weight: 600;
+            color: var(--primary);
+            background-color: rgba(37, 99, 235, 0.02);
+            width: 35%;
+        }
+
+        .compare-legacy {
             color: var(--text-light);
+            width: 35%;
         }
 
         /* PRICING PLANS */
-        .pricing {
+        .pricing-section {
+            background: var(--bg-white);
             padding: 100px 0;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
         }
 
         .pricing-grid {
@@ -529,50 +687,43 @@ try {
             grid-template-columns: repeat(3, 1fr);
             gap: 32px;
             margin-top: 48px;
-            align-items: stretch;
         }
 
         .price-card {
-            background: var(--bg-white);
-            border: 1px solid var(--border-color);
+            background: var(--bg-main);
+            border: 1.5px solid var(--border-color);
             border-radius: 24px;
             padding: 48px 32px;
             display: flex;
             flex-direction: column;
             gap: 24px;
             transition: all 0.3s;
-            box-shadow: var(--shadow-premium);
         }
 
         .price-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 30px 50px -15px rgba(15, 23, 42, 0.08);
-            border-color: rgba(99, 102, 241, 0.2);
+            background-color: white;
+            border-color: rgba(37, 99, 235, 0.25);
+            box-shadow: 0 25px 50px -15px rgba(15, 23, 42, 0.08);
         }
 
-        .price-header {
+        .price-card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .price-name {
+        .price-tier-name {
             font-family: var(--font-display);
             font-size: 22px;
             font-weight: 800;
         }
 
-        .price-value {
+        .price-val {
             font-family: var(--font-display);
-            font-size: 36px;
+            font-size: 38px;
             font-weight: 900;
             color: var(--text-dark);
-        }
-
-        .price-desc {
-            font-size: 14px;
-            color: var(--text-light);
-            line-height: 1.5;
         }
 
         .price-features {
@@ -582,19 +733,19 @@ try {
             gap: 14px;
             border-top: 1px solid var(--border-color);
             padding-top: 24px;
+            margin-top: 10px;
         }
 
         .price-features li {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             font-size: 14px;
             color: var(--text-medium);
         }
 
         .price-features li i {
             color: #10b981;
-            font-size: 16px;
         }
 
         .price-btn {
@@ -604,12 +755,9 @@ try {
             text-align: center;
         }
 
-        /* FAQ SECTION */
-        .faq {
+        /* TECHNICAL ACCORDION FAQ */
+        .faq-section {
             padding: 100px 0;
-            background: var(--bg-white);
-            border-top: 1px solid var(--border-color);
-            border-bottom: 1px solid var(--border-color);
         }
 
         .faq-accordion {
@@ -621,11 +769,12 @@ try {
         }
 
         .faq-item {
-            background-color: var(--bg-main);
+            background-color: var(--bg-white);
             border: 1px solid var(--border-color);
             border-radius: 16px;
             overflow: hidden;
             transition: all 0.3s;
+            box-shadow: var(--shadow-card);
         }
 
         .faq-trigger {
@@ -655,31 +804,62 @@ try {
         }
 
         .faq-item.active {
-            border-color: rgba(99, 102, 241, 0.3);
-            background: #fff;
+            border-color: rgba(37, 99, 235, 0.3);
+            box-shadow: 0 15px 30px rgba(37, 99, 235, 0.05);
         }
 
         .faq-item.active .faq-trigger i {
             transform: rotate(180deg);
         }
 
-        /* CALLOUT / SUPPORT PANEL */
-        .callout {
+        /* SECURITY & COMPLIANCE BADGES */
+        .security-badge-grid {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            flex-wrap: wrap;
+            margin-top: 60px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 40px;
+        }
+
+        .security-badge {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 13px;
+            color: var(--text-light);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .security-badge i {
+            font-size: 20px;
+            color: #10b981;
+        }
+
+        /* SUPPORT CALLOUT BOX */
+        .callout-section {
             padding: 80px 0;
             text-align: center;
+            background: var(--bg-white);
+            border-top: 1px solid var(--border-color);
         }
 
         .callout-box {
-            background: linear-gradient(135deg, var(--primary-light) 0%, rgba(99, 102, 241, 0.02) 100%);
-            border: 1.5px solid rgba(99, 102, 241, 0.15);
+            background: linear-gradient(135deg, var(--primary-light) 0%, rgba(255,255,255,0) 100%);
+            border: 1.5px solid rgba(37, 99, 235, 0.15);
             border-radius: 30px;
-            padding: 60px 40px;
+            padding: 60px;
+            max-width: 900px;
+            margin: 0 auto;
         }
 
         .callout-box h2 {
             font-family: var(--font-display);
             font-size: 32px;
-            font-weight: 800;
+            font-weight: 900;
             color: var(--text-dark);
             margin-bottom: 12px;
         }
@@ -687,8 +867,7 @@ try {
         .callout-box p {
             color: var(--text-light);
             font-size: 16px;
-            max-width: 600px;
-            margin: 0 auto 32px;
+            margin-bottom: 32px;
         }
 
         .phone-btn {
@@ -713,7 +892,7 @@ try {
             color: white;
             border-color: transparent;
             transform: scale(1.03);
-            box-shadow: 0 10px 25px rgba(79, 70, 229, 0.3);
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.25);
         }
 
         .phone-btn i {
@@ -742,7 +921,7 @@ try {
         .footer-col h3 {
             color: white;
             font-family: var(--font-display);
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 700;
             margin-bottom: 20px;
             text-transform: uppercase;
@@ -776,7 +955,7 @@ try {
 
         /* RESPONSIVE LAYOUT */
         @media (max-width: 1024px) {
-            .hero-grid, .telemetry-grid, .workflow-grid {
+            .hero-grid, .tab-content, .workflow-grid {
                 grid-template-columns: 1fr;
                 gap: 48px;
             }
@@ -786,32 +965,24 @@ try {
             .hero-ctas {
                 justify-content: center;
             }
-            .hero-desc {
-                margin: 0 auto 36px;
-            }
             .features-grid, .pricing-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
 
         @media (max-width: 768px) {
-            .navbar {
-                height: 80px;
-            }
-            .nav-links {
-                display: none; /* Handled by JS on mobile if needed, or simplified */
-            }
-            .nav-cta {
+            .nav-links, .nav-cta {
                 display: none;
             }
             .menu-toggle {
                 display: block;
             }
-            .features-grid, .pricing-grid, .footer-grid, .stats-bar {
+            .features-grid, .pricing-grid, .footer-grid, .metrics-bar {
                 grid-template-columns: 1fr;
             }
-            .stat-card {
-                padding: 16px;
+            .comparison-table {
+                display: block;
+                overflow-x: auto;
             }
             .footer-bottom {
                 flex-direction: column;
@@ -832,9 +1003,10 @@ try {
                     <span>Taskbazi</span>
                 </a>
                 <ul class="nav-links" id="navLinks">
+                    <li><a href="#solutions">Solutions</a></li>
                     <li><a href="#features">Features</a></li>
                     <li><a href="#workflow">Workflow</a></li>
-                    <li><a href="#pricing">Pricing Plans</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
                     <li><a href="#faq">FAQ</a></li>
                     <li><a href="tel:8016222991">Support</a></li>
                 </ul>
@@ -855,193 +1027,284 @@ try {
             <div class="hero-grid">
                 <div class="hero-content">
                     <span class="hero-badge">
-                        <i class="fas fa-microchip"></i> High-Performance Tracking
+                        <i class="fas fa-microchip"></i> Next-Gen SaaS Affiliate Architecture
                     </span>
                     <h1 class="hero-title">
-                        Uncapped scale <span class="gradient-text">for professional performance networks</span>
+                        Enterprise tracking <span class="gradient-text">for professional performance networks</span>
                     </h1>
                     <p class="hero-desc">
                         Taskbazi is the premier dynamic affiliate network builder. Spin up custom tracking subdomains, isolate tenant databases, and leverage real-time analytics in a fast, robust PHP engine.
                     </p>
                     <div class="hero-ctas">
-                        <a href="#pricing" class="btn btn-primary btn-lg">View Subscriptions</a>
+                        <a href="#pricing" class="btn btn-primary btn-lg">Explore Pricing Plans</a>
                         <a href="tel:8016222991" class="btn btn-outline btn-lg">
-                            <i class="fas fa-phone-volume"></i> Call 8016222991
+                            <i class="fas fa-phone-volume"></i> Support Line: 8016222991
                         </a>
                     </div>
                 </div>
                 <div class="floating-mockup">
-                    <img src="assets/dashboard_preview.png" alt="Taskbazi Dashboard Preview">
+                    <img src="assets/dashboard_preview.png" alt="Taskbazi Enterprise Dashboard Preview">
                 </div>
             </div>
 
-            <!-- Stats Bar -->
-            <div class="stats-bar">
-                <div class="stat-card">
-                    <div class="stat-num" id="stat-clicks">124M+</div>
-                    <div class="stat-desc">Clicks Tracked</div>
+            <!-- Metrics bar -->
+            <div class="metrics-bar">
+                <div class="metric-card">
+                    <div class="metric-num">124M+</div>
+                    <div class="metric-label">Processed Clicks</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-num">2.3ms</div>
-                    <div class="stat-desc">Redirect Speed</div>
+                <div class="metric-card">
+                    <div class="metric-num">2.3ms</div>
+                    <div class="metric-label">Redirect Latency</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-num">100%</div>
-                    <div class="stat-desc">SLA Core Uptime</div>
+                <div class="metric-card">
+                    <div class="metric-num">100%</div>
+                    <div class="metric-label">SLA Core Uptime</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-num">43+</div>
-                    <div class="stat-desc">Global Clusters</div>
+                <div class="metric-card">
+                    <div class="metric-num">0%</div>
+                    <div class="metric-label">Redirect Framework Bloat</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- LIVE TELEMETRY CONSOLE -->
-    <section class="telemetry-section" id="workflow">
+    <!-- INTERACTIVE SOLUTIONS SEGMENT TABS -->
+    <section class="solutions-section" id="solutions">
         <div class="container">
-            <div class="telemetry-grid">
-                <div class="console-container">
-                    <div class="console-header">
-                        <div class="console-dots">
-                            <div class="dot dot-red"></div>
-                            <div class="dot dot-yellow"></div>
-                            <div class="dot dot-green"></div>
-                        </div>
-                        <span>Live Core Telemetry</span>
-                    </div>
-                    <div class="console-body" id="consoleBody">
-                        <div class="log-line"><span class="log-time">[17:00:01]</span> System initialized on host taskbazi.xyz</div>
-                        <div class="log-line"><span class="log-time">[17:00:03]</span> Connecting database... <span class="log-success">SUCCESS</span></div>
-                        <div class="log-line"><span class="log-time">[17:00:05]</span> Explicit tenant scoping: <span class="log-success">ENABLED</span></div>
-                        <div class="log-line"><span class="log-time">[17:00:08]</span> Resolving host 'localhost'... resolved as Tenant ID #1</div>
-                    </div>
-                </div>
-                <div class="telemetry-content">
-                    <span class="hero-badge" style="background:#fef3c7; color:#d97706;"><i class="fas fa-terminal"></i> Real-Time Console</span>
-                    <h2 class="feature-title" style="font-size:32px; margin-bottom:16px;">Explicit SQL Query Safety Check</h2>
-                    <p style="color:var(--text-light); margin-bottom:24px; font-size:15px; line-height:1.7;">
-                        Taskbazi runs a custom `GuardPDO` statement wrapper in development. It inspects all SQL statements dynamically before execution to enforce tenant isolation boundary checks. Any unscoped query touching critical tables is automatically logged to `sql_guard.log`.
+            <div class="section-header">
+                <h2>Tailored for Performance Marketing</h2>
+                <p>Choose your workspace role to see how Taskbazi scales your operations.</p>
+            </div>
+            
+            <div class="tabs-header">
+                <button class="tab-btn active" onclick="switchTab(event, 'networks')">
+                    <i class="fas fa-network-wired"></i> Affiliate Networks
+                </button>
+                <button class="tab-btn" onclick="switchTab(event, 'advertisers')">
+                    <i class="fas fa-bullhorn"></i> Brands & Advertisers
+                </button>
+                <button class="tab-btn" onclick="switchTab(event, 'publishers')">
+                    <i class="fas fa-users"></i> Publishers & Partners
+                </button>
+            </div>
+
+            <!-- TAB CONTENT 1: NETWORKS -->
+            <div class="tab-content active" id="networks">
+                <div class="tab-info">
+                    <h3>Empower Your Network Infrastructure</h3>
+                    <p>
+                        Set up a white-labeled corporate network in seconds. Taskbazi provides full tenant isolation at the database layer so multiple sub-networks run independently on unique custom domains.
                     </p>
-                    <a href="/login.php" class="btn btn-primary">Try Live Dashboard</a>
+                    <ul class="tab-features-list">
+                        <li><i class="fas fa-check-circle"></i> White-label subdomains & custom DNS routing</li>
+                        <li><i class="fas fa-check-circle"></i> Isolated data boundaries for compliance</li>
+                        <li><i class="fas fa-check-circle"></i> Multi-level manager hierarchies</li>
+                    </ul>
+                </div>
+                <div class="tab-image">
+                    <img src="assets/dashboard_preview.png" alt="SaaS Network dashboard interface">
+                </div>
+            </div>
+
+            <!-- TAB CONTENT 2: ADVERTISERS -->
+            <div class="tab-content" id="advertisers">
+                <div class="tab-info">
+                    <h3>Maximize Campaign ROI & Tracking</h3>
+                    <p>
+                        Track landing page conversions, budget caps, and incoming click leads with complete precision. Leverage automated server-to-server postbacks to optimize budgets.
+                    </p>
+                    <ul class="tab-features-list">
+                        <li><i class="fas fa-check-circle"></i> Real-time postback events delivery</li>
+                        <li><i class="fas fa-check-circle"></i> Cap limits validation (daily/total limits)</li>
+                        <li><i class="fas fa-check-circle"></i> Integrated IP Whitelists & activity audits</li>
+                    </ul>
+                </div>
+                <div class="tab-image">
+                    <img src="assets/tracking_routes.png" alt="Dynamic advertiser conversion flow illustration">
+                </div>
+            </div>
+
+            <!-- TAB CONTENT 3: PUBLISHERS -->
+            <div class="tab-content" id="publishers">
+                <div class="tab-info">
+                    <h3>Transparent Reports & High-Speed Links</h3>
+                    <p>
+                        Give your affiliates the tracking tools they need. With instant link builders, five custom SubID parameters, and transparent conversions telemetry, they can drive conversions at scale.
+                    </p>
+                    <ul class="tab-features-list">
+                        <li><i class="fas fa-check-circle"></i> Custom SubID parameters breakdown</li>
+                        <li><i class="fas fa-check-circle"></i> Automated links constructor</li>
+                        <li><i class="fas fa-check-circle"></i> Fast payout request dashboards</li>
+                    </ul>
+                </div>
+                <div class="tab-image">
+                    <img src="assets/dashboard_preview.png" alt="Affiliate tracking dashboard preview">
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- FEATURES SECTION -->
+    <!-- COMPREHENSIVE PRODUCT FEATURES GRID -->
     <section class="features" id="features">
         <div class="container">
             <div class="section-header">
-                <h2>Built for Affiliate & Performance Marketing</h2>
-                <p>Enterprise tracking performance combined with secure, isolated data boundaries.</p>
+                <h2>Comprehensive Feature Architecture</h2>
+                <p>Enterprise performance, dynamic routing protocols, and custom developer guards.</p>
             </div>
+            
             <div class="features-grid">
-                <!-- Feature 1 -->
+                <!-- Card 1 -->
                 <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-shield-halved"></i>
-                    </div>
-                    <h3 class="feature-title">Explicit Tenant Scoping</h3>
-                    <p class="feature-desc">Complete database protection. Every SQL select, update, and delete query is explicitly filtered by unique tenant constraints at the native execution layer.</p>
+                    <div class="feature-icon"><i class="fas fa-shield-halved"></i></div>
+                    <h3 class="feat-title">Explicit Tenant Scoping</h3>
+                    <p class="feat-desc">Every SQL statement select, update, and insert is filtered by unique tenant constraints at the execution layer to guarantee isolated workspace boundaries.</p>
                 </div>
-                <!-- Feature 2 -->
-                <div class="feature-icon-box feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-globe"></i>
-                    </div>
-                    <h3 class="feature-title">Dynamic Domain Routing</h3>
-                    <p class="feature-desc">Map custom branding domains or subdomains instantly. Our HTTP host parser dynamically routes users to their matching tenant workspace.</p>
+                <!-- Card 2 -->
+                <div class="feature-card"><i class="fas fa-globe"></i>
+                    <div class="feature-icon"><i class="fas fa-globe"></i></div>
+                    <h3 class="feat-title">Domain Router Engine</h3>
+                    <p class="feat-desc">Map custom branding tracking domains or subdomains dynamically. Our HTTP host parser routes traffic instantly to matching tenant database spaces.</p>
                 </div>
-                <!-- Feature 3 -->
+                <!-- Card 3 -->
                 <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-bolt"></i>
-                    </div>
-                    <h3 class="feature-title">Procedural PHP Speed</h3>
-                    <p class="feature-desc">Built in optimized PHP 7.1+ using native PDO, bypassing bulky framework overhead to process clicks and log redirects in milliseconds.</p>
+                    <div class="feature-icon"><i class="fas fa-bolt"></i></div>
+                    <h3 class="feat-title">Procedural PHP Core</h3>
+                    <p class="feat-desc">Engineered in procedural PHP 7.1+ using native PDO, bypassing heavy framework layers to execute link redirects in under 2.3 milliseconds.</p>
                 </div>
-                <!-- Feature 4 -->
+                <!-- Card 4 -->
                 <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-arrow-turn-down"></i>
-                    </div>
-                    <h3 class="feature-title">Automated Postbacks</h3>
-                    <p class="feature-desc">Trigger postback logs and firing queues immediately. Deliver conversion metrics dynamically back to your advertisers and publishers.</p>
+                    <div class="feature-icon"><i class="fas fa-arrow-turn-down"></i></div>
+                    <h3 class="feat-title">Automated Postback Loop</h3>
+                    <p class="feat-desc">Process incoming server-to-server callbacks instantly, log HTTP response statuses, and fire conversion postbacks to publishers.</p>
                 </div>
-                <!-- Feature 5 -->
+                <!-- Card 5 -->
                 <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-user-gear"></i>
-                    </div>
-                    <h3 class="feature-title">Global Control Portal</h3>
-                    <p class="feature-desc">Super admins retain total network control from the centralized `/superadmin` console, complete with telemetry logs and user impersonation tools.</p>
+                    <div class="feature-icon"><i class="fas fa-terminal"></i></div>
+                    <h3 class="feat-title">Developer SQL Guard</h3>
+                    <p class="feat-desc">Custom GuardPDO class monitors SQL execution in real time during development, writing warnings to `sql_guard.log` for unscoped queries.</p>
                 </div>
-                <!-- Feature 6 -->
+                <!-- Card 6 -->
                 <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-magnifying-glass-chart"></i>
-                    </div>
-                    <h3 class="feature-title">SubID Telemetry Logs</h3>
-                    <p class="feature-desc">Break down incoming clicks by up to 5 custom SubIDs. Identify top publishers, fraud threats, and geo conversion patterns dynamically.</p>
+                    <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                    <h3 class="feat-title">Multi-SubID Telemetry</h3>
+                    <p class="feat-desc">Support up to 5 custom SubIDs per click. Provide your publishers with granular telemetry data on traffic placements, device versions, and geos.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- SYSTEM WORKFLOW / HOW IT WORKS -->
-    <section class="system-workflow" id="workflow-workflow">
+    <!-- DETAILED WORKFLOW MATRIX -->
+    <section class="workflow-section" id="workflow">
         <div class="container">
             <div class="workflow-grid">
                 <div class="workflow-image">
-                    <img src="assets/tracking_routes.png" alt="Dynamic Tracking Workflow Diagram">
+                    <img src="assets/tracking_routes.png" alt="Data Routing and Server Telemetry Infographic">
                 </div>
-                <div class="workflow-content">
-                    <span class="hero-badge" style="background:#dcfce7; color:#15803d;"><i class="fas fa-network-wired"></i> Workflow Matrix</span>
+                <div class="steps-container">
+                    <span class="hero-badge" style="background:#dcfce7; color:#15803d;"><i class="fas fa-network-wired"></i> Workflow Integration</span>
                     <h2 class="hero-title" style="font-size:36px; margin-bottom:16px;">How data flows through Taskbazi</h2>
                     
-                    <div class="workflow-steps">
-                        <div class="step-item">
-                            <div class="step-number">1</div>
-                            <div class="step-content">
-                                <h3>User Clicks Affiliate Link</h3>
-                                <p>The system intercepts the click at <code>click.php</code> and resolves the active tenant dynamically based on the incoming domain name.</p>
-                            </div>
-                        </div>
-                        <div class="step-item">
-                            <div class="step-number">2</div>
-                            <div class="step-content">
-                                <h3>Explicit SQL Verification</h3>
-                                <p>The request parses incoming SubIDs, validates IP limits, and records the click logs securely scoped under the tenant's ID.</p>
-                            </div>
-                        </div>
-                        <div class="step-item">
-                            <div class="step-number">3</div>
-                            <div class="step-content">
-                                <h3>Secure Redirect & Conversion</h3>
-                                <p>The user is redirected to the target campaign. When a conversion fires, <code>postback.php</code> triggers the publisher webhook automatically.</p>
-                            </div>
+                    <div class="step-item">
+                        <div class="step-num">1</div>
+                        <div class="step-info">
+                            <h3>Click Interception</h3>
+                            <p>The system intercepts incoming traffic at <code>click.php</code> and dynamically matches host headers to resolve the active tenant.</p>
                         </div>
                     </div>
+                    <div class="step-item">
+                        <div class="step-num">2</div>
+                        <div class="step-info">
+                            <h3>Scoping & Redirect</h3>
+                            <p>Parameters are parsed and logged into database tables explicitly scoped under the tenant ID, and the click is forwarded to the landing page in 2.3ms.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-num">3</div>
+                        <div class="step-info">
+                            <h3>Conversion Callback</h3>
+                            <p>When a conversion is generated, <code>postback.php</code> verifies tokens, updates caps, and fires publisher postback endpoints automatically.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Animated Telemetry Console -->
+            <div class="console-container">
+                <div class="console-header">
+                    <div class="console-dots">
+                        <div class="dot dot-red"></div>
+                        <div class="dot dot-yellow"></div>
+                        <div class="dot dot-green"></div>
+                    </div>
+                    <span>Taskbazi Core Router Telemetry</span>
+                </div>
+                <div class="console-body" id="consoleBody">
+                    <div class="log-line"><span class="log-time">[17:20:01]</span> System routing initialized... OK</div>
+                    <div class="log-line"><span class="log-time">[17:20:03]</span> Connecting live database node... <span class="log-success">SUCCESS</span></div>
+                    <div class="log-line"><span class="log-time">[17:20:06]</span> Emulated prepared statements check: <span class="log-info">DISABLED (NATIVE PREPARES ACTIVE)</span></div>
+                    <div class="log-line"><span class="log-time">[17:20:09]</span> Host request 'taskbazi.xyz' resolved dynamically to Tenant ID #1</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- PRICING SECTION -->
-    <section class="pricing" id="pricing">
+    <!-- TECHNICAL COMPARISON MATRIX -->
+    <section class="comparison-section">
         <div class="container">
             <div class="section-header">
-                <h2>Flexible pricing built to grow with you</h2>
-                <p>Editable from the superadmin dashboard. Choose a subscription package that fits your operations.</p>
+                <h2>Technical System Architecture Comparison</h2>
+                <p>See why developers prefer Taskbazi's procedural database isolation over legacy frameworks.</p>
+            </div>
+            
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Capability / Metric</th>
+                        <th class="compare-taskbazi">Taskbazi Core</th>
+                        <th class="compare-legacy">Legacy Tracking Platforms</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="compare-label">Average Click Redirect Latency</td>
+                        <td class="compare-taskbazi">2.3 milliseconds (No framework overhead)</td>
+                        <td class="compare-legacy">120 - 250 milliseconds (Bootstrapping lag)</td>
+                    </tr>
+                    <tr>
+                        <td class="compare-label">Multi-Tenant Database Architecture</td>
+                        <td class="compare-taskbazi">Isolated workspace scoping via explicit tenant IDs</td>
+                        <td class="compare-legacy">Shared schemas lacking real-time developer query guards</td>
+                    </tr>
+                    <tr>
+                        <td class="compare-label">SaaS Domain Mapping</td>
+                        <td class="compare-taskbazi">Automated HTTP host matching on custom DNS tracking domains</td>
+                        <td class="compare-legacy">Manual config edits or server reboots required</td>
+                    </tr>
+                    <tr>
+                        <td class="compare-label">SQL Execution Integrity</td>
+                        <td class="compare-taskbazi">PDO Native Prepares and automatic GuardPDO logs</td>
+                        <td class="compare-legacy">Implicit ORM parameters vulnerable to blind injection</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- PRICING PLANS SECTION -->
+    <section class="pricing-section" id="pricing">
+        <div class="container">
+            <div class="section-header">
+                <h2>Choose a Plan for Your Network</h2>
+                <p>Fully manageable from your Super Admin console. Switch plans as your traffic scales.</p>
             </div>
             
             <div class="pricing-grid">
                 <?php foreach ($plans as $p): ?>
                     <div class="price-card" style="border-top: 4px solid <?=$p['color']?>">
-                        <div class="price-header">
-                            <span class="price-name" style="color: <?=$p['color']?>"><?=$p['name']?></span>
-                            <span class="price-value"><?=$p['price']?></span>
+                        <div class="price-card-header">
+                            <span class="price-tier-name" style="color: <?=$p['color']?>"><?=$p['name']?></span>
+                            <span class="price-val"><?=$p['price']?></span>
                         </div>
                         <p class="price-desc"><?=$p['description']?></p>
                         
@@ -1049,11 +1312,11 @@ try {
                             <li><i class="fas fa-circle-check"></i> Max Offers: <strong><?=$p['offers_limit']?></strong></li>
                             <li><i class="fas fa-circle-check"></i> Max Publishers: <strong><?=$p['publishers_limit']?></strong></li>
                             <li><i class="fas fa-circle-check"></i> Max Advertisers: <strong><?=$p['advertisers_limit']?></strong></li>
-                            <li><i class="fas fa-circle-check"></i> Advanced Reports & API Access</li>
-                            <li><i class="fas fa-circle-check"></i> SSL Protection Support</li>
+                            <li><i class="fas fa-circle-check"></i> High-Speed Click Redirects</li>
+                            <li><i class="fas fa-circle-check"></i> Custom SSL Mapping Support</li>
                         </ul>
                         
-                        <a href="/register.php?plan=<?=urlencode($p['name'])?>" class="btn btn-primary price-btn" style="background: linear-gradient(135deg, <?=$p['color']?> 0%, #0f172a 100%); border:none; box-shadow: 0 4px 14px rgba(0,0,0,0.05);">
+                        <a href="/register.php?plan=<?=urlencode($p['name'])?>" class="btn btn-primary price-btn" style="background: linear-gradient(135deg, <?=$p['color']?> 0%, #0f172a 100%); border: none; box-shadow: 0 4px 14px rgba(0,0,0,0.02)">
                             Select <?=$p['name']?>
                         </a>
                     </div>
@@ -1062,13 +1325,14 @@ try {
         </div>
     </section>
 
-    <!-- FAQ SECTION -->
-    <section class="faq" id="faq">
+    <!-- TECHNICAL ACCORDION FAQ -->
+    <section class="faq-section" id="faq">
         <div class="container">
             <div class="section-header">
-                <h2>Frequently Asked Questions</h2>
-                <p>Have questions about Taskbazi? Here are the quick technical answers you need.</p>
+                <h2>Technical FAQ</h2>
+                <p>Quick, technical answers about our SaaS infrastructure.</p>
             </div>
+            
             <div class="faq-accordion">
                 <div class="faq-item">
                     <div class="faq-trigger" onclick="toggleFaq(this)">
@@ -1081,32 +1345,54 @@ try {
                 </div>
                 <div class="faq-item">
                     <div class="faq-trigger" onclick="toggleFaq(this)">
-                        <span>Can I map my own custom domains?</span>
+                        <span>How do I set up custom tracking subdomains?</span>
                         <i class="fas fa-chevron-down"></i>
                     </div>
                     <div class="faq-content">
-                        Yes! Tenants can register custom tracking and postback domains in their dashboard. The system matches the incoming HTTP host headers against the database dynamically to route traffic instantly.
+                        Tenants register their custom domain or subdomain in the panel, and point their CNAME DNS records to your main server IP. The system matches the incoming HTTP host header dynamically to route the traffic instantly.
                     </div>
                 </div>
                 <div class="faq-item">
                     <div class="faq-trigger" onclick="toggleFaq(this)">
-                        <span>Is there a cap on daily click volume?</span>
+                        <span>What is the purpose of the GuardPDO class?</span>
                         <i class="fas fa-chevron-down"></i>
                     </div>
                     <div class="faq-content">
-                        Volume caps depend on your subscription plan. Starter and Professional plans have soft volume boundaries, while the Enterprise plan supports completely uncapped click and redirect scales.
+                        It acts as a development safety net. It intercepts all SQL queries before execution, checking if queries that access tenant-owned tables include a <code>tenant_id</code> constraint. If not, it logs a warning.
                     </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-trigger" onclick="toggleFaq(this)">
+                        <span>Is there an API for fetching reports?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-content">
+                        Yes! Taskbazi has a REST API module under the advertiser and admin panels to fetch campaign stats, conversion postback logs, and affiliate payouts.
+                    </div>
+                </div>
+            </div>
+
+            <!-- TRUST BADGES -->
+            <div class="security-badge-grid">
+                <div class="security-badge">
+                    <i class="fas fa-shield-halved"></i> GDPR Compliant boundary
+                </div>
+                <div class="security-badge">
+                    <i class="fas fa-lock"></i> SSL Secured endpoints
+                </div>
+                <div class="security-badge">
+                    <i class="fas fa-cloud-arrow-up"></i> Automated Backups
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- CONTACT / SUPPORT CALLOUT -->
-    <section class="container">
-        <div class="callout">
+    <!-- SUPPORT / CONTACT CALLOUT SECTION -->
+    <section class="callout-section">
+        <div class="container">
             <div class="callout-box">
-                <h2>Ready to scale your affiliate business?</h2>
-                <p>Speak to our system engineers today. Get help setting up your tenant spaces, migrating databases, or configuring custom routing protocols.</p>
+                <h2>Need Custom Enterprise Deployment?</h2>
+                <p>Speak to our system engineers today. We can configure dedicated database nodes, setup bulk tracking redirects migrations, or integrate tracking APIs.</p>
                 <a href="tel:8016222991" class="phone-btn">
                     <i class="fas fa-phone-volume"></i> Call us: +91 8016222991
                 </a>
@@ -1149,7 +1435,7 @@ try {
             </div>
             <div class="footer-bottom">
                 <p>&copy; <?=date('Y')?> Taskbazi. All rights reserved.</p>
-                <p>High-Tech Affiliate Tracking Engines</p>
+                <p>Enterprise Tracking Solutions</p>
             </div>
         </div>
     </footer>
@@ -1171,6 +1457,23 @@ try {
                 navLinks.style.padding = '20px';
                 navLinks.style.borderBottom = '1px solid var(--border-color)';
             }
+        }
+
+        // Switch Tabs (Affise/Offer18 style)
+        function switchTab(evt, tabId) {
+            // Hide all tab content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Deactivate all tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show current tab content & active state
+            document.getElementById(tabId).classList.add('active');
+            evt.currentTarget.classList.add('active');
         }
 
         // FAQ Collapsible Toggle
@@ -1198,14 +1501,14 @@ try {
 
         // Live Console log simulation
         const consoleLogs = [
-            "Processed conversion payload for Offer ID #3... SUCCESS",
-            "Fired publisher postback: https://api.publisher.com/postback?clickid=8a2b3c... SUCCESS",
-            "Tenant default mapping resolved: sub.localhost",
+            "Processed conversion payload for Offer ID #5... SUCCESS",
+            "Fired publisher postback: https://api.publisher.com/postback?clickid=cf52ba... SUCCESS",
+            "Tenant default mapping resolved: client-1.localhost",
             "GuardPDO safety assert: Query is explicitly tenant-scoped. Passed.",
             "Database cleanup task executed... cleared 0 expired sessions",
-            "Processed click event from IP 152.12.33.91... device resolved as mobile",
-            "Fraud trigger score: 0.05 (clean click request)",
-            "System telemetry: Average CPU 1.2%, Memory usage 18MB"
+            "Processed click event from IP 182.23.91.44... device resolved as mobile",
+            "Fraud trigger score: 0.01 (clean click request)",
+            "System telemetry: Average CPU 0.8%, Memory usage 15MB"
         ];
 
         const consoleBody = document.getElementById('consoleBody');
@@ -1217,11 +1520,10 @@ try {
             const logLine = document.createElement('div');
             logLine.className = 'log-line';
             
-            // Format colors in logs
             let formattedLog = randomLog;
             if (randomLog.includes("SUCCESS")) {
                 formattedLog = randomLog.replace("SUCCESS", '<span class="log-success">SUCCESS</span>');
-            } else if (randomLog.includes("assert") || randomLog.includes("resolved")) {
+            } else if (randomLog.includes("assert") || randomLog.includes("resolved") || randomLog.includes("DISABLED")) {
                 formattedLog = '<span class="log-info">' + randomLog + '</span>';
             }
             
@@ -1230,7 +1532,6 @@ try {
             consoleBody.appendChild(logLine);
             consoleBody.scrollTop = consoleBody.scrollHeight;
             
-            // Limit output lines
             if (consoleBody.children.length > 20) {
                 consoleBody.removeChild(consoleBody.firstChild);
             }
