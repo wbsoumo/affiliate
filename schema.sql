@@ -757,6 +757,7 @@ CREATE TABLE `tenant_homepages` (
   `about_text` TEXT DEFAULT NULL,
   `contact_email` VARCHAR(150) DEFAULT NULL,
   `social_links_json` TEXT DEFAULT NULL,
+  `layout_json` LONGTEXT DEFAULT NULL,
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (`tenant_id`) REFERENCES `tenants` (`id`) ON DELETE CASCADE

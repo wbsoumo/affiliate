@@ -158,11 +158,22 @@ try {
             `about_text` TEXT DEFAULT NULL,
             `contact_email` VARCHAR(150) DEFAULT NULL,
             `social_links_json` TEXT DEFAULT NULL,
+            `layout_json` LONGTEXT DEFAULT NULL,
             `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             FOREIGN KEY (`tenant_id`) REFERENCES `tenants` (`id`) ON DELETE CASCADE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
     ");
+
+    // Check if layout_json column exists in tenant_homepages
+    try {
+        $cols = $pdo->query("DESCRIBE `tenant_homepages`")->fetchAll(PDO::FETCH_COLUMN);
+        if (!in_array('layout_json', $cols, true)) {
+            $pdo->exec("ALTER TABLE `tenant_homepages` ADD COLUMN `layout_json` LONGTEXT DEFAULT NULL");
+        }
+    } catch (Exception $colEx) {
+        error_log("Failed to alter tenant_homepages table: " . $colEx->getMessage());
+    }
 } catch (Exception $e) {
     error_log("Failed to self-heal profile tables: " . $e->getMessage());
 }
