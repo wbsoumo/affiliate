@@ -287,16 +287,19 @@ class GuardPDO extends PDO {
         'affiliate_bank_details', 'advertiser_ip_whitelist', 'postback_logs_aff'
     ];
 
+    #[\ReturnTypeWillChange]
     public function prepare($query, $options = []) {
         $this->checkQuerySafety($query);
         return parent::prepare($query, $options);
     }
 
+    #[\ReturnTypeWillChange]
     public function query($query, ...$args) {
         $this->checkQuerySafety($query);
         return parent::query($query, ...$args);
     }
 
+    #[\ReturnTypeWillChange]
     public function exec($query) {
         $this->checkQuerySafety($query);
         return parent::exec($query);
