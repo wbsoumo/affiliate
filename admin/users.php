@@ -22,8 +22,8 @@ $dateFrom = $_GET['from'] ?? '';
 $dateTo = $_GET['to'] ?? '';
 
 // Build WHERE clause
-$where = ["u.status = 'pending'"];
-$params = [];
+$where = ["u.status = 'pending'", "u.tenant_id = :tenant_id"];
+$params = ['tenant_id' => current_tenant_id()];
 
 if ($search) {
     $where[] = '(u.name LIKE :search OR u.email LIKE :search)';

@@ -37,8 +37,8 @@ $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $perPage = 20;
 
 // Build WHERE clause
-$where = ['u.role_id = 4']; // Advertiser role
-$params = [];
+$where = ['u.role_id = 4', 'u.tenant_id = :tenant_id']; // Advertiser role
+$params = ['tenant_id' => current_tenant_id()];
 
 if ($search) {
     $where[] = '(u.name LIKE :search OR u.email LIKE :search OR u.company LIKE :search OR u.mobile LIKE :search)';
@@ -89,7 +89,7 @@ $countStmt = $pdo->prepare("
     SELECT COUNT(*) 
     FROM users u
     $whereSql
- WHERE u.tenant_id = " . current_tenant_id() . "");
+");
 $countStmt->execute($params);
 $totalAdvertisers = $countStmt->fetchColumn();
 $totalPages = ceil($totalAdvertisers / $perPage);
@@ -145,7 +145,7 @@ $sql = "
     LEFT JOIN clicks c ON c.offer_id = o.offer_id
     LEFT JOIN conversions cv ON cv.offer_id = o.offer_id
     $whereSql
-     WHERE u.tenant_id = " . current_tenant_id() . " GROUP BY u.user_id
+    GROUP BY u.user_id
     ORDER BY $orderBy
     LIMIT :offset, :per_page
 ";

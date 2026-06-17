@@ -130,8 +130,8 @@ if (isset($_GET['remove_assignment'])) {
 $search = $_GET['search'] ?? '';
 $statusFilter = $_GET['status'] ?? 'all';
 
-$where = ['u.role_id = 2'];
-$params = [];
+$where = ['u.role_id = 2', 'u.tenant_id = :tenant_id'];
+$params = ['tenant_id' => current_tenant_id()];
 
 if ($search) {
     $where[] = '(u.name LIKE :search OR u.email LIKE :search)';
@@ -157,7 +157,7 @@ $managers = $pdo->prepare("
     FROM users u
     LEFT JOIN users p ON p.account_manager_id = u.user_id AND p.role_id = 3
     $whereSql
-     WHERE u.tenant_id = " . current_tenant_id() . " GROUP BY u.user_id
+    GROUP BY u.user_id
     ORDER BY u.created_at DESC
 ");
 
@@ -175,8 +175,8 @@ $publisherSearch = $_GET['publisher_search'] ?? '';
 $publisherPage = isset($_GET['publisher_page']) ? (int)$_GET['publisher_page'] : 1;
 $publishersPerPage = 10;
 
-$publisherWhere = ['u.role_id = 3'];
-$publisherParams = [];
+$publisherWhere = ['u.role_id = 3', 'u.tenant_id = :tenant_id'];
+$publisherParams = ['tenant_id' => current_tenant_id()];
 
 if ($publisherSearch) {
     $publisherWhere[] = '(u.name LIKE :search OR u.email LIKE :search OR u.company LIKE :search)';
@@ -189,7 +189,7 @@ $publisherWhereSql = $publisherWhere ? 'WHERE ' . implode(' AND ', $publisherWhe
 $totalPublishersStmt = $pdo->prepare("
     SELECT COUNT(*) FROM users u
     $publisherWhereSql
- WHERE u.tenant_id = " . current_tenant_id() . "");
+");
 $totalPublishersStmt->execute($publisherParams);
 $totalPublishers = $totalPublishersStmt->fetchColumn();
 $totalPublisherPages = ceil($totalPublishers / $publishersPerPage);
@@ -210,7 +210,7 @@ $allPublishersStmt = $pdo->prepare("
     FROM users u
     LEFT JOIN users m ON m.user_id = u.account_manager_id AND m.role_id = 2
     $publisherWhereSql
-     WHERE u.tenant_id = " . current_tenant_id() . " ORDER BY u.account_manager_id IS NULL DESC, u.name ASC
+    ORDER BY u.account_manager_id IS NULL DESC, u.name ASC
     LIMIT :offset, :per_page
 ");
 

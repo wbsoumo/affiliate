@@ -29,8 +29,8 @@ $dateFrom = $_GET['from'] ?? '';
 $dateTo = $_GET['to'] ?? '';
 
 // Build WHERE clause - only users with pending KYC
-$where = ["u.kyc_status = 'pending'"];
-$params = [];
+$where = ["u.kyc_status = 'pending'", "u.tenant_id = :tenant_id"];
+$params = ['tenant_id' => current_tenant_id()];
 
 if ($search) {
     $where[] = '(u.name LIKE :search OR u.email LIKE :search OR u.company LIKE :search)';
@@ -100,9 +100,9 @@ $stats = $pdo->query("
         SUM(CASE WHEN role_id = 4 THEN 1 ELSE 0 END) as pending_advertisers,
         
         (SELECT COUNT(*) FROM users WHERE tenant_id = " . current_tenant_id() . " AND kyc_status = 'verified') as total_verified,
-        (SELECT COUNT(*) FROM users WHERE kyc_status = 'rejected') as total_rejected
+        (SELECT COUNT(*) FROM users WHERE tenant_id = " . current_tenant_id() . " AND kyc_status = 'rejected') as total_rejected
     FROM users
-    WHERE kyc_status = 'pending'
+    WHERE tenant_id = " . current_tenant_id() . " AND kyc_status = 'pending'
 ")->fetch(PDO::FETCH_ASSOC);
 
 /* ===============================

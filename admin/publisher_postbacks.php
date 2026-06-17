@@ -80,8 +80,8 @@ $statusFilter = $_GET['status'] ?? 'all';
 $typeFilter = $_GET['type'] ?? 'all';
 
 // Build WHERE clause for affiliates
-$where = ['u.role_id = 3'];
-$params = [];
+$where = ['u.role_id = 3', 'u.tenant_id = :tenant_id'];
+$params = ['tenant_id' => current_tenant_id()];
 
 if ($search) {
     $where[] = '(u.name LIKE :search OR u.email LIKE :search OR ap.name LIKE :search)';
@@ -127,7 +127,7 @@ $affiliates = $pdo->prepare("
     LEFT JOIN postback_logs_aff pl 
         ON pl.affiliate_id = u.user_id
     $whereSql
-     WHERE u.tenant_id = " . current_tenant_id() . " GROUP BY u.user_id, ap.id
+    GROUP BY u.user_id, ap.id
     ORDER BY u.name ASC
 ");
 
@@ -146,8 +146,8 @@ $dateFrom = $_GET['date_from'] ?? '';
 $dateTo = $_GET['date_to'] ?? '';
 $logStatus = $_GET['log_status'] ?? 'all';
 
-$logWhere = [];
-$logParams = [];
+$logWhere = ['u.tenant_id = :tenant_id'];
+$logParams = ['tenant_id' => current_tenant_id()];
 
 if ($logSearch) {
     $logWhere[] = '(u.name LIKE :log_search OR u.email LIKE :log_search OR pl.offer_id LIKE :log_search)';
@@ -197,7 +197,7 @@ $postbackLogs = $pdo->prepare("
     LEFT JOIN users u ON u.user_id = pl.affiliate_id
     LEFT JOIN offers o ON o.offer_id = pl.offer_id
     $logWhereSql
-     WHERE u.tenant_id = " . current_tenant_id() . " ORDER BY pl.fired_at DESC
+    ORDER BY pl.fired_at DESC
     LIMIT 50
 ");
 

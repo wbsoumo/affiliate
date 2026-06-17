@@ -32,8 +32,8 @@ if (!strtotime($dateTo)) $dateTo = date('Y-m-d');
 /* ===============================
    BUILD WHERE CLAUSE
 ================================ */
-$where = ['u.role_id = 2']; // Advertisers only (role_id = 2)
-$params = [];
+$where = ['u.role_id = 2', 'u.tenant_id = :tenant_id']; // Advertisers only (role_id = 2)
+$params = ['tenant_id' => current_tenant_id()];
 
 // Date filter
 if ($dateFrom && $dateTo) {
@@ -91,7 +91,6 @@ $countSql = "
     LEFT JOIN clicks cl ON cl.offer_id = o.offer_id
     LEFT JOIN conversions c ON c.offer_id = o.offer_id
     $whereSql
- WHERE u.tenant_id = " . current_tenant_id() . "";
 
 $countStmt = $pdo->prepare($countSql);
 $countStmt->execute($params);
@@ -205,7 +204,7 @@ $sql = "
     LEFT JOIN conversions c ON c.offer_id = o.offer_id
     
     $whereSql
-     WHERE u.tenant_id = " . current_tenant_id() . " GROUP BY u.user_id
+    GROUP BY u.user_id
     $havingSql
     ORDER BY $orderBy
     LIMIT :offset, :per_page
@@ -283,7 +282,7 @@ FROM (
     LEFT JOIN clicks cl ON cl.offer_id = o.offer_id
     LEFT JOIN conversions c ON c.offer_id = o.offer_id
     $whereSql
-     WHERE u.tenant_id = " . current_tenant_id() . " GROUP BY u.user_id
+    GROUP BY u.user_id
 ) t
 ";
 
@@ -354,7 +353,7 @@ if (isset($_GET['export'])) {
         LEFT JOIN clicks cl ON cl.offer_id = o.offer_id
         LEFT JOIN conversions c ON c.offer_id = o.offer_id
         $whereSql
-         WHERE u.tenant_id = " . current_tenant_id() . " GROUP BY u.user_id
+        GROUP BY u.user_id
         ORDER BY revenue DESC
     ");
     

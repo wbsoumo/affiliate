@@ -22,11 +22,11 @@ $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $perPage = 20;
 
 // Build WHERE clause
-$where = ['1=1'];
-$params = [];
+$where = ['1=1', 'o.tenant_id = :tenant_id'];
+$params = ['tenant_id' => current_tenant_id()];
 
 if ($search) {
-    $where[] = '(o.offer_name LIKE :search OR o.offer_id LIKE :search LIKE :search)';
+    $where[] = '(o.offer_name LIKE :search OR o.offer_id LIKE :search)';
     $params['search'] = "%$search%";
 }
 
@@ -48,7 +48,7 @@ if ($category !== 'all') {
 $whereSql = $where ? 'WHERE ' . implode(' AND ', $where) : '';
 
 // Get total count
-$countStmt = $pdo->prepare("SELECT COUNT(*) FROM offers o $whereSql WHERE o.tenant_id = " . current_tenant_id() . "");
+$countStmt = $pdo->prepare("SELECT COUNT(*) FROM offers o $whereSql");
 $countStmt->execute($params);
 $totalOffers = $countStmt->fetchColumn();
 $totalPages = ceil($totalOffers / $perPage);
@@ -86,7 +86,7 @@ $stmt = $pdo->prepare("
     LEFT JOIN conversions cv ON cv.offer_id = o.offer_id
     
     $whereSql
-     WHERE u.tenant_id = " . current_tenant_id() . " GROUP BY o.offer_id
+    GROUP BY o.offer_id
     ORDER BY o.created_at DESC
     LIMIT :offset, :per_page
 ");

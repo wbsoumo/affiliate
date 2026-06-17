@@ -24,8 +24,8 @@ $offset  = ($page - 1) * $perPage;
 /* ===============================
    BUILD FILTERS
 ================================ */
-$where  = ['u.role_id = 3'];
-$params = [];
+$where  = ['u.role_id = 3', 'u.tenant_id = :tenant_id'];
+$params = ['tenant_id' => current_tenant_id()];
 
 if ($search !== '') {
     $where[] = '(u.name LIKE :search OR u.email LIKE :search OR u.mobile LIKE :search)';
@@ -49,7 +49,7 @@ $whereSql = 'WHERE ' . implode(' AND ', $where);
 /* ===============================
    TOTAL COUNT
 ================================ */
-$countStmt = $pdo->prepare("SELECT COUNT(*) FROM users u $whereSql WHERE u.tenant_id = " . current_tenant_id() . "");
+$countStmt = $pdo->prepare("SELECT COUNT(*) FROM users u $whereSql");
 $countStmt->execute($params);
 $totalPublishers = (int)$countStmt->fetchColumn();
 $totalPages = max(1, ceil($totalPublishers / $perPage));
@@ -85,8 +85,7 @@ FROM users u
 LEFT JOIN account_managers am ON am.id = u.account_manager_id
 LEFT JOIN clicks c          ON c.affiliate_id = u.user_id
 LEFT JOIN conversions cv    ON cv.affiliate_id = u.user_id
-$whereSql
- WHERE u.tenant_id = " . current_tenant_id() . " GROUP BY u.user_id
+$whereSql GROUP BY u.user_id
 ORDER BY u.created_at DESC
 LIMIT :offset, :limit
 ";

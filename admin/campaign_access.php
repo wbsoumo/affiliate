@@ -163,8 +163,8 @@ $offers = $pdo->query("
 /* ===============================
    FETCH EXISTING ACCESS WITH FILTERS
 ================================ */
-$where = [];
-$params = [];
+$where = ['aoa.tenant_id = :tenant_id'];
+$params = ['tenant_id' => current_tenant_id()];
 
 if ($search) {
     $where[] = '(u.name LIKE :search OR u.email LIKE :search OR o.offer_name LIKE :search OR aoa.notes LIKE :search)';
@@ -215,7 +215,7 @@ $countStmt = $pdo->prepare("
     INNER JOIN users u ON u.user_id = aoa.affiliate_id
     INNER JOIN offers o ON o.offer_id = aoa.offer_id
     $whereSql
- WHERE u.tenant_id = " . current_tenant_id() . "");
+");
 $countStmt->execute($params);
 $totalAssignments = $countStmt->fetchColumn();
 $totalPages = ceil($totalAssignments / $perPage);
@@ -251,7 +251,7 @@ $assignments = $pdo->prepare("
     LEFT JOIN users admin ON admin.user_id = aoa.approved_by
     
     $whereSql
-     WHERE u.tenant_id = " . current_tenant_id() . " ORDER BY $orderBy
+    ORDER BY $orderBy
     LIMIT :offset, :per_page
 ");
 
