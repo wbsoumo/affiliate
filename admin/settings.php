@@ -34,7 +34,7 @@ $stats = $pdo->query("
 $recentActivity = $pdo->query("
     SELECT 'user' as type, user_id, name, 'registered' as action, created_at 
     FROM users 
-     WHERE ORDER.tenant_id = " . current_tenant_id() . " ORDER BY created_at DESC 
+     WHERE tenant_id = " . current_tenant_id() . " ORDER BY created_at DESC 
     LIMIT 5
 ")->fetchAll(PDO::FETCH_ASSOC);
 

@@ -148,7 +148,7 @@ function exportToExcel($pdo, $search, $offerFilter, $advertiserFilter, $statusFi
 /* ===============================
    FETCH DROPDOWN DATA
 ================================ */
-$offers = $pdo->query("SELECT offer_id, offer_name FROM offers  WHERE ORDER.tenant_id = " . current_tenant_id() . " ORDER BY offer_name")->fetchAll();
+$offers = $pdo->query("SELECT offer_id, offer_name FROM offers  WHERE tenant_id = " . current_tenant_id() . " ORDER BY offer_name")->fetchAll();
 $advertisers = $pdo->query("SELECT user_id, name FROM users WHERE tenant_id = " . current_tenant_id() . " AND role_id = 4 ORDER BY name")->fetchAll();
 
 /* ===============================
@@ -329,7 +329,7 @@ $summary = [
 ];
 
 // Get status counts
-$statusStmt = $pdo->prepare("SELECT status, COUNT(*) as count FROM offers  WHERE GROUP.tenant_id = " . current_tenant_id() . " GROUP BY status");
+$statusStmt = $pdo->prepare("SELECT status, COUNT(*) as count FROM offers  WHERE tenant_id = " . current_tenant_id() . " GROUP BY status");
 $statusStmt->execute();
 while ($row = $statusStmt->fetch(PDO::FETCH_ASSOC)) {
     if ($row['status'] === 'active') $summary['active_offers'] = $row['count'];
