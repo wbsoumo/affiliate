@@ -28,6 +28,42 @@ class TenantResolver {
         // Strip port if present
         $host = explode(':', $host)[0];
 
+        // Ensure session is started with the correct name per request host to avoid session cookie name conflicts
+        if (session_status() === PHP_SESSION_NONE) {
+            $session_name = 'PHPSESSID_global';
+            try {
+                $stmt = $pdo->prepare("SELECT type, tenant_id FROM tenant_domains WHERE domain = :domain LIMIT 1");
+                $stmt->execute(['domain' => $host]);
+                $domainInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+                if ($domainInfo) {
+                    if ($domainInfo['type'] === 'subdomain') {
+                        $tStmt = $pdo->prepare("SELECT slug FROM tenants WHERE id = ? LIMIT 1");
+                        $tStmt->execute([$domainInfo['tenant_id']]);
+                        $slug = $tStmt->fetchColumn();
+                        if ($slug) {
+                            $session_name = 'PHPSESSID_' . $slug;
+                        }
+                    } else {
+                        $session_name = 'PHPSESSID_root';
+                    }
+                } else {
+                    if ($host === 'localhost' || $host === '127.0.0.1') {
+                        $session_name = 'PHPSESSID_root';
+                    }
+                }
+            } catch (Exception $e) {
+                // Ignore
+            }
+
+            $isHttps = (
+                (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+                || ($_SERVER['SERVER_PORT'] ?? null) == 443
+            );
+            session_set_cookie_params(0, '/', '', $isHttps, true);
+            session_name($session_name);
+            session_start();
+        }
+
         try {
             // Resolve domain
             $stmt = $pdo->prepare("
@@ -39,16 +75,35 @@ class TenantResolver {
             $stmt->execute(['domain' => $host]);
             $domainInfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if (!$domainInfo) {
-                // If not found, and we are on localhost, fall back to default tenant 1
-                if ($host === 'localhost' || $host === '127.0.0.1') {
-                    $domainInfo = ['tenant_id' => 1, 'type' => 'root'];
+            $tenantId = null;
+
+            if ($domainInfo) {
+                if ($domainInfo['type'] === 'root') {
+                    // On root domain! Check if a session override exists
+                    if (isset($_SESSION['tenant_id'])) {
+                        $tenantId = (int)$_SESSION['tenant_id'];
+                    } else {
+                        $tenantId = (int)$domainInfo['tenant_id'];
+                    }
                 } else {
-                    return; // No tenant resolved
+                    $tenantId = (int)$domainInfo['tenant_id'];
+                }
+            } else {
+                // Fall back for localhost/testing or no mapping match
+                if ($host === 'localhost' || $host === '127.0.0.1') {
+                    if (isset($_SESSION['tenant_id'])) {
+                        $tenantId = (int)$_SESSION['tenant_id'];
+                    } else {
+                        $tenantId = 1;
+                    }
+                } else {
+                    if (isset($_SESSION['tenant_id'])) {
+                        $tenantId = (int)$_SESSION['tenant_id'];
+                    } else {
+                        return; // No tenant resolved
+                    }
                 }
             }
-
-            $tenantId = (int)$domainInfo['tenant_id'];
 
             // Fetch tenant details
             $tStmt = $pdo->prepare("SELECT * FROM tenants WHERE id = :id LIMIT 1");
@@ -81,6 +136,26 @@ class TenantResolver {
     public static function getSettings() {
         self::resolve();
         return self::$settings;
+    }
+
+    public static function forceResolve($tenantId) {
+        global $pdo;
+        self::$resolved = true;
+        try {
+            $tStmt = $pdo->prepare("SELECT * FROM tenants WHERE id = :id LIMIT 1");
+            $tStmt->execute(['id' => $tenantId]);
+            $tenantData = $tStmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($tenantData) {
+                self::$tenant = $tenantData;
+
+                $sStmt = $pdo->prepare("SELECT * FROM tenant_settings WHERE tenant_id = :id LIMIT 1");
+                $sStmt->execute(['id' => $tenantId]);
+                self::$settings = $sStmt->fetch(PDO::FETCH_ASSOC) ?: [];
+            }
+        } catch (PDOException $e) {
+            error_log("forceResolve database error: " . $e->getMessage());
+        }
     }
 }
 

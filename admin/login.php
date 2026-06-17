@@ -20,21 +20,63 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email    = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
 
-    if ($email === '' || $password === '') {
-        $error = 'Email and password are required';
-    } else {
-        $result = auth_login($email, $password);
-
-        if (!$result['success']) {
-            $error = $result['error'];
+    if (is_root_domain()) {
+        $subdomain = trim($_POST['subdomain'] ?? '');
+        $subdomain = strtolower($subdomain);
+        if ($subdomain === '') {
+            $error = 'Please enter your workspace domain';
+        } elseif (!preg_match('/^[a-z0-9\-]+$/', $subdomain)) {
+            $error = 'Invalid workspace domain format';
+        } elseif ($email === '' || $password === '') {
+            $error = 'Email and password are required';
         } else {
-            // EXTRA SAFETY: only admin allowed here
-            if ($_SESSION['auth']['role'] !== 'admin') {
-                auth_logout();
-                $error = 'Access denied. Admin privileges required.';
+            // Check if workspace exists
+            $stmt = $pdo->prepare("SELECT id FROM tenants WHERE slug = :slug LIMIT 1");
+            $stmt->execute(['slug' => $subdomain]);
+            $tenant = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($tenant) {
+                // Set tenant override
+                $_SESSION['tenant_id'] = $tenant['id'];
+                TenantResolver::forceResolve($tenant['id']);
+
+                $result = auth_login($email, $password);
+                if (!$result['success']) {
+                    $error = $result['error'];
+                    unset($_SESSION['tenant_id']);
+                } else {
+                    if ($_SESSION['auth']['role'] !== 'admin') {
+                        auth_logout();
+                        unset($_SESSION['tenant_id']);
+                        $error = 'Access denied. Admin privileges required.';
+                    } else {
+                        session_regenerate_id(true);
+                        $_SESSION['tenant_id'] = $tenant['id'];
+                        header('Location: /admin/dashboard.php');
+                        exit;
+                    }
+                }
             } else {
-                header('Location: /admin/dashboard.php');
-                exit;
+                $error = 'Workspace domain does not exist';
+            }
+        }
+    } else {
+        if ($email === '' || $password === '') {
+            $error = 'Email and password are required';
+        } else {
+            $result = auth_login($email, $password);
+
+            if (!$result['success']) {
+                $error = $result['error'];
+            } else {
+                // EXTRA SAFETY: only admin allowed here
+                if ($_SESSION['auth']['role'] !== 'admin') {
+                    auth_logout();
+                    $error = 'Access denied. Admin privileges required.';
+                } else {
+                    header('Location: /admin/dashboard.php');
+                    exit;
+                }
             }
         }
     }
@@ -527,6 +569,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <!-- Login Form -->
             <form method="post" id="loginForm" novalidate autocomplete="off">
+                <!-- Workspace Subdomain Field (only on root domain) -->
+                <?php if (is_root_domain()): ?>
+                    <div class="form-group">
+                        <label class="form-label" for="subdomain">
+                            <i class="fas fa-globe"></i>
+                            <span>WORKSPACE SUBDOMAIN</span>
+                        </label>
+                        <div class="input-wrapper" style="display: flex; align-items: center; position: relative;">
+                            <i class="fas fa-globe input-icon" style="top: 50%; transform: translateY(-50%);"></i>
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                id="subdomain" 
+                                name="subdomain" 
+                                placeholder="your-workspace"
+                                value="<?= htmlspecialchars($_POST['subdomain'] ?? $_GET['workspace'] ?? '') ?>"
+                                style="padding-right: 140px; font-weight: 500;"
+                                autocomplete="off"
+                                required
+                                autofocus
+                            >
+                            <span class="subdomain-suffix" style="position: absolute; right: 16px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-weight: 700; font-size: 14px; pointer-events: none; letter-spacing: -0.2px;">
+                                <?= ($_SERVER['HTTP_HOST'] === 'localhost' || explode(':', $_SERVER['HTTP_HOST'])[0] === 'localhost') ? '.localhost' : '.taskbazi.xyz' ?>
+                            </span>
+                        </div>
+                    </div>
+                <?php endif; ?>
+
                 <!-- Email Field -->
                 <div class="form-group">
                     <label class="form-label" for="email">
@@ -663,6 +733,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (form) {
                 form.addEventListener('submit', function(e) {
                     let isValid = true;
+
+                    // Validate subdomain if present
+                    const subdomainInput = document.getElementById('subdomain');
+                    if (subdomainInput && !subdomainInput.value.trim()) {
+                        markError(subdomainInput, 'Workspace subdomain is required');
+                        isValid = false;
+                    }
 
                     // Validate email
                     if (!emailInput.value.trim()) {

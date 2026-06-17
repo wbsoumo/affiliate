@@ -19,28 +19,73 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (is_root_domain()) {
         $subdomain = trim($_POST['subdomain'] ?? '');
         $subdomain = strtolower($subdomain);
+        $email     = trim($_POST['email'] ?? '');
+        $pass      = $_POST['password'] ?? '';
+        $role      = $_POST['role'] ?? '';
+        $remember  = isset($_POST['remember']);
+
         if ($subdomain === '') {
             $error = 'Please enter your workspace domain';
         } elseif (!preg_match('/^[a-z0-9\-]+$/', $subdomain)) {
             $error = 'Invalid workspace domain format';
         } else {
             // Check if workspace exists
-            $stmt = $pdo->prepare("SELECT slug FROM tenants WHERE slug = :slug LIMIT 1");
+            $stmt = $pdo->prepare("SELECT id, slug FROM tenants WHERE slug = :slug LIMIT 1");
             $stmt->execute(['slug' => $subdomain]);
-            $exists = $stmt->fetch();
-            if ($exists) {
-                $current_host = $_SERVER['HTTP_HOST'] ?? 'localhost';
-                $host_parts = explode(':', $current_host);
-                $port_str = isset($host_parts[1]) ? ':' . $host_parts[1] : '';
-                $base_domain = $host_parts[0];
-                
-                if ($base_domain === 'localhost' || $base_domain === '127.0.0.1') {
-                    $redirect_url = 'http://' . $subdomain . '.localhost' . $port_str . '/login.php';
+            $tenant = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($tenant) {
+                // If credentials are provided, log in directly on the root domain
+                if ($email !== '' || $pass !== '') {
+                    if (!in_array($role, ['affiliate', 'advertiser'], true)) {
+                        $error = 'Please select your account type';
+                    } elseif ($email === '' || $pass === '') {
+                        $error = 'Email and password are required for login';
+                    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                        $error = 'Please enter a valid email address';
+                    } else {
+                        // Set tenant override session before checking credentials
+                        $_SESSION['tenant_id'] = $tenant['id'];
+                        // Shift TenantResolver context dynamically
+                        TenantResolver::forceResolve($tenant['id']);
+
+                        $result = auth_login($email, $pass, $remember);
+                        if (!$result['success']) {
+                            $error = $result['error'] ?? 'Invalid credentials. Please try again.';
+                            unset($_SESSION['tenant_id']);
+                        } else {
+                            // Verify user role matches the selected type
+                            if ($result['role'] !== $role) {
+                                auth_logout();
+                                unset($_SESSION['tenant_id']);
+                                $error = 'Access denied. Incorrect portal selected.';
+                            } else {
+                                session_regenerate_id(true);
+                                $_SESSION['tenant_id'] = $tenant['id']; // Ensure it stays set
+                                if ($result['role'] === 'affiliate') {
+                                    header('Location: /affiliate/dashboard.php');
+                                } else {
+                                    header('Location: /advertiser/dashboard.php');
+                                }
+                                exit;
+                            }
+                        }
+                    }
                 } else {
-                    $redirect_url = 'http://' . $subdomain . '.' . $base_domain . $port_str . '/login.php';
+                    // Redirect to workspace subdomain if no login credentials are provided
+                    $current_host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+                    $host_parts = explode(':', $current_host);
+                    $port_str = isset($host_parts[1]) ? ':' . $host_parts[1] : '';
+                    $base_domain = $host_parts[0];
+                    
+                    if ($base_domain === 'localhost' || $base_domain === '127.0.0.1') {
+                        $redirect_url = 'http://' . $subdomain . '.localhost' . $port_str . '/login.php';
+                    } else {
+                        $redirect_url = 'http://' . $subdomain . '.' . $base_domain . $port_str . '/login.php';
+                    }
+                    header('Location: ' . $redirect_url);
+                    exit;
                 }
-                header('Location: ' . $redirect_url);
-                exit;
             } else {
                 $error = 'Workspace domain does not exist';
             }
@@ -802,7 +847,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     id="subdomain" 
                                     name="subdomain" 
                                     placeholder="your-workspace"
-                                    value="<?= htmlspecialchars($_POST['subdomain'] ?? '') ?>"
+                                    value="<?= htmlspecialchars($_POST['subdomain'] ?? $_GET['workspace'] ?? '') ?>"
                                     style="padding-right: 140px; font-weight: 500;"
                                     autocomplete="off"
                                     autofocus
@@ -812,10 +857,77 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 </span>
                             </div>
                         </div>
+                        <!-- Optional Login Fields -->
+                        <div id="directLoginFields" style="margin-top: 20px; border-top: 1px solid #f1f5f9; padding-top: 20px;">
+                            <p style="font-size: 13.5px; color: #64748b; margin-bottom: 16px; font-weight: 500;">
+                                <i class="fas fa-circle-info" style="color: #3b82f6; margin-right: 4px;"></i>
+                                Subdomain DNS propagating? You can log in directly below:
+                            </p>
+                            
+                            <!-- Role Selection -->
+                            <div class="form-group">
+                                <label class="form-label">Select Account Type</label>
+                                <div class="role-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+                                    <div class="role-card">
+                                        <input type="radio" id="role_affiliate" name="role" value="affiliate" <?= (isset($_POST['role']) && $_POST['role'] === 'affiliate') ? 'checked' : '' ?>>
+                                        <label for="role_affiliate">
+                                            <div class="role-icon">
+                                                <i class="fas fa-users"></i>
+                                            </div>
+                                            <span class="role-title">Affiliate</span>
+                                            <span class="role-desc">Publisher</span>
+                                        </label>
+                                    </div>
+                                    <div class="role-card">
+                                        <input type="radio" id="role_advertiser" name="role" value="advertiser" <?= (isset($_POST['role']) && $_POST['role'] === 'advertiser') ? 'checked' : '' ?>>
+                                        <label for="role_advertiser">
+                                            <div class="role-icon">
+                                                <i class="fas fa-bullhorn"></i>
+                                            </div>
+                                            <span class="role-title">Advertiser</span>
+                                            <span class="role-desc">Brand</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Email Field -->
+                            <div class="form-group" style="margin-bottom: 16px;">
+                                <label class="form-label" for="email">Email address</label>
+                                <div class="input-wrapper">
+                                    <i class="fas fa-envelope input-icon"></i>
+                                    <input 
+                                        type="email" 
+                                        class="form-control" 
+                                        id="email" 
+                                        name="email" 
+                                        placeholder="partner@company.com" 
+                                        value="<?= htmlspecialchars($_POST['email'] ?? '') ?>"
+                                        autocomplete="email"
+                                    >
+                                </div>
+                            </div>
+
+                            <!-- Password Field -->
+                            <div class="form-group" style="margin-bottom: 16px;">
+                                <label class="form-label" for="password">Password</label>
+                                <div class="input-wrapper">
+                                    <i class="fas fa-lock input-icon"></i>
+                                    <input 
+                                        type="password" 
+                                        class="form-control" 
+                                        id="password" 
+                                        name="password" 
+                                        placeholder="••••••••••••"
+                                        autocomplete="current-password"
+                                    >
+                                </div>
+                            </div>
+                        </div>
 
                         <!-- Submit Button -->
                         <button type="submit" class="btn-login" id="submitBtn" style="margin-top: 24px;">
-                            <span>Continue to workspace</span>
+                            <span>Sign In / Continue</span>
                             <i class="fas fa-arrow-right"></i>
                         </button>
 
@@ -998,20 +1110,86 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             isValid = false;
                         }
 
+                        // Optional direct login fields validation
+                        const emailInput = document.getElementById('email');
+                        const passwordInput = document.getElementById('password');
+                        const roleInputs = document.querySelectorAll('input[name="role"]');
+                        
+                        let isDirectLogin = false;
+                        if ((emailInput && emailInput.value.trim()) || (passwordInput && passwordInput.value)) {
+                            isDirectLogin = true;
+                        }
+
+                        if (isDirectLogin) {
+                            // Check role selection
+                            let roleSelected = false;
+                            roleInputs.forEach(r => {
+                                if (r.checked) roleSelected = true;
+                            });
+                            if (!roleSelected) {
+                                const roleLabel = document.querySelector('.role-container');
+                                if (roleLabel) {
+                                    showError(roleLabel.parentElement.querySelector('.form-label') || roleLabel, 'Please select your account type');
+                                } else {
+                                    showError(emailInput, 'Please select your account type');
+                                }
+                                isValid = false;
+                            }
+
+                            // Validate email
+                            if (emailInput && !emailInput.value.trim()) {
+                                showError(emailInput, 'Email address is required');
+                                isValid = false;
+                            } else if (emailInput && !isValidEmail(emailInput.value.trim())) {
+                                showError(emailInput, 'Please enter a valid email address');
+                                isValid = false;
+                            }
+
+                            // Validate password
+                            if (passwordInput && !passwordInput.value) {
+                                showError(passwordInput, 'Password is required');
+                                isValid = false;
+                            }
+                        }
+
                         if (!isValid) {
                             e.preventDefault();
+                            
+                            // Shake animation
+                            const card = document.querySelector('.form-container');
+                            if (card) {
+                                card.classList.add('shake');
+                                setTimeout(() => card.classList.remove('shake'), 400);
+                            }
                             return false;
                         }
 
                         submitBtn.classList.add('btn-loading');
-                        submitBtn.innerHTML = `
-                            <span>Redirecting to workspace...</span>
-                            <i class="fas fa-spinner"></i>
-                        `;
+                        if (isDirectLogin) {
+                            submitBtn.innerHTML = `
+                                <span>Signing in...</span>
+                                <i class="fas fa-spinner"></i>
+                            `;
+                        } else {
+                            submitBtn.innerHTML = `
+                                <span>Redirecting to workspace...</span>
+                                <i class="fas fa-spinner"></i>
+                            `;
+                        }
                     });
 
                     subdomainInput.addEventListener('input', function() {
                         clearError(this);
+                    });
+
+                    // Clear error on role radio click
+                    document.querySelectorAll('input[name="role"]').forEach(radio => {
+                        radio.addEventListener('change', function() {
+                            const roleLabel = document.querySelector('.role-container');
+                            if (roleLabel) {
+                                clearError(roleLabel.parentElement.querySelector('.form-label') || roleLabel);
+                            }
+                        });
                     });
                 }
             } else {

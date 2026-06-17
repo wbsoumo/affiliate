@@ -196,15 +196,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                         $pdo->commit();
 
-                        // Redirect to the custom workspace login screen
-                        $host_parts = explode(':', $current_host);
-                        $port_str = isset($host_parts[1]) ? ':' . $host_parts[1] : '';
-                        if ($base_domain === 'localhost' || $base_domain === '127.0.0.1') {
-                            $redirect_url = 'http://' . $subdomain . '.localhost' . $port_str . '/admin/login.php?registered=1';
-                        } else {
-                            $redirect_url = 'http://' . $subdomain . '.taskbazi.xyz' . $port_str . '/admin/login.php?registered=1';
-                        }
-                        header('Location: ' . $redirect_url);
+                        // Redirect to the success page on the main domain instead of the subdomain directly
+                        header('Location: /register.php?success=1&subdomain=' . urlencode($subdomain));
                         exit;
 
                     } catch (Exception $e) {
@@ -912,14 +905,221 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             background-color: #fef2f2;
         }
 
-        .error-text {
-            color: #ef4444;
-            font-size: 12px;
-            margin-top: 4px;
+        /* ===== SUCCESS CARD (ONBOARDING) ===== */
+        .success-card {
+            text-align: center;
+            padding: 24px 0;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .success-icon {
+            width: 72px;
+            height: 72px;
+            background: rgba(16, 185, 129, 0.08);
+            border: 2px solid rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            font-size: 32px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
-            gap: 4px;
-            font-weight: 500;
+            justify-content: center;
+            margin: 0 auto 24px;
+            box-shadow: 0 10px 20px -5px rgba(16, 185, 129, 0.1);
+        }
+
+        .success-card h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .success-intro {
+            color: #64748b;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+
+        .workspace-details-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .detail-row:first-child {
+            padding-top: 0;
+        }
+
+        .detail-label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .detail-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .link-style {
+            color: #2563eb;
+            transition: color 0.2s;
+        }
+        .link-style:hover {
+            color: #1d4ed8;
+            text-decoration: underline;
+        }
+
+        .dns-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .dns-badge-live {
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        .dns-badge-live .dns-dot {
+            background-color: #10b981;
+            box-shadow: 0 0 6px #10b981;
+        }
+
+        .dns-badge-pending {
+            background: rgba(245, 158, 11, 0.08);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            color: #d97706;
+        }
+
+        .dns-badge-pending .dns-dot {
+            background-color: #f59e0b;
+            box-shadow: 0 0 6px #f59e0b;
+        }
+
+        .dns-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+
+        .dns-info-alert {
+            display: flex;
+            gap: 16px;
+            background: #fffbeb;
+            border: 1px solid #fef3c7;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 32px;
+            text-align: left;
+        }
+
+        .dns-info-alert i {
+            color: #d97706;
+            font-size: 18px;
+            margin-top: 2px;
+        }
+
+        .dns-info-alert strong {
+            display: block;
+            font-size: 14px;
+            color: #92400e;
+            margin-bottom: 4px;
+        }
+
+        .dns-info-alert p {
+            font-size: 13px;
+            color: #b45309;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .action-buttons-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .btn-primary {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            font-size: 15px;
+            font-weight: 700;
+            padding: 14px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.2);
+            transition: all 0.25s;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #1d4ed8, #1e40af);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+            color: white;
+        }
+
+        .btn-secondary {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            color: #475569;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 12px 20px;
+            border-radius: 12px;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary:hover {
+            border-color: #cbd5e1;
+            background: #f8fafc;
+            color: #1e293b;
+        }
+
+        .success-footer {
+            color: #94a3b8;
+            font-size: 12px;
+            line-height: 1.5;
         }
     </style>
 </head>
@@ -1013,6 +1213,87 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <img src="/logo.png" alt="Taskbazi Logo">
                 </div>
 
+                <?php if (isset($_GET['success']) && $_GET['success'] == '1'):
+                    $subdomain = htmlspecialchars($_GET['subdomain'] ?? '');
+                    
+                    // DNS check
+                    $host_to_check = $subdomain . '.taskbazi.xyz';
+                    $is_local = false;
+                    $dns_live = false;
+                    
+                    $current_host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+                    $current_host = explode(':', $current_host)[0];
+                    
+                    if ($current_host === 'localhost' || $current_host === '127.0.0.1' || strpos($current_host, 'localhost') !== false) {
+                        $host_to_check = $subdomain . '.localhost';
+                        $is_local = true;
+                        $dns_live = true; // Localhost always resolves
+                    } else {
+                        $ip = @gethostbyname($host_to_check);
+                        if ($ip && $ip !== $host_to_check) {
+                            $dns_live = true;
+                        }
+                    }
+                ?>
+                    <div class="success-card">
+                        <div class="success-icon">
+                            <i class="fas fa-check-double"></i>
+                        </div>
+                        
+                        <h2>Workspace Provisioned!</h2>
+                        <p class="success-intro">Your affiliate network workspace is fully created. DNS configurations are mapping automatically.</p>
+                        
+                        <div class="workspace-details-box">
+                            <div class="detail-row">
+                                <span class="detail-label">Workspace Slug</span>
+                                <span class="detail-value"><?= $subdomain ?></span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Subdomain Address</span>
+                                <a href="<?= $is_local ? 'http://' . $subdomain . '.localhost:8000/admin/login.php' : 'http://' . $subdomain . '.taskbazi.xyz/admin/login.php' ?>" target="_blank" class="detail-value link-style">
+                                    <?= $host_to_check ?> <i class="fas fa-arrow-up-right-from-square" style="font-size: 11px;"></i>
+                                </a>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">DNS Status</span>
+                                <?php if ($dns_live): ?>
+                                    <span class="dns-badge dns-badge-live">
+                                        <span class="dns-dot"></span> Live & Active
+                                    </span>
+                                <?php else: ?>
+                                    <span class="dns-badge dns-badge-pending">
+                                        <span class="dns-dot"></span> Propagating (takes 5-30m)
+                                    </span>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+
+                        <?php if (!$dns_live): ?>
+                            <div class="dns-info-alert">
+                                <i class="fas fa-circle-info"></i>
+                                <div>
+                                    <strong>Subdomain DNS propagation in progress.</strong>
+                                    <p>It can take up to 30 minutes for new DNS records to activate worldwide. In the meantime, you can log in and manage your account immediately via our main gateway.</p>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+
+                        <div class="action-buttons-stack">
+                            <a href="/admin/login.php?workspace=<?= $subdomain ?>" class="btn-primary">
+                                <span>Access Workspace Directly (on taskbazi.xyz)</span>
+                                <i class="fas fa-angle-right"></i>
+                            </a>
+                            
+                            <a href="?success=1&subdomain=<?= $subdomain ?>" class="btn-secondary">
+                                <i class="fas fa-arrows-rotate"></i> Check DNS Status Again
+                            </a>
+                        </div>
+                        
+                        <div class="success-footer">
+                            <p>A confirmation email has been sent to the owner's address. Need help? <a href="mailto:support@taskbazi.xyz">Contact support</a></p>
+                        </div>
+                    </div>
+                <?php else: ?>
                 <?php if (is_root_domain()): 
                     try {
                         $plans = $pdo->query("SELECT * FROM saas_plans ORDER BY id ASC")->fetchAll();
@@ -1404,6 +1685,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <span><i class="fas fa-check-circle"></i> GDPR Compliant</span>
                         </div>
                     </form>
+                <?php endif; ?>
                 <?php endif; ?>
             </div>
         </div>
