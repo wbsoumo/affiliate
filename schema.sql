@@ -690,6 +690,14 @@ VALUES
 ('Enterprise', '$999/mo', 'Unlimited', 'Unlimited', 'Unlimited', 'Uncapped limits and VIP support for large operations.', '#34d399')
 ON DUPLICATE KEY UPDATE `price` = VALUES(`price`);
 
+-- Seed default roles
+INSERT INTO `roles` (`role_id`, `role_name`) VALUES 
+(1, 'admin'),
+(2, 'manager'),
+(3, 'affiliate'),
+(4, 'advertiser')
+ON DUPLICATE KEY UPDATE `role_name` = VALUES(`role_name`);
+
 SET FOREIGN_KEY_CHECKS = 1;
 -- =====================================================
 -- Phase 1: Seed SaaS Super Admin and Default Tenant

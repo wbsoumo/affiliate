@@ -40,6 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Taskbazi · Super Admin Login</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5">
     
     <!-- Google Fonts: Inter -->
@@ -298,13 +299,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="login-container">
         <div class="admin-card">
             <div class="card-header">
-                <div class="super-badge">
-                    <i class="fas fa-crown"></i>
-                    <span>Global Control</span>
-                </div>
-                <div class="lock-icon">
-                    <i class="fas fa-user-shield"></i>
-                </div>
+                <img src="/logo.png" alt="Taskbazi Logo" style="height: 48px; width: auto; object-fit: contain; margin-bottom: 20px;">
                 <h1>Taskbazi Super Admin</h1>
                 <p>Authenticate to access global network settings</p>
             </div>

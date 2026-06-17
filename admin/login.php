@@ -45,6 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Taskbazi · Administrator Login</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5">
     
     <!-- Google Fonts: Inter & Outfit -->
@@ -510,17 +511,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- Login Container -->
     <div class="login-container">
         <div class="admin-card">
-            <!-- Header -->
             <div class="card-header">
-                <div class="admin-badge">
-                    <i class="fas fa-shield-halved"></i>
-                    <span>Secure Admin Access</span>
-                </div>
-                
-                <div class="lock-icon">
-                    <i class="fas fa-lock"></i>
-                </div>
-                
+                <img src="/logo.png" alt="Taskbazi Logo" style="height: 48px; width: auto; object-fit: contain; margin-bottom: 20px;">
                 <h1>Administrator Login</h1>
                 <p>Enter your credentials to access the control panel</p>
             </div>

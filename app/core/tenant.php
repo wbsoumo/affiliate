@@ -84,6 +84,32 @@ class TenantResolver {
     }
 }
 
+/**
+ * Check if the current host is the root SaaS domain
+ */
+function is_root_domain() {
+    global $pdo;
+    $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+    $host = explode(':', $host)[0];
+
+    try {
+        $stmt = $pdo->prepare("SELECT type FROM tenant_domains WHERE domain = :domain LIMIT 1");
+        $stmt->execute(['domain' => $host]);
+        $type = $stmt->fetchColumn();
+        if ($type === 'root') {
+            return true;
+        }
+        if ($type === false) {
+            if ($host === 'localhost' || $host === '127.0.0.1') {
+                return true;
+            }
+        }
+    } catch (Exception $e) {
+        error_log("Error in is_root_domain: " . $e->getMessage());
+    }
+    return false;
+}
+
 /* =====================================================
    GLOBAL SAAS TENANCY HELPER FUNCTIONS
    ===================================================== */

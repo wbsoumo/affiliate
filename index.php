@@ -53,6 +53,7 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Taskbazi · Enterprise Affiliate Tracking & Partner Marketing Platform</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
     <!-- Google Fonts: Outfit (Brand/Headers) & Inter (Body) -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <!-- Font Awesome 6 -->
@@ -999,7 +1000,7 @@ try {
         <div class="container">
             <nav class="navbar">
                 <a href="/index.php" class="logo">
-                    <i class="fas fa-chart-network"></i>
+                    <img src="/logo.png" alt="Taskbazi Logo" style="height: 32px; width: auto; object-fit: contain; margin-right: 2px;">
                     <span>Taskbazi</span>
                 </a>
                 <ul class="nav-links" id="navLinks">
