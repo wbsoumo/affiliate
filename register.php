@@ -38,6 +38,22 @@ $error = null;
 $success = null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Auto-seed roles table if empty to prevent foreign key errors
+    try {
+        $countRoles = $pdo->query("SELECT COUNT(*) FROM roles")->fetchColumn();
+        if ($countRoles == 0) {
+            $pdo->exec("
+                INSERT INTO roles (role_id, role_name) VALUES 
+                (1, 'admin'),
+                (2, 'manager'),
+                (3, 'affiliate'),
+                (4, 'advertiser')
+            ");
+        }
+    } catch (Exception $e) {
+        error_log("Failed to auto-seed roles: " . $e->getMessage());
+    }
+
     if (is_root_domain()) {
         $companyName = trim($_POST['company_name'] ?? '');
         $subdomain   = trim($_POST['subdomain'] ?? '');

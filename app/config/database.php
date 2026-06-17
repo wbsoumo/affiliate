@@ -39,6 +39,44 @@ try {
     die('Database connection error');
 }
 
+// Self-healing database check: ensure default roles exist
+try {
+    $roles_in_db = $pdo->query("SELECT role_id, role_name FROM roles")->fetchAll(PDO::FETCH_KEY_PAIR);
+    $defaultRoles = [
+        1 => 'admin',
+        2 => 'manager',
+        3 => 'affiliate',
+        4 => 'advertiser'
+    ];
+    $missing = false;
+    foreach ($defaultRoles as $id => $name) {
+        if (!isset($roles_in_db[$id]) || $roles_in_db[$id] !== $name) {
+            $missing = true;
+            break;
+        }
+    }
+    if ($missing) {
+        foreach ($defaultRoles as $id => $name) {
+            $otherId = array_search($name, $roles_in_db);
+            if ($otherId !== false) {
+                // Update the ID to match standard ID
+                $upd = $pdo->prepare("UPDATE roles SET role_id = ? WHERE role_id = ?");
+                $upd->execute([$id, $otherId]);
+            } elseif (!isset($roles_in_db[$id])) {
+                // Insert the missing role
+                $ins = $pdo->prepare("INSERT INTO roles (role_id, role_name) VALUES (?, ?)");
+                $ins->execute([$id, $name]);
+            } else {
+                // ID exists but has a different name, rename it to the expected role name
+                $upd = $pdo->prepare("UPDATE roles SET role_name = ? WHERE role_id = ?");
+                $upd->execute([$name, $id]);
+            }
+        }
+    }
+} catch (Exception $e) {
+    // Ignore errors if roles table doesn't exist yet (e.g. during initial schema import)
+}
+
 // Automatically enforce tenant resolution in tenant contexts
 if (php_sapi_name() !== 'cli' && (!defined('SUPER_ADMIN_CONTEXT') || SUPER_ADMIN_CONTEXT !== true)) {
     require_tenant();

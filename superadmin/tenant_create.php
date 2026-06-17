@@ -85,14 +85,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ");
             $dStmt->execute([$tenantId, $domain, $dType]);
 
+            // Get admin role ID dynamically
+            $roleStmt = $pdo->prepare("SELECT role_id FROM roles WHERE role_name = 'admin' LIMIT 1");
+            $roleStmt->execute();
+            $roleId = $roleStmt->fetchColumn() ?: 1;
+
             // Insert Tenant Administrator
             $passHash = password_hash($owner_password, PASSWORD_DEFAULT);
             $uStmt = $pdo->prepare("
                 INSERT INTO users 
                 (tenant_id, name, email, password_hash, role_id, status, created_at)
-                VALUES (?, ?, ?, ?, 1, 'active', NOW())
+                VALUES (?, ?, ?, ?, ?, 'active', NOW())
             ");
-            $uStmt->execute([$tenantId, $owner_name, $owner_email, $passHash]);
+            $uStmt->execute([$tenantId, $owner_name, $owner_email, $passHash, $roleId]);
 
             $pdo->commit();
             $message = "Tenant network '{$name}' created successfully with Admin: {$owner_email}.";
