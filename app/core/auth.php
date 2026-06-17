@@ -16,40 +16,40 @@ require_once __DIR__ . '/../config/database.php';
    SESSION INITIALIZATION (DO THIS ONCE, PROPERLY)
    ================================================= */
 
-// Detect HTTPS
-$isHttps = (
-    (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
-    || ($_SERVER['SERVER_PORT'] ?? null) == 443
-);
-
-// Determine host-only session configuration
-$host = $_SERVER['HTTP_HOST'] ?? 'localhost';
-$host = explode(':', $host)[0];
-
-// Configure session cookie params for host-only isolation
-session_set_cookie_params(
-    0,          // lifetime (session)
-    '/',        // path (ENTIRE DOMAIN)
-    '',         // domain (empty string maps to exact host-only cookie)
-    $isHttps,   // secure
-    true        // httponly
-);
-
-// Resolve tenant to assign a unique session cookie name (isolates sessions across subdomains)
-$tenantId = current_tenant_id();
-$tenantSlug = 'global';
-if ($tenantId) {
-    $tenant = current_tenant();
-    if ($tenant) {
-        $tenantSlug = $tenant['slug'];
-    }
-}
-
-// Prefix the session name per tenant
-session_name('PHPSESSID_' . $tenantSlug);
-
-// Start session ONCE
+// Start session ONCE if not already active
 if (session_status() === PHP_SESSION_NONE) {
+    // Detect HTTPS
+    $isHttps = (
+        (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+        || ($_SERVER['SERVER_PORT'] ?? null) == 443
+    );
+
+    // Determine host-only session configuration
+    $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+    $host = explode(':', $host)[0];
+
+    // Configure session cookie params for host-only isolation
+    session_set_cookie_params(
+        0,          // lifetime (session)
+        '/',        // path (ENTIRE DOMAIN)
+        '',         // domain (empty string maps to exact host-only cookie)
+        $isHttps,   // secure
+        true        // httponly
+    );
+
+    // Resolve tenant to assign a unique session cookie name (isolates sessions across subdomains)
+    $tenantId = current_tenant_id();
+    $tenantSlug = 'global';
+    if ($tenantId) {
+        $tenant = current_tenant();
+        if ($tenant) {
+            $tenantSlug = $tenant['slug'];
+        }
+    }
+
+    // Prefix the session name per tenant
+    session_name('PHPSESSID_' . $tenantSlug);
+
     session_start();
 }
 
