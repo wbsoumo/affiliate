@@ -421,6 +421,11 @@ class GuardPDO extends PDO {
             return;
         }
 
+        // Skip safety checks for schema definition and metadata queries (DDL/Utility)
+        if (preg_match('/^\s*(describe|desc|show|create|alter|drop|truncate|explain|rename)\b/i', $query)) {
+            return;
+        }
+
         // Check if query touches any tenant table
         $touchesTenantTable = false;
         $matchedTable = '';
