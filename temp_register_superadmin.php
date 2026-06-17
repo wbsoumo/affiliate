@@ -26,12 +26,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt = $pdo->prepare("
                 INSERT INTO `super_admins` (`email`, `password_hash`, `name`, `status`)
                 VALUES (:email, :hash, :name, 'active')
-                ON DUPLICATE KEY UPDATE `password_hash` = :hash, `name` = :name, `status` = 'active'
+                ON DUPLICATE KEY UPDATE `password_hash` = :update_hash, `name` = :update_name, `status` = 'active'
             ");
             $stmt->execute([
                 'email' => $email,
                 'hash' => $hash,
-                'name' => $name
+                'name' => $name,
+                'update_hash' => $hash,
+                'update_name' => $name
             ]);
             $message = "Super Admin registered successfully! You can now log in at /superadmin/login.php. Remember to delete this file for security.";
         } catch (PDOException $e) {
