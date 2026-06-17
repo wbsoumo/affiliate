@@ -44,11 +44,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Login · Quantum Control Panel</title>
+    <title>Taskbazi · Administrator Login</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5">
     
-    <!-- Google Fonts: Inter (clean, professional) -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Google Fonts: Inter & Outfit -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -62,7 +62,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, #0b1120 0%, #1a2235 100%);
+            background-color: #f8fafc;
+            color: #334155;
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -77,8 +78,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             width: 100%;
             height: 100%;
             background-image: 
-                linear-gradient(rgba(37, 99, 235, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(37, 99, 235, 0.03) 1px, transparent 1px);
+                linear-gradient(rgba(37, 99, 235, 0.015) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(37, 99, 235, 0.015) 1px, transparent 1px);
             background-size: 50px 50px;
             z-index: 1;
         }
@@ -87,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             position: absolute;
             width: 600px;
             height: 600px;
-            background: radial-gradient(circle at 30% 30%, rgba(37, 99, 235, 0.15), rgba(124, 58, 237, 0.1));
+            background: radial-gradient(circle at 30% 30%, rgba(37, 99, 235, 0.06), rgba(124, 58, 237, 0.04));
             border-radius: 50%;
             top: -200px;
             right: -200px;
@@ -100,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             position: absolute;
             width: 500px;
             height: 500px;
-            background: radial-gradient(circle at 70% 70%, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));
+            background: radial-gradient(circle at 70% 70%, rgba(59, 130, 246, 0.04), rgba(139, 92, 246, 0.03));
             border-radius: 50%;
             bottom: -200px;
             left: -100px;
@@ -125,100 +126,79 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         /* ===== PREMIUM CARD ===== */
         .admin-card {
-            background: rgba(15, 23, 42, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 32px;
-            padding: 48px 40px;
-            box-shadow: 
-                0 25px 50px -12px rgba(0, 0, 0, 0.5),
-                0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+            background: #ffffff;
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-radius: 28px;
+            padding: 44px 40px;
+            box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.05);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .admin-card:hover {
             transform: translateY(-2px);
-            box-shadow: 
-                0 30px 60px -12px rgba(0, 0, 0, 0.6),
-                0 0 0 1px rgba(37, 99, 235, 0.3) inset;
+            box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.08);
         }
 
         /* ===== HEADER SECTION ===== */
         .card-header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 32px;
         }
 
         .admin-badge {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: rgba(37, 99, 235, 0.15);
-            border: 1px solid rgba(37, 99, 235, 0.3);
-            padding: 8px 18px;
+            background: rgba(37, 99, 235, 0.08);
+            border: 1px solid rgba(37, 99, 235, 0.2);
+            padding: 6px 14px;
             border-radius: 100px;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
 
         .admin-badge i {
-            color: #60a5fa;
-            font-size: 14px;
+            color: #2563eb;
+            font-size: 13px;
         }
 
         .admin-badge span {
-            color: #94a3b8;
-            font-size: 13px;
-            font-weight: 600;
+            color: #1d4ed8;
+            font-size: 11px;
+            font-weight: 700;
             letter-spacing: 1px;
+            text-transform: uppercase;
         }
 
         .lock-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(145deg, #1e293b, #0f172a);
-            border: 2px solid rgba(37, 99, 235, 0.3);
-            border-radius: 30px;
+            width: 72px;
+            height: 72px;
+            background: rgba(37, 99, 235, 0.05);
+            border: 1.5px solid rgba(37, 99, 235, 0.15);
+            border-radius: 22px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 24px;
+            margin: 0 auto 20px;
             position: relative;
         }
 
         .lock-icon i {
-            font-size: 36px;
-            color: #3b82f6;
-            filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.5));
-        }
-
-        .lock-icon::after {
-            content: '';
-            position: absolute;
-            width: 90px;
-            height: 90px;
-            border: 2px solid rgba(59, 130, 246, 0.2);
-            border-radius: 35px;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 0.5; }
-            70% { transform: scale(1.1); opacity: 0; }
-            100% { transform: scale(1); opacity: 0; }
+            font-size: 30px;
+            color: #2563eb;
         }
 
         .card-header h1 {
-            color: white;
-            font-size: 28px;
-            font-weight: 700;
+            font-family: 'Outfit', sans-serif;
+            color: #0f172a;
+            font-size: 26px;
+            font-weight: 800;
             margin-bottom: 8px;
             letter-spacing: -0.5px;
         }
 
         .card-header p {
-            color: #94a3b8;
-            font-size: 15px;
+            color: #64748b;
+            font-size: 14px;
         }
 
         /* ===== ERROR MESSAGE ===== */
@@ -226,11 +206,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             display: flex;
             align-items: center;
             gap: 12px;
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            border-radius: 16px;
-            padding: 16px 20px;
-            margin-bottom: 28px;
+            background: #fef2f2;
+            border: 1px solid #fee2e2;
+            border-radius: 12px;
+            padding: 14px 18px;
+            margin-bottom: 24px;
             animation: slideDown 0.4s ease;
         }
 
@@ -247,34 +227,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         .error-alert i {
             color: #ef4444;
-            font-size: 18px;
+            font-size: 16px;
         }
 
         .error-alert span {
-            color: #fca5a5;
-            font-size: 14px;
+            color: #991b1b;
+            font-size: 13px;
             font-weight: 500;
         }
 
         /* ===== FORM ===== */
         .form-group {
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
 
         .form-label {
             display: flex;
             align-items: center;
             gap: 8px;
-            color: #94a3b8;
-            font-size: 13px;
-            font-weight: 600;
+            color: #0f172a;
+            font-size: 11px;
+            font-weight: 700;
             letter-spacing: 0.5px;
             margin-bottom: 8px;
         }
 
         .form-label i {
-            color: #3b82f6;
-            font-size: 14px;
+            color: #2563eb;
+            font-size: 13px;
         }
 
         .input-wrapper {
@@ -283,35 +263,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         .input-icon {
             position: absolute;
-            left: 18px;
+            left: 16px;
             top: 50%;
             transform: translateY(-50%);
-            color: #475569;
-            font-size: 18px;
+            color: #64748b;
+            font-size: 16px;
             transition: color 0.2s;
             z-index: 2;
         }
 
         .form-control {
             width: 100%;
-            padding: 16px 20px 16px 52px;
-            background: rgba(30, 41, 59, 0.7);
-            border: 2px solid rgba(255, 255, 255, 0.05);
-            border-radius: 18px;
-            color: white;
-            font-size: 16px;
+            padding: 14px 16px 14px 48px;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            color: #0f172a;
+            font-size: 15px;
             transition: all 0.25s;
         }
 
         .form-control:focus {
             outline: none;
-            border-color: #3b82f6;
-            background: rgba(30, 41, 59, 0.9);
-            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+            border-color: #2563eb;
+            background: #ffffff;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
         }
 
         .form-control::placeholder {
-            color: #475569;
+            color: #94a3b8;
             font-weight: 400;
         }
 
@@ -320,14 +300,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin: 28px 0 32px;
+            margin: 24px 0 28px;
         }
 
         .remember-me {
             display: flex;
             align-items: center;
             gap: 8px;
-            color: #94a3b8;
+            color: #475569;
             font-size: 14px;
             cursor: pointer;
         }
@@ -335,48 +315,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .remember-me input[type="checkbox"] {
             width: 18px;
             height: 18px;
-            accent-color: #3b82f6;
+            accent-color: #2563eb;
             border-radius: 4px;
             cursor: pointer;
         }
 
         .forgot-link {
-            color: #94a3b8;
+            color: #2563eb;
             font-size: 14px;
-            font-weight: 500;
+            font-weight: 600;
             transition: color 0.2s;
         }
 
         .forgot-link:hover {
-            color: #60a5fa;
+            color: #1d4ed8;
         }
 
         /* ===== SUBMIT BUTTON ===== */
         .btn-login {
             width: 100%;
-            padding: 18px 24px;
-            background: linear-gradient(145deg, #3b82f6, #2563eb);
+            padding: 15px 20px;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
             border: none;
-            border-radius: 18px;
+            border-radius: 12px;
             color: white;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 700;
             letter-spacing: 0.5px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
+            gap: 10px;
             cursor: pointer;
             transition: all 0.25s;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.2);
         }
 
         .btn-login:hover {
-            background: linear-gradient(145deg, #2563eb, #1d4ed8);
-            transform: translateY(-2px);
-            box-shadow: 0 12px 30px rgba(37, 99, 235, 0.4);
+            background: linear-gradient(135deg, #1d4ed8, #1e40af);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
         }
 
         .btn-login:active {
@@ -384,7 +364,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         .btn-login i {
-            font-size: 18px;
+            font-size: 16px;
             transition: transform 0.2s;
         }
 
@@ -392,65 +372,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             transform: translateX(4px);
         }
 
-        .btn-login::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.7s ease;
-        }
-
-        .btn-login:hover::after {
-            left: 100%;
-        }
-
         /* ===== SECURITY BADGES ===== */
         .security-badges {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 24px;
-            margin-top: 32px;
-            padding-top: 24px;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            gap: 16px;
+            margin-top: 28px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(226, 232, 240, 0.8);
         }
 
         .security-item {
             display: flex;
             align-items: center;
             gap: 6px;
-            color: #475569;
-            font-size: 12px;
-            font-weight: 500;
+            color: #64748b;
+            font-size: 11px;
+            font-weight: 600;
         }
 
         .security-item i {
-            color: #3b82f6;
-            font-size: 12px;
+            color: #2563eb;
+            font-size: 11px;
         }
 
         /* ===== ADMIN FOOTER ===== */
         .admin-footer {
-            margin-top: 32px;
+            margin-top: 28px;
             text-align: center;
         }
 
         .admin-footer p {
-            color: #475569;
+            color: #64748b;
             font-size: 13px;
         }
 
         .admin-footer a {
-            color: #94a3b8;
+            color: #2563eb;
             font-weight: 600;
             transition: color 0.2s;
         }
 
         .admin-footer a:hover {
-            color: #60a5fa;
+            color: #1d4ed8;
         }
 
         /* ===== LOADING STATE ===== */
@@ -472,11 +437,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         /* ===== ERROR STATE ===== */
         .form-control.error {
             border-color: #ef4444;
-            background: rgba(239, 68, 68, 0.05);
+            background: #fef2f2;
         }
 
         .error-text {
-            color: #f87171;
+            color: #ef4444;
             font-size: 12px;
             margin-top: 6px;
             display: flex;
@@ -497,21 +462,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             .lock-icon {
                 width: 64px;
                 height: 64px;
-                border-radius: 22px;
+                border-radius: 18px;
             }
 
             .lock-icon i {
-                font-size: 28px;
-            }
-
-            .lock-icon::after {
-                width: 74px;
-                height: 74px;
-                border-radius: 27px;
+                font-size: 26px;
             }
 
             .card-header h1 {
-                font-size: 24px;
+                font-size: 22px;
             }
 
             .form-control {
@@ -520,25 +479,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             .btn-login {
-                padding: 16px 20px;
+                padding: 14px 20px;
             }
 
             .security-badges {
                 flex-direction: column;
-                gap: 12px;
-                align-items: flex-start;
-            }
-        }
-
-        @media (max-width: 360px) {
-            .admin-card {
-                padding: 28px 18px;
-            }
-
-            .form-options {
-                flex-direction: column;
-                gap: 16px;
-                align-items: flex-start;
+                gap: 10px;
+                align-items: center;
             }
         }
 
@@ -567,7 +514,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="card-header">
                 <div class="admin-badge">
                     <i class="fas fa-shield-halved"></i>
-                    <span>SECURE ADMIN ACCESS</span>
+                    <span>Secure Admin Access</span>
                 </div>
                 
                 <div class="lock-icon">
@@ -601,7 +548,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             class="form-control" 
                             id="email" 
                             name="email" 
-                            placeholder="admin@quantum.com"
+                            placeholder="admin@taskbazi.com"
                             value="<?= htmlspecialchars($_POST['email'] ?? '') ?>"
                             autocomplete="off"
                             required
@@ -658,14 +605,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </span>
                     <span class="security-item">
                         <i class="fas fa-clock"></i>
-                        <span>Session Timeout: 15min</span>
+                        <span>Session Timeout</span>
                     </span>
                 </div>
             </form>
 
             <!-- Footer -->
             <div class="admin-footer">
-                <p>© <?= date('Y') ?> Quantum Affiliate · <a href="#">Privacy</a> · <a href="#">Security</a></p>
+                <p>© <?= date('Y') ?> Taskbazi &middot; <a href="#">Privacy</a> · <a href="#">Security</a></p>
             </div>
         </div>
     </div>

@@ -95,7 +95,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         /* ===== LEFT SIDE - BRAND SHOWCASE ===== */
         .brand-panel {
             flex: 1;
-            background: linear-gradient(145deg, #0a1e3c 0%, #0e2a4a 100%);
+            background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 100%);
+            border-right: 1px solid rgba(226, 232, 240, 0.8);
             display: none;
             position: relative;
             overflow: hidden;
@@ -113,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .brand-content {
             position: relative;
             z-index: 10;
-            color: white;
+            color: #0f172a;
             max-width: 540px;
             margin: 0 auto;
         }
@@ -128,14 +129,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .brand-icon {
             width: 48px;
             height: 48px;
-            background: rgba(255, 255, 255, 0.12);
+            background: rgba(37, 99, 235, 0.1);
             backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(37, 99, 235, 0.15);
             border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+            color: #2563eb;
             font-size: 24px;
         }
 
@@ -143,7 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-size: 24px;
             font-weight: 700;
             letter-spacing: -0.5px;
-            background: linear-gradient(to right, #ffffff, #cbd5e1);
+            background: linear-gradient(to right, #0f172a, #334155);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -154,26 +155,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             line-height: 1.1;
             letter-spacing: -0.03em;
             margin-bottom: 24px;
+            color: #0f172a;
         }
 
         .brand-description {
             font-size: 18px;
-            color: #b0c9e0;
+            color: #64748b;
             margin-bottom: 48px;
             line-height: 1.6;
         }
 
         .testimonial {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: white;
+            border: 1px solid rgba(226, 232, 240, 0.8);
             border-radius: 20px;
             padding: 28px;
             margin-top: 40px;
+            box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.05);
         }
 
         .testimonial-quote {
-            color: white;
+            color: #334155;
             font-size: 18px;
             font-style: italic;
             margin-bottom: 20px;
@@ -200,14 +202,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         .author-info h4 {
-            color: white;
+            color: #0f172a;
             font-size: 16px;
             font-weight: 600;
             margin-bottom: 4px;
         }
 
         .author-info p {
-            color: #b0c9e0;
+            color: #64748b;
             font-size: 14px;
         }
 
@@ -225,13 +227,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .stat-number {
             font-size: 28px;
             font-weight: 700;
-            color: white;
+            color: #2563eb;
             margin-bottom: 4px;
         }
 
         .stat-label {
             font-size: 14px;
-            color: #b0c9e0;
+            color: #64748b;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
@@ -241,7 +243,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             position: absolute;
             width: 600px;
             height: 600px;
-            background: radial-gradient(circle at 30% 30%, rgba(37,99,235,0.2) 0%, rgba(124,58,237,0.1) 70%);
+            background: radial-gradient(circle at 30% 30%, rgba(37,99,235,0.06) 0%, rgba(124,58,237,0.03) 70%);
             border-radius: 50%;
             top: -200px;
             right: -100px;
@@ -253,7 +255,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             position: absolute;
             width: 400px;
             height: 400px;
-            background: radial-gradient(circle at 70% 70%, rgba(6,182,212,0.15) 0%, rgba(59,130,246,0.1) 80%);
+            background: radial-gradient(circle at 70% 70%, rgba(6,182,212,0.04) 0%, rgba(59,130,246,0.02) 80%);
             border-radius: 50%;
             bottom: -100px;
             left: -50px;

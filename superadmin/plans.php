@@ -57,15 +57,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 }
 
 // Count tenants per plan
-$plansDistribution = $pdo->query("
-    SELECT plan_name, COUNT(*) as count 
-    FROM tenants 
-    WHERE status != 'deleted' 
-    GROUP BY plan_name
-")->fetchAll(PDO::FETCH_KEY_PAIR);
+try {
+    $plansDistribution = $pdo->query("
+        SELECT plan_name, COUNT(*) as count 
+        FROM tenants 
+        WHERE status != 'deleted' 
+        GROUP BY plan_name
+    ")->fetchAll(PDO::FETCH_KEY_PAIR);
+} catch (PDOException $e) {
+    $plansDistribution = [];
+}
 
 // Retrieve SaaS plans dynamically from database
-$dbPlans = $pdo->query("SELECT * FROM saas_plans ORDER BY id ASC")->fetchAll(PDO::FETCH_ASSOC);
+try {
+    $dbPlans = $pdo->query("SELECT * FROM saas_plans ORDER BY id ASC")->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    $dbPlans = [
+        [
+            'id' => 1,
+            'name' => 'Starter',
+            'price' => '$99/mo',
+            'offers_limit' => '100',
+            'publishers_limit' => '100',
+            'advertisers_limit' => '20',
+            'description' => 'Great for starting out or testing workflows.',
+            'color' => '#3b82f6'
+        ],
+        [
+            'id' => 2,
+            'name' => 'Professional',
+            'price' => '$299/mo',
+            'offers_limit' => '500',
+            'publishers_limit' => '500',
+            'advertisers_limit' => '100',
+            'description' => 'Designed for growing affiliate networks.',
+            'color' => '#8b5cf6'
+        ],
+        [
+            'id' => 3,
+            'name' => 'Enterprise',
+            'price' => '$999/mo',
+            'offers_limit' => 'Unlimited',
+            'publishers_limit' => 'Unlimited',
+            'advertisers_limit' => 'Unlimited',
+            'description' => 'Uncapped limits and VIP support for large operations.',
+            'color' => '#10b981'
+        ]
+    ];
+}
 
 $plans = [];
 foreach ($dbPlans as $dp) {
