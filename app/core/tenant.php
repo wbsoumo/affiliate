@@ -454,7 +454,10 @@ class GuardPDO extends PDO {
             );
 
             // In development, trigger a warning to raise immediate developer awareness
-            trigger_error($msg, E_USER_WARNING);
+            $isLocal = isset($_SERVER['HTTP_HOST']) && (strpos($_SERVER['HTTP_HOST'], 'localhost') !== false || strpos($_SERVER['HTTP_HOST'], '127.0.0.1') !== false);
+            if ($isLocal) {
+                trigger_error($msg, E_USER_WARNING);
+            }
         }
     }
 }
