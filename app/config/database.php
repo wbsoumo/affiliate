@@ -145,6 +145,24 @@ try {
             FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
     ");
+    // Create tenant_homepages table if missing
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS `tenant_homepages` (
+            `tenant_id` INT NOT NULL PRIMARY KEY,
+            `template_id` VARCHAR(50) NOT NULL DEFAULT 'classic_hero',
+            `hero_title` VARCHAR(255) DEFAULT 'Start Your Premium Affiliate Network',
+            `hero_subtitle` TEXT DEFAULT 'Track conversions, manage payouts, and grow your affiliate partnerships with zero latency.',
+            `hero_cta_text` VARCHAR(50) DEFAULT 'Apply as Partner',
+            `hero_cta_url` VARCHAR(255) DEFAULT '/register.php',
+            `features_json` TEXT DEFAULT NULL,
+            `about_text` TEXT DEFAULT NULL,
+            `contact_email` VARCHAR(150) DEFAULT NULL,
+            `social_links_json` TEXT DEFAULT NULL,
+            `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            FOREIGN KEY (`tenant_id`) REFERENCES `tenants` (`id`) ON DELETE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    ");
 } catch (Exception $e) {
     error_log("Failed to self-heal profile tables: " . $e->getMessage());
 }
