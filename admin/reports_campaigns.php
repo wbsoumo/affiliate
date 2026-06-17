@@ -38,7 +38,7 @@ if (isset($_GET['export']) && $_GET['export'] == 'excel') {
 
 function exportToExcel($pdo, $search, $offerFilter, $advertiserFilter, $statusFilter, $dateFrom, $dateTo, $sortBy, $sortOrder) {
     // Build WHERE clause
-    $where = ['1=1'];
+    $where = ['1=1', 'tenant_id = ' . (int)current_tenant_id()];
     $params = [];
 
     if ($search) {
@@ -65,7 +65,7 @@ function exportToExcel($pdo, $search, $offerFilter, $advertiserFilter, $statusFi
     $whereSql = $where ? 'WHERE ' . implode(' AND ', $where) : '';
 
     // Get all offers
-    $sql = "SELECT offer_id, offer_name, status, advertiser_id FROM offers $whereSql  WHERE tenant_id = " . current_tenant_id() . " ORDER BY offer_name";
+    $sql = "SELECT offer_id, offer_name, status, advertiser_id FROM offers $whereSql ORDER BY offer_name";
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
     $offers = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -154,7 +154,7 @@ $advertisers = $pdo->query("SELECT user_id, name FROM users WHERE tenant_id = " 
 /* ===============================
    BUILD FILTER CONDITIONS
 ================================ */
-$where = ['1=1'];
+$where = ['1=1', 'o.tenant_id = ' . (int)current_tenant_id()];
 $params = [];
 
 if ($search) {
@@ -183,7 +183,7 @@ $whereSql = $where ? 'WHERE ' . implode(' AND ', $where) : '';
 /* ===============================
    GET TOTAL COUNT
 ================================ */
-$countStmt = $pdo->prepare("SELECT COUNT(*) FROM offers o $whereSql WHERE o.tenant_id = " . current_tenant_id() . "");
+$countStmt = $pdo->prepare("SELECT COUNT(*) FROM offers o $whereSql");
 $countStmt->execute($params);
 $totalOffers = $countStmt->fetchColumn();
 $totalPages = ceil($totalOffers / $perPage);
@@ -195,7 +195,7 @@ $offset = ($page - 1) * $perPage;
 $sql = "SELECT offer_id, offer_name, status, advertiser_id, created_at as offer_created 
         FROM offers o 
         $whereSql 
-         WHERE o.tenant_id = " . current_tenant_id() . " ORDER BY 
+        ORDER BY 
             CASE WHEN ? = 'date' AND ? = 'desc' THEN o.created_at END DESC,
             CASE WHEN ? = 'date' AND ? = 'asc' THEN o.created_at END ASC,
             CASE WHEN ? = 'name' AND ? = 'asc' THEN o.offer_name END ASC,

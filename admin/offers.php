@@ -39,8 +39,8 @@ $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $perPage = 20;
 
 // Build WHERE clause
-$where = ['1=1'];
-$params = [];
+$where = ['1=1', 'o.tenant_id = :tenant_id'];
+$params = ['tenant_id' => current_tenant_id()];
 
 if ($search) {
     $where[] = '(o.offer_name LIKE :search OR o.offer_description LIKE :search OR u.name LIKE :search OR u.email LIKE :search)';
@@ -107,7 +107,7 @@ $countStmt = $pdo->prepare("
     FROM offers o
     LEFT JOIN users u ON u.user_id = o.advertiser_id
     $whereSql
- WHERE u.tenant_id = " . current_tenant_id() . "");
+");
 $countStmt->execute($params);
 $totalOffers = $countStmt->fetchColumn();
 $totalPages = ceil($totalOffers / $perPage);
@@ -169,7 +169,7 @@ $sql = "
     LEFT JOIN clicks c ON c.offer_id = o.offer_id
     LEFT JOIN conversions cv ON cv.offer_id = o.offer_id
     $whereSql
-     WHERE u.tenant_id = " . current_tenant_id() . " GROUP BY o.offer_id
+    GROUP BY o.offer_id
     ORDER BY $orderBy
     LIMIT :offset, :per_page
 ";
