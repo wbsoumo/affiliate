@@ -653,6 +653,15 @@ CREATE TABLE `users` (
   `balance` decimal(12,2) DEFAULT 0.00,
   `last_login_ip` varbinary(16) DEFAULT NULL,
   `last_login_at` datetime DEFAULT NULL,
+  `profile_image` varchar(255) DEFAULT NULL,
+  `bio` text DEFAULT NULL,
+  `department` varchar(100) DEFAULT NULL,
+  `designation` varchar(100) DEFAULT NULL,
+  `two_factor_enabled` tinyint(1) NOT NULL DEFAULT 0,
+  `two_factor_secret` varchar(255) DEFAULT NULL,
+  `notification_email` tinyint(1) NOT NULL DEFAULT 1,
+  `notification_sms` tinyint(1) NOT NULL DEFAULT 1,
+  `theme_preference` varchar(20) NOT NULL DEFAULT 'light',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
   PRIMARY KEY (`user_id`),
@@ -664,6 +673,57 @@ CREATE TABLE `users` (
   CONSTRAINT `fk_user_account_manager` FOREIGN KEY (`account_manager_id`) REFERENCES `account_managers` (`id`) ON DELETE SET NULL,
   CONSTRAINT `users_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- -----------------------------------------------------
+-- Table structure for table `user_permissions`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `user_permissions`;
+CREATE TABLE `user_permissions` (
+  `user_id` bigint(20) unsigned NOT NULL,
+  `permission_level` varchar(50) DEFAULT 'standard',
+  `can_manage_users` tinyint(1) NOT NULL DEFAULT 1,
+  `can_manage_finance` tinyint(1) NOT NULL DEFAULT 1,
+  `can_manage_reports` tinyint(1) NOT NULL DEFAULT 1,
+  `can_manage_settings` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`user_id`),
+  CONSTRAINT `fk_permissions_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- -----------------------------------------------------
+-- Table structure for table `user_sessions`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `user_sessions`;
+CREATE TABLE `user_sessions` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `session_id` varchar(255) NOT NULL,
+  `user_id` bigint(20) unsigned NOT NULL,
+  `ip_address` varchar(45) DEFAULT NULL,
+  `user_agent` text DEFAULT NULL,
+  `login_time` timestamp NOT NULL DEFAULT current_timestamp(),
+  `last_activity` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `is_current_session` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `fk_sessions_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- -----------------------------------------------------
+-- Table structure for table `user_activity_log`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `user_activity_log`;
+CREATE TABLE `user_activity_log` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) unsigned NOT NULL,
+  `action_type` varchar(100) NOT NULL,
+  `action_description` text DEFAULT NULL,
+  `ip_address` varchar(45) DEFAULT NULL,
+  `user_agent` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `fk_activity_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- -----------------------------------------------------
 -- Table structure for table `saas_plans`

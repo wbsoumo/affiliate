@@ -77,6 +77,78 @@ try {
     // Ignore errors if roles table doesn't exist yet (e.g. during initial schema import)
 }
 
+// Self-healing database check: ensure missing user columns and profile tables exist
+try {
+    $columns = $pdo->query("DESCRIBE users")->fetchAll(PDO::FETCH_COLUMN);
+    
+    $missingColumns = [
+        'profile_image' => "ALTER TABLE users ADD COLUMN profile_image VARCHAR(255) DEFAULT NULL",
+        'bio' => "ALTER TABLE users ADD COLUMN bio TEXT DEFAULT NULL",
+        'department' => "ALTER TABLE users ADD COLUMN department VARCHAR(100) DEFAULT NULL",
+        'designation' => "ALTER TABLE users ADD COLUMN designation VARCHAR(100) DEFAULT NULL",
+        'two_factor_enabled' => "ALTER TABLE users ADD COLUMN two_factor_enabled TINYINT(1) NOT NULL DEFAULT 0",
+        'two_factor_secret' => "ALTER TABLE users ADD COLUMN two_factor_secret VARCHAR(255) DEFAULT NULL",
+        'notification_email' => "ALTER TABLE users ADD COLUMN notification_email TINYINT(1) NOT NULL DEFAULT 1",
+        'notification_sms' => "ALTER TABLE users ADD COLUMN notification_sms TINYINT(1) NOT NULL DEFAULT 1",
+        'theme_preference' => "ALTER TABLE users ADD COLUMN theme_preference VARCHAR(20) NOT NULL DEFAULT 'light'"
+    ];
+    
+    foreach ($missingColumns as $col => $sql) {
+        if (!in_array($col, $columns, true)) {
+            $pdo->exec($sql);
+        }
+    }
+} catch (Exception $e) {
+    error_log("Failed to self-heal users table columns: " . $e->getMessage());
+}
+
+try {
+    // Create user_permissions table if missing
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS `user_permissions` (
+            `user_id` bigint(20) unsigned NOT NULL PRIMARY KEY,
+            `permission_level` varchar(50) DEFAULT 'standard',
+            `can_manage_users` tinyint(1) NOT NULL DEFAULT 1,
+            `can_manage_finance` tinyint(1) NOT NULL DEFAULT 1,
+            `can_manage_reports` tinyint(1) NOT NULL DEFAULT 1,
+            `can_manage_settings` tinyint(1) NOT NULL DEFAULT 1,
+            FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    ");
+    
+    // Create user_sessions table if missing
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS `user_sessions` (
+            `id` bigint(20) unsigned AUTO_INCREMENT PRIMARY KEY,
+            `session_id` varchar(255) NOT NULL,
+            `user_id` bigint(20) unsigned NOT NULL,
+            `ip_address` varchar(45) DEFAULT NULL,
+            `user_agent` text DEFAULT NULL,
+            `login_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            `last_activity` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            `is_active` tinyint(1) NOT NULL DEFAULT 1,
+            `is_current_session` tinyint(1) NOT NULL DEFAULT 0,
+            FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    ");
+    
+    // Create user_activity_log table if missing
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS `user_activity_log` (
+            `id` bigint(20) unsigned AUTO_INCREMENT PRIMARY KEY,
+            `user_id` bigint(20) unsigned NOT NULL,
+            `action_type` varchar(100) NOT NULL,
+            `action_description` text DEFAULT NULL,
+            `ip_address` varchar(45) DEFAULT NULL,
+            `user_agent` text DEFAULT NULL,
+            `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    ");
+} catch (Exception $e) {
+    error_log("Failed to self-heal profile tables: " . $e->getMessage());
+}
+
 // Automatically enforce tenant resolution in tenant contexts
 if (php_sapi_name() !== 'cli' && (!defined('SUPER_ADMIN_CONTEXT') || SUPER_ADMIN_CONTEXT !== true)) {
     require_tenant();
