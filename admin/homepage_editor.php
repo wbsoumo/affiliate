@@ -17,6 +17,18 @@ $settings = current_tenant_settings() ?: [];
 $siteName = htmlspecialchars($settings['site_name'] ?? $tenant['name']);
 $primaryColor = htmlspecialchars($settings['primary_color'] ?? '#2563eb');
 
+$primaryDomain = null;
+try {
+    $domainStmt = $pdo->prepare("SELECT domain FROM tenant_domains WHERE tenant_id = :tid AND is_primary = 1 LIMIT 1");
+    $domainStmt->execute(['tid' => $tenantId]);
+    $primaryDomain = $domainStmt->fetchColumn();
+} catch (Exception $e) {
+    error_log("Failed to resolve primary domain: " . $e->getMessage());
+}
+if (!$primaryDomain) {
+    $primaryDomain = ($tenant['slug'] ?? 'agency') . '.taskbazi.xyz';
+}
+
 $success = $error = null;
 
 // Fetch current homepage settings
@@ -303,19 +315,49 @@ if (empty($layoutJson)) {
             color: var(--text-dark);
         }
         
-        /* Section cards in the sidebar */
         .section-builder-card {
             background: #ffffff;
             border: 2px solid var(--border-color);
             border-radius: 12px;
             margin-bottom: 16px;
-            transition: all 0.25s ease;
+            transition: all 0.25s ease, transform 0.2s ease;
             overflow: hidden;
             box-shadow: 0 2px 4px rgba(0,0,0,0.01);
         }
         
         .section-builder-card:hover {
             border-color: #cbd5e1;
+        }
+        
+        .section-builder-card.dragging {
+            opacity: 0.55;
+            border: 2px dashed var(--primary-color) !important;
+            background: #f8fafc;
+            transform: scale(0.97);
+            box-shadow: 0 8px 20px rgba(15,23,42,0.1);
+        }
+        
+        .section-builder-card.drag-over {
+            border-top: 3px solid var(--primary-color) !important;
+            background: #eff6ff;
+        }
+        
+        .drag-handle {
+            cursor: grab;
+            color: #94a3b8;
+            padding: 4px 6px;
+            margin-right: 4px;
+            display: flex;
+            align-items: center;
+            transition: color 0.2s;
+        }
+        
+        .drag-handle:hover {
+            color: var(--primary-color);
+        }
+        
+        .drag-handle:active {
+            cursor: grabbing;
         }
         
         .section-card-header {
@@ -536,6 +578,20 @@ if (empty($layoutJson)) {
             overflow: hidden;
             height: calc(100vh - 210px);
             min-height: 450px;
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-left: auto;
+            margin-right: auto;
+            width: 100%;
+        }
+        
+        .preview-device-frame.tablet {
+            width: 768px;
+            max-width: 100%;
+        }
+        
+        .preview-device-frame.mobile {
+            width: 375px;
+            max-width: 100%;
         }
         
         .preview-device-header {
@@ -782,8 +838,21 @@ if (empty($layoutJson)) {
                     <!-- RIGHT COLUMN: Interactive Live Preview -->
                     <div class="preview-panel d-none d-xl-block">
                         <div class="preview-sticky">
-                            <div style="font-family: var(--font-display); font-weight: 800; font-size: 16px; margin-bottom: 12px; color: var(--text-dark); display: flex; align-items: center; justify-content: space-between;">
+                            <div style="font-family: var(--font-display); font-weight: 800; font-size: 14px; margin-bottom: 12px; color: var(--text-dark); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
                                 <span><i class="fas fa-eye mr-2" style="color: var(--primary-color);"></i>Live Preview</span>
+                                
+                                <div class="btn-group btn-group-toggle" data-toggle="buttons" style="box-shadow: 0 1px 3px rgba(0,0,0,0.05); border-radius: 6px; background: #e2e8f0; padding: 2px;">
+                                    <label class="btn btn-xs btn-light active font-weight-bold shadow-sm" style="padding: 3px 10px; font-size: 11px; border: none; border-radius: 4px;" onclick="changeViewport('desktop')" id="vp-desktop">
+                                        <input type="radio" name="viewport" checked> <i class="fas fa-desktop mr-1"></i> Desktop
+                                    </label>
+                                    <label class="btn btn-xs btn-light font-weight-bold" style="padding: 3px 10px; font-size: 11px; border: none; border-radius: 4px;" onclick="changeViewport('tablet')" id="vp-tablet">
+                                        <input type="radio" name="viewport"> <i class="fas fa-tablet-alt mr-1"></i> Tablet
+                                    </label>
+                                    <label class="btn btn-xs btn-light font-weight-bold" style="padding: 3px 10px; font-size: 11px; border: none; border-radius: 4px;" onclick="changeViewport('mobile')" id="vp-mobile">
+                                        <input type="radio" name="viewport"> <i class="fas fa-mobile-alt mr-1"></i> Mobile
+                                    </label>
+                                </div>
+
                                 <button class="btn btn-xs btn-outline-secondary font-weight-bold" onclick="document.getElementById('sitePreview').src = '../index.php?t=' + Date.now();">
                                     <i class="fas fa-rotate mr-1"></i> Refresh
                                 </button>
@@ -793,7 +862,7 @@ if (empty($layoutJson)) {
                                     <span class="preview-dot preview-dot-red"></span>
                                     <span class="preview-dot preview-dot-yellow"></span>
                                     <span class="preview-dot preview-dot-green"></span>
-                                    <div class="preview-address-bar"><i class="fas fa-lock mr-1 text-success"></i> https://<?= $_SERVER['HTTP_HOST'] ?>/</div>
+                                    <div class="preview-address-bar"><i class="fas fa-lock mr-1 text-success"></i> https://<?= htmlspecialchars($primaryDomain) ?>/</div>
                                 </div>
                                 <iframe src="../index.php?t=<?= time() ?>" class="preview-iframe" id="sitePreview"></iframe>
                             </div>
@@ -918,7 +987,7 @@ function addNewSection(type) {
     const settings = JSON.parse(JSON.stringify(defaultTemplates[type]));
     sections.push({ id, type, settings });
     expandedSectionId = id;
-    renderSections();
+    layoutChanged();
     scrollToSection(id);
 }
 
@@ -955,7 +1024,7 @@ function deleteSection(id, event) {
     if (confirm('Are you sure you want to delete this section?')) {
         sections = sections.filter(s => s.id !== id);
         if (expandedSectionId === id) expandedSectionId = null;
-        renderSections();
+        layoutChanged();
     }
 }
 
@@ -972,8 +1041,116 @@ function moveSection(id, direction, event) {
     sections[idx] = sections[targetIdx];
     sections[targetIdx] = temp;
     
-    renderSections();
+    layoutChanged();
     scrollToSection(id);
+}
+
+// Layout change wrapper
+function layoutChanged() {
+    renderSections();
+    saveLayoutSilent();
+}
+
+// Silent save layout to update the preview frame dynamically
+function saveLayoutSilent() {
+    let formData = new FormData();
+    formData.append('action', 'save_layout');
+    formData.append('layout_json', JSON.stringify(sections));
+
+    fetch('homepage_editor.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.success) {
+            // Force reload preview frame
+            document.getElementById('sitePreview').src = '../index.php?t=' + Date.now();
+        }
+    })
+    .catch(err => {
+        console.error("Silent save error:", err);
+    });
+}
+
+// Viewport Switcher
+function changeViewport(mode) {
+    const frame = $('.preview-device-frame');
+    frame.removeClass('tablet mobile');
+    
+    // Toggle active class on UI buttons
+    $('#vp-desktop, #vp-tablet, #vp-mobile').removeClass('active btn-primary text-white shadow-sm').addClass('btn-light');
+    
+    if (mode === 'tablet') {
+        frame.addClass('tablet');
+        $('#vp-tablet').addClass('active btn-primary text-white shadow-sm').removeClass('btn-light');
+    } else if (mode === 'mobile') {
+        frame.addClass('mobile');
+        $('#vp-mobile').addClass('active btn-primary text-white shadow-sm').removeClass('btn-light');
+    } else {
+        $('#vp-desktop').addClass('active btn-primary text-white shadow-sm').removeClass('btn-light');
+    }
+}
+
+// HTML5 Drag and Drop Handlers
+let dragSourceId = null;
+
+function dragStart(e, id) {
+    // Check if the drag started from a drag handle (or nested within it)
+    if (!$(e.target).closest('.drag-handle').length) {
+        e.preventDefault();
+        return false;
+    }
+    dragSourceId = id;
+    
+    let dt = e.dataTransfer || (e.originalEvent && e.originalEvent.dataTransfer);
+    if (dt) {
+        dt.effectAllowed = 'move';
+        dt.setData('text/plain', id);
+    }
+    
+    // Add visual feedback
+    setTimeout(() => {
+        $(`#card_${id}`).addClass('dragging');
+    }, 0);
+}
+
+function dragEnd(e, id) {
+    $(`#card_${id}`).removeClass('dragging');
+    $('.section-builder-card').removeClass('drag-over');
+    dragSourceId = null;
+}
+
+function dragOver(e, id) {
+    if (dragSourceId && dragSourceId !== id) {
+        e.preventDefault();
+        $(`#card_${id}`).addClass('drag-over');
+    }
+}
+
+function dragLeave(e, id) {
+    $(`#card_${id}`).removeClass('drag-over');
+}
+
+function dragDrop(e, id) {
+    e.preventDefault();
+    $(`#card_${id}`).removeClass('drag-over');
+    
+    let sourceId = dragSourceId;
+    let dt = e.dataTransfer || (e.originalEvent && e.originalEvent.dataTransfer);
+    if (!sourceId && dt) {
+        sourceId = dt.getData('text/plain');
+    }
+    
+    if (sourceId && sourceId !== id) {
+        const sourceIdx = sections.findIndex(s => s.id === sourceId);
+        const targetIdx = sections.findIndex(s => s.id === id);
+        if (sourceIdx !== -1 && targetIdx !== -1) {
+            const [moved] = sections.splice(sourceIdx, 1);
+            sections.splice(targetIdx, 0, moved);
+            layoutChanged();
+        }
+    }
 }
 
 // Add child list items
@@ -1128,9 +1305,17 @@ function renderSections() {
         else if (sec.type === 'trust_badges') { typeName = 'Trust Badges'; iconClass = 'fa-shield-halved'; labelClass = 'icon-trust_badges'; }
         
         let cardHtml = `
-            <div class="section-builder-card" id="card_${sec.id}">
+            <div class="section-builder-card" id="card_${sec.id}" draggable="true"
+                 ondragstart="dragStart(event, '${sec.id}')"
+                 ondragend="dragEnd(event, '${sec.id}')"
+                 ondragover="dragOver(event, '${sec.id}')"
+                 ondragleave="dragLeave(event, '${sec.id}')"
+                 ondrop="dragDrop(event, '${sec.id}')">
                 <div class="section-card-header" onclick="toggleSection('${sec.id}')">
                     <div class="section-card-info">
+                        <div class="drag-handle" onclick="event.stopPropagation();" title="Drag to reorder">
+                            <i class="fas fa-grip-vertical"></i>
+                        </div>
                         <div class="section-card-icon ${labelClass}"><i class="fas ${iconClass}"></i></div>
                         <div>
                             <span class="d-block text-dark">${headerTitle}</span>
@@ -1138,8 +1323,6 @@ function renderSections() {
                         </div>
                     </div>
                     <div class="section-card-controls">
-                        <button onclick="moveSection('${sec.id}', 'up', event)" title="Move Up" ${idx === 0 ? 'disabled style="opacity:0.3;"' : ''}><i class="fas fa-arrow-up"></i></button>
-                        <button onclick="moveSection('${sec.id}', 'down', event)" title="Move Down" ${idx === sections.length - 1 ? 'disabled style="opacity:0.3;"' : ''}><i class="fas fa-arrow-down"></i></button>
                         <button onclick="deleteSection('${sec.id}', event)" class="btn-delete-section" title="Delete"><i class="fas fa-trash"></i></button>
                     </div>
                 </div>

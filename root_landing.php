@@ -1012,6 +1012,7 @@ try {
                     <li><a href="tel:8016222991">Support</a></li>
                 </ul>
                 <div class="nav-cta">
+                    <a href="/admin/login.php" class="btn btn-outline" style="border-color: #3b82f6; color: #3b82f6; font-weight: 600;">Admin Login</a>
                     <a href="/login.php" class="btn btn-outline">Sign In</a>
                     <a href="/register.php" class="btn btn-primary">Join Network</a>
                 </div>

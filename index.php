@@ -748,6 +748,7 @@ $sections = json_decode($layoutJson, true) ?: [];
                 </div>
                 
                 <div class="nav-actions">
+                    <a href="/admin/login.php" class="btn-link" style="color: var(--primary-color); font-weight: 700; margin-right: 15px;">Admin Login</a>
                     <a href="/login.php" class="btn-link">Sign In</a>
                     <a href="/register.php" class="btn-theme">Register</a>
                 </div>
@@ -1043,6 +1044,7 @@ $sections = json_decode($layoutJson, true) ?: [];
                 </div>
                 
                 <div class="footer-links">
+                    <a href="/admin/login.php" style="font-weight: 600; color: var(--primary-color);">Admin Portal</a>
                     <a href="#">Terms of Service</a>
                     <a href="#">Privacy Policy</a>
                     <a href="mailto:<?= $supportEmail ?>">Contact Support</a>
