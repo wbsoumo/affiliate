@@ -51,7 +51,7 @@ if (!empty($startDate) && !empty($endDate)) {
    BUILD FILTER CONDITIONS
 -------------------------------------------------- */
 $where  = [];
-$params = ['aid' => $affiliateId];
+$params = ['aid' => $affiliateId, 'tenant_id' => current_tenant_id()];
 
 /* -------------------------------------------------
    DATE FILTER (ONLY IF PROVIDED)
@@ -121,7 +121,7 @@ if (isset($_GET['has_click'])) {
 /* -------------------------------------------------
    FINAL WHERE SQL
 -------------------------------------------------- */
-$whereSql = "WHERE cv.affiliate_id = :aid";
+$whereSql = "WHERE cv.affiliate_id = :aid AND cv.tenant_id = :tenant_id";
 
 if (!empty($where)) {
     $whereSql .= " AND " . implode(' AND ', $where);
@@ -141,7 +141,6 @@ SELECT
     COALESCE(AVG(CASE WHEN cv.status = 'approved' THEN cv.payout END),0) AS avg_payout
 FROM conversions cv
 $whereSql
- WHERE cv.tenant_id = " . current_tenant_id() . "";
 
 $statsStmt = $pdo->prepare($statsSql);
 $statsStmt->execute($params);
@@ -178,8 +177,7 @@ SELECT
 FROM conversions cv
 INNER JOIN offers o ON o.offer_id = cv.offer_id
 LEFT JOIN clicks c ON c.click_id = cv.click_id
-$whereSql
- WHERE o.tenant_id = " . current_tenant_id() . " ORDER BY cv.created_at DESC
+$whereSql ORDER BY cv.created_at DESC
 LIMIT 1000
 ";
 
@@ -199,8 +197,7 @@ SELECT
     SUM(CASE WHEN cv.status = 'rejected' THEN 1 ELSE 0 END) as rejected,
     SUM(CASE WHEN cv.status = 'approved' THEN cv.payout ELSE 0 END) as earnings
 FROM conversions cv
-$whereSql
- WHERE cv.tenant_id = " . current_tenant_id() . " GROUP BY DATE(cv.created_at)
+$whereSql GROUP BY DATE(cv.created_at)
 ORDER BY date ASC
 ";
 
@@ -223,8 +220,7 @@ SELECT
     AVG(CASE WHEN cv.status = 'approved' THEN cv.payout END) as avg_payout
 FROM conversions cv
 INNER JOIN offers o ON o.offer_id = cv.offer_id
-$whereSql
- WHERE o.tenant_id = " . current_tenant_id() . " GROUP BY o.offer_id, o.offer_name
+$whereSql GROUP BY o.offer_id, o.offer_name
 ORDER BY earnings DESC
 LIMIT 10
 ";
@@ -243,8 +239,7 @@ SELECT
     SUM(cv.payout) as total_payout,
     AVG(cv.payout) as avg_payout
 FROM conversions cv
-$whereSql
- WHERE cv.tenant_id = " . current_tenant_id() . " GROUP BY cv.status
+$whereSql GROUP BY cv.status
 ";
 
 $statusStatsStmt = $pdo->prepare($statusStatsSql);
@@ -260,8 +255,7 @@ SELECT
     COUNT(*) as count,
     SUM(CASE WHEN cv.status = 'approved' THEN cv.payout ELSE 0 END) as earnings
 FROM conversions cv
-$whereSql
- WHERE cv.tenant_id = " . current_tenant_id() . " GROUP BY cv.source
+$whereSql GROUP BY cv.source
 ";
 
 $sourceStatsStmt = $pdo->prepare($sourceStatsSql);

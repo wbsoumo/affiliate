@@ -31,8 +31,8 @@ if (strtotime($fromDate) > strtotime($toDate)) {
 /* ===============================
    BUILD WHERE CLAUSE WITH POSITIONAL PARAMETERS
 ================================ */
-$where  = ["o.advertiser_id = ?"];
-$params = [$advertiserId];
+$where  = ["o.advertiser_id = ?", "o.tenant_id = ?"];
+$params = [$advertiserId, current_tenant_id()];
 
 if ($status !== 'all') {
     $where[] = "cv.status = ?";
@@ -58,7 +58,6 @@ $countSql = "
     FROM conversions cv
     INNER JOIN offers o ON o.offer_id = cv.offer_id
     $whereSql
- WHERE o.tenant_id = " . current_tenant_id() . "";
 $countStmt = $pdo->prepare($countSql);
 $countStmt->execute($params);
 $totalRows = (int)$countStmt->fetchColumn();
@@ -93,7 +92,7 @@ $sql = "
     LEFT JOIN clicks c ON c.click_id = cv.click_id
     LEFT JOIN users u ON u.user_id = c.affiliate_id
     $whereSql
-     WHERE u.tenant_id = " . current_tenant_id() . " ORDER BY cv.created_at DESC
+    ORDER BY cv.created_at DESC
     LIMIT ?, ?
 ";
 
@@ -129,7 +128,6 @@ $summarySql = "
     FROM conversions cv
     INNER JOIN offers o ON o.offer_id = cv.offer_id
     $whereSql
- WHERE o.tenant_id = " . current_tenant_id() . "";
 $summaryStmt = $pdo->prepare($summarySql);
 $summaryStmt->execute($params);
 $summary = $summaryStmt->fetch(PDO::FETCH_ASSOC);
@@ -145,7 +143,7 @@ $distSql = "
     FROM conversions cv
     INNER JOIN offers o ON o.offer_id = cv.offer_id
     $whereSql
-     WHERE o.tenant_id = " . current_tenant_id() . " GROUP BY cv.status
+    GROUP BY cv.status
     ORDER BY FIELD(cv.status, 'approved', 'pending', 'rejected')
 ";
 $distStmt = $pdo->prepare($distSql);

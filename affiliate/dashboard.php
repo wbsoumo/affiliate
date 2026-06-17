@@ -16,8 +16,8 @@ $affiliateName = $_SESSION['user_name'] ?? 'Affiliate';
    FILTERS
 -------------------------------------------------- */
 
-$where   = [];
-$params  = [];
+$where   = ['c.tenant_id = :tenant_id'];
+$params  = ['tenant_id' => current_tenant_id()];
 
 // Mandatory affiliate filter
 $where[]        = 'c.affiliate_id = :aid';
@@ -64,8 +64,7 @@ $whereSql = 'WHERE ' . implode(' AND ', $where);
 $countStmt = $pdo->prepare("
     SELECT COUNT(*) 
     FROM clicks c
-    $whereSql
- WHERE c.tenant_id = " . current_tenant_id() . "");
+    $whereSql");
 
 $countStmt->execute($params);
 $totalRecords = (int)$countStmt->fetchColumn();

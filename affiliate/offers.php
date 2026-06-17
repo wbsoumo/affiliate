@@ -22,9 +22,10 @@ $affiliateName = $_SESSION['user_name'] ?? 'Affiliate';
    FILTERS
 -------------------------------------------------- */
 
-$where  = [];
+$where  = ['o.tenant_id = :tenant_id'];
 $params = [
-    'aid' => $affiliateId
+    'aid' => $affiliateId,
+    'tenant_id' => current_tenant_id()
 ];
 
 /* Only approved offers */

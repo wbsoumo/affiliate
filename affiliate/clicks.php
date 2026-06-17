@@ -36,6 +36,7 @@ $endDate   = $_GET['end_date']   ?? date('Y-m-d');
 $where   = [];
 $params  = [
     'aid'        => $affiliateId,
+    'tenant_id'  => current_tenant_id(),
     'start_date'=> $startDate,
     'end_date'  => $endDate
 ];
@@ -83,7 +84,7 @@ if (isset($_GET['has_conversion'])) {
     }
 }
 
-$whereSql = "WHERE c.affiliate_id = :aid";
+$whereSql = "WHERE c.affiliate_id = :aid AND c.tenant_id = :tenant_id";
 if ($where) {
     $whereSql .= " AND " . implode(' AND ', $where);
 }
@@ -104,7 +105,6 @@ LEFT JOIN conversions cv
     ON cv.click_id = c.click_id
     AND cv.status = 'approved'
 $whereSql
- WHERE c.tenant_id = " . current_tenant_id() . "";
 
 $statsStmt = $pdo->prepare($statsSql);
 $statsStmt->execute($params);
@@ -135,8 +135,7 @@ SELECT
 FROM clicks c
 INNER JOIN offers o ON o.offer_id = c.offer_id
 LEFT JOIN conversions cv ON cv.click_id = c.click_id
-$whereSql
- WHERE o.tenant_id = " . current_tenant_id() . " GROUP BY c.click_id
+$whereSql GROUP BY c.click_id
 ORDER BY c.created_at DESC
 LIMIT 1000
 ";

@@ -31,8 +31,8 @@ $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $perPage = 20;
 
 // Build WHERE clause
-$where = ['o.advertiser_id = :advertiser_id'];
-$params = ['advertiser_id' => $advertiserId];
+$where = ['o.advertiser_id = :advertiser_id', 'o.tenant_id = :tenant_id'];
+$params = ['advertiser_id' => $advertiserId, 'tenant_id' => current_tenant_id()];
 
 if ($search) {
     $where[] = '(o.offer_name LIKE :search OR o.offer_description LIKE :search)';
@@ -74,7 +74,7 @@ $countStmt = $pdo->prepare("
     SELECT COUNT(*) 
     FROM offers o
     $whereSql
- WHERE o.tenant_id = " . current_tenant_id() . "");
+");
 $countStmt->execute($params); // Use the same $params array
 $totalOffers = $countStmt->fetchColumn();
 $totalPages = ceil($totalOffers / $perPage);
@@ -122,7 +122,7 @@ $sql = "
     LEFT JOIN clicks c ON c.offer_id = o.offer_id
     LEFT JOIN conversions cv ON cv.offer_id = o.offer_id
     $whereSql
-     WHERE o.tenant_id = " . current_tenant_id() . " GROUP BY o.offer_id
+    GROUP BY o.offer_id
     ORDER BY $orderBy
     LIMIT :offset, :per_page
 ";
@@ -154,11 +154,11 @@ $summaryStmt = $pdo->prepare("
         SUM(revenue) as total_potential_revenue,
         
         -- Performance stats
-        (SELECT COUNT(*) FROM clicks c WHERE o2.tenant_id = " . current_tenant_id() . " AND c.offer_id IN (SELECT offer_id FROM offers o2 WHERE o2.advertiser_id = :aid1)) as total_clicks,
-        (SELECT COUNT(*) FROM conversions cv WHERE cv.offer_id IN (SELECT offer_id FROM offers o2 WHERE o2.advertiser_id = :aid2)) as total_conversions,
-        (SELECT SUM(revenue) FROM conversions cv WHERE cv.status = 'approved' AND cv.offer_id IN (SELECT offer_id FROM offers o2 WHERE o2.advertiser_id = :aid3)) as total_earned
+        (SELECT COUNT(*) FROM clicks c WHERE c.tenant_id = " . current_tenant_id() . " AND c.offer_id IN (SELECT offer_id FROM offers o2 WHERE o2.advertiser_id = :aid1)) as total_clicks,
+        (SELECT COUNT(*) FROM conversions cv WHERE cv.tenant_id = " . current_tenant_id() . " AND cv.offer_id IN (SELECT offer_id FROM offers o2 WHERE o2.advertiser_id = :aid2)) as total_conversions,
+        (SELECT SUM(revenue) FROM conversions cv WHERE cv.tenant_id = " . current_tenant_id() . " AND cv.status = 'approved' AND cv.offer_id IN (SELECT offer_id FROM offers o2 WHERE o2.advertiser_id = :aid3)) as total_earned
     FROM offers
-    WHERE advertiser_id = :aid4
+    WHERE tenant_id = " . current_tenant_id() . " AND advertiser_id = :aid4
 ");
 
 $summaryStmt->execute([

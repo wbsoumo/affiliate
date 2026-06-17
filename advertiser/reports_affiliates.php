@@ -31,8 +31,8 @@ if (strtotime($fromDate) > strtotime($toDate)) {
 /* ===============================
    BUILD WHERE CLAUSE WITH POSITIONAL PARAMETERS
 ================================ */
-$where  = ["o.advertiser_id = ?"];
-$params = [$advertiserId];
+$where  = ["o.advertiser_id = ?", "u.tenant_id = ?"];
+$params = [$advertiserId, current_tenant_id()];
 
 if ($offerId !== 'all') {
     $where[] = "o.offer_id = ?";
@@ -89,7 +89,7 @@ $sql = "
     INNER JOIN users u ON u.user_id = c.affiliate_id
     LEFT JOIN conversions cv ON cv.click_id = c.click_id
     $whereSql
-     WHERE u.tenant_id = " . current_tenant_id() . " GROUP BY u.user_id, u.name, u.email
+    GROUP BY u.user_id, u.name, u.email
 ";
 
 // Add sorting
