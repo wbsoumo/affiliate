@@ -141,6 +141,7 @@ SELECT
     COALESCE(AVG(CASE WHEN cv.status = 'approved' THEN cv.payout END),0) AS avg_payout
 FROM conversions cv
 $whereSql
+";
 
 $statsStmt = $pdo->prepare($statsSql);
 $statsStmt->execute($params);

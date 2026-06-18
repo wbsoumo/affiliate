@@ -82,7 +82,7 @@ SELECT
     COALESCE(SUM(CASE WHEN cv.status = 'pending'  THEN cv.payout END), 0) AS pending_earnings
 
 FROM users u
-LEFT JOIN account_managers am ON am.id = u.account_manager_id
+LEFT JOIN users am ON am.user_id = u.account_manager_id AND am.role_id = 2
 LEFT JOIN clicks c          ON c.affiliate_id = u.user_id
 LEFT JOIN conversions cv    ON cv.affiliate_id = u.user_id
 $whereSql GROUP BY u.user_id
@@ -105,9 +105,9 @@ $publishers = $stmt->fetchAll(PDO::FETCH_ASSOC);
    FETCH ACCOUNT MANAGERS (CORRECT)
 ================================ */
 $managers = $pdo->query("
-    SELECT id, name 
-    FROM account_managers
-    WHERE tenant_id = " . current_tenant_id() . " AND status = 'active'
+    SELECT user_id AS id, name 
+    FROM users
+    WHERE tenant_id = " . current_tenant_id() . " AND role_id = 2 AND status = 'active'
     ORDER BY name
 ")->fetchAll(PDO::FETCH_ASSOC);
 
@@ -169,7 +169,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['assign_manager'])) {
 
     // validate manager exists
     if ($managerId !== null) {
-        $chk = $pdo->prepare("SELECT 1 FROM account_managers WHERE tenant_id = " . current_tenant_id() . " AND id = ?");
+        $chk = $pdo->prepare("SELECT 1 FROM users WHERE tenant_id = " . current_tenant_id() . " AND role_id = 2 AND user_id = ?");
         $chk->execute([$managerId]);
         if (!$chk->fetchColumn()) {
             $error = 'Invalid account manager selected';
@@ -243,7 +243,7 @@ if (isset($_GET['export'])) {
             COUNT(DISTINCT cv.conversion_id) AS conversions,
             COALESCE(SUM(CASE WHEN cv.status='approved' THEN cv.payout END),0) AS earnings
         FROM users u
-        LEFT JOIN account_managers am ON am.id=u.account_manager_id
+        LEFT JOIN users am ON am.user_id = u.account_manager_id AND am.role_id = 2
         LEFT JOIN conversions cv ON cv.affiliate_id=u.user_id
         WHERE u.tenant_id = " . current_tenant_id() . " AND u.role_id=3
         GROUP BY u.user_id
@@ -771,102 +771,7 @@ if (isset($_GET['export'])) {
     </nav>
 
     <!-- Sidebar -->
-    <aside class="main-sidebar sidebar-dark-primary elevation-4">
-        <a href="dashboard.php" class="brand-link text-center">
-            <span class="brand-text font-weight-light" style="font-size: 1.5rem;">
-                <i class="fas fa-crown mr-2"></i>
-                <strong>Admin</strong>
-            </span>
-        </a>
-
-        <div class="sidebar">
-            <nav class="mt-2">
-                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                    <li class="nav-item">
-                        <a href="dashboard.php" class="nav-link">
-                            <i class="nav-icon fas fa-chart-line"></i>
-                            <p>Dashboard</p>
-                        </a>
-                    </li>
-
-                    <li class="nav-header">CAMPAIGNS</li>
-                    <li class="nav-item">
-                        <a href="campaigns.php" class="nav-link">
-                            <i class="nav-icon fas fa-bullhorn"></i>
-                            <p>Manage Campaigns</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="create_campaign.php" class="nav-link">
-                            <i class="nav-icon fas fa-plus"></i>
-                            <p>Create Campaign</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="campaign_access.php" class="nav-link">
-                            <i class="nav-icon fas fa-key"></i>
-                            <p>Campaign Access</p>
-                        </a>
-                    </li>
-
-                    <li class="nav-header">REPORTS</li>
-                    <li class="nav-item">
-                        <a href="reports_campaigns.php" class="nav-link">
-                            <i class="nav-icon fas fa-chart-bar"></i>
-                            <p>Campaign Report</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="reports_affiliates.php" class="nav-link">
-                            <i class="nav-icon fas fa-users"></i>
-                            <p>Affiliate Report</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="reports_advertisers.php" class="nav-link">
-                            <i class="nav-icon fas fa-building"></i>
-                            <p>Advertiser Report</p>
-                        </a>
-                    </li>
-
-                    <li class="nav-header">PUBLISHERS</li>
-                    <li class="nav-item">
-                        <a href="publishers.php" class="nav-link active">
-                            <i class="nav-icon fas fa-user-friends"></i>
-                            <p>Manage Publishers</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="publisher_postbacks.php" class="nav-link">
-                            <i class="nav-icon fas fa-link"></i>
-                            <p>Publisher Postbacks</p>
-                        </a>
-                    </li>
-
-                    <li class="nav-header">ADVERTISERS</li>
-                    <li class="nav-item">
-                        <a href="advertisers.php" class="nav-link">
-                            <i class="nav-icon fas fa-briefcase"></i>
-                            <p>Manage Advertisers</p>
-                        </a>
-                    </li>
-
-                    <li class="nav-header">ACCOUNT</li>
-                    <li class="nav-item">
-                        <a href="account_managers.php" class="nav-link">
-                            <i class="nav-icon fas fa-user-tie"></i>
-                            <p>Account Managers</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="settings.php" class="nav-link">
-                            <i class="nav-icon fas fa-cog"></i>
-                            <p>Settings</p>
-                        </a>
-                </ul>
-            </nav>
-        </div>
-    </aside>
+    <?php include __DIR__ . '/sidebar.php'; ?>
 
     <!-- Content Wrapper -->
     <div class="content-wrapper">

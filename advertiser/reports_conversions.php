@@ -58,6 +58,7 @@ $countSql = "
     FROM conversions cv
     INNER JOIN offers o ON o.offer_id = cv.offer_id
     $whereSql
+";
 $countStmt = $pdo->prepare($countSql);
 $countStmt->execute($params);
 $totalRows = (int)$countStmt->fetchColumn();
@@ -128,6 +129,7 @@ $summarySql = "
     FROM conversions cv
     INNER JOIN offers o ON o.offer_id = cv.offer_id
     $whereSql
+";
 $summaryStmt = $pdo->prepare($summarySql);
 $summaryStmt->execute($params);
 $summary = $summaryStmt->fetch(PDO::FETCH_ASSOC);

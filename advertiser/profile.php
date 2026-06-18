@@ -33,13 +33,13 @@ $userStmt = $pdo->prepare("
         u.last_login_at,
         u.created_at,
         u.updated_at,
-        am.id    AS manager_id,
+        am.user_id    AS manager_id,
         am.name  AS manager_name,
         am.email AS manager_email,
-        am.phone AS manager_phone
+        am.mobile AS manager_phone
     FROM users u
-    LEFT JOIN account_managers am 
-        ON am.id = u.account_manager_id
+    LEFT JOIN users am 
+        ON am.user_id = u.account_manager_id AND am.role_id = 2
     WHERE u.tenant_id = " . current_tenant_id() . " AND u.user_id = :uid AND u.role_id = 4
 ");
 $userStmt->execute(['uid' => $advertiserId]);
