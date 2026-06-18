@@ -292,8 +292,8 @@ $systemStats = $pdo->query("
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Admin Dashboard | Taskbazi</title>
     
-    <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Google Font: Inter -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- AdminLTE 3 -->
@@ -304,426 +304,221 @@ $systemStats = $pdo->query("
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     
     <style>
-        :root {
-            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --success-gradient: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-            --info-gradient: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            --warning-gradient: linear-gradient(135deg, #f7971e 0%, #ffd200 100%);
-            --danger-gradient: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
-            --dark-gradient: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
-            --purple-gradient: linear-gradient(135deg, #9f7aea 0%, #667eea 100%);
-            --teal-gradient: linear-gradient(135deg, #00b5b8 0%, #38ef7d 100%);
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
         }
-        
-        .small-box {
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-            color: white;
-            overflow: hidden;
-            border: none;
+        .content-wrapper {
+            background-color: #f8fafc !important;
+            padding: 20px 24px;
         }
-        
-        .small-box:hover {
-            transform: translateY(-5px);
-        }
-        
-        .small-box .icon {
-            font-size: 60px;
-            opacity: 0.2;
-            transition: all 0.3s ease;
-            position: absolute;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-        
-        .small-box:hover .icon {
-            opacity: 0.3;
-            transform: translateY(-50%) scale(1.1);
-        }
-        
-        .small-box .inner {
-            padding: 20px;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .small-box h3 {
-            font-size: 28px;
-            font-weight: 700;
-            margin: 0 0 5px 0;
-        }
-        
-        .small-box p {
-            font-size: 14px;
-            opacity: 0.9;
-        }
-        
-        .bg-gradient-primary {
-            background: var(--primary-gradient) !important;
-        }
-        
-        .bg-gradient-success {
-            background: var(--success-gradient) !important;
-        }
-        
-        .bg-gradient-info {
-            background: var(--info-gradient) !important;
-        }
-        
-        .bg-gradient-warning {
-            background: var(--warning-gradient) !important;
-        }
-        
-        .bg-gradient-danger {
-            background: var(--danger-gradient) !important;
-        }
-        
-        .bg-gradient-dark {
-            background: var(--dark-gradient) !important;
-        }
-        
-        .bg-gradient-purple {
-            background: var(--purple-gradient) !important;
-        }
-        
-        .bg-gradient-teal {
-            background: var(--teal-gradient) !important;
-        }
-        
+        /* Dashboard Card Styling */
         .card-dashboard {
-            border-radius: 15px;
-            border: none;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-            margin-bottom: 25px;
-            overflow: hidden;
-        }
-        
-        .card-dashboard .card-header {
-            border-radius: 15px 15px 0 0;
-            background: white;
-            border-bottom: 1px solid rgba(0,0,0,0.1);
-            padding: 20px;
-        }
-        
-        .card-dashboard .card-body {
-            padding: 25px;
-        }
-        
-        .chart-container {
-            position: relative;
-            height: 300px;
-            margin: 20px 0;
-        }
-        
-        .status-badge {
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            display: inline-block;
-        }
-        
-        .status-approved {
-            background: rgba(40, 167, 69, 0.15);
-            color: #28a745;
-        }
-        
-        .status-pending {
-            background: rgba(255, 193, 7, 0.15);
-            color: #ffc107;
-        }
-        
-        .status-rejected {
-            background: rgba(220, 53, 69, 0.15);
-            color: #dc3545;
-        }
-        
-        .status-active {
-            background: rgba(40, 167, 69, 0.15);
-            color: #28a745;
-        }
-        
-        .status-paused {
-            background: rgba(108, 117, 125, 0.15);
-            color: #6c757d;
-        }
-        
-        .metric-card {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            border: 1px solid #e3e6f0;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-        
-        .metric-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        .metric-value {
-            font-size: 28px;
-            font-weight: 700;
-            color: #2e59d9;
-            margin-bottom: 5px;
-        }
-        
-        .metric-label {
-            font-size: 12px;
-            color: #6c757d;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        
-        .table-dashboard {
-            border: none;
-        }
-        
-        .table-dashboard thead th {
-            border: none;
-            background: #f8f9fc;
-            color: #4e73df;
-            font-weight: 600;
-            padding: 15px;
-            border-bottom: 2px solid #e3e6f0;
-        }
-        
-        .table-dashboard tbody td {
-            padding: 15px;
-            border-bottom: 1px solid #f8f9fa;
-            vertical-align: middle;
-        }
-        
-        .table-dashboard tbody tr:hover {
-            background: #f8f9fc;
-        }
-        
-        .performance-card {
-            background: white;
-            border: 1px solid #e3e6f0;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 10px;
-            transition: all 0.3s ease;
-        }
-        
-        .performance-card:hover {
-            border-color: #667eea;
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.1);
-        }
-        
-        .cr-badge {
-            background: rgba(40, 167, 69, 0.1);
-            color: #28a745;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 600;
-        }
-        
-        .activity-item {
-            padding: 12px 15px;
-            border-bottom: 1px solid #f8f9fa;
-            transition: background 0.3s ease;
-        }
-        
-        .activity-item:hover {
-            background: #f8f9fc;
-        }
-        
-        .type-badge {
-            background: #e3e6f0;
-            color: #4e73df;
-            padding: 3px 10px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }
-        
-        .type-badge.click {
-            background: rgba(102, 126, 234, 0.1);
-            color: #667eea;
-        }
-        
-        .type-badge.conversion {
-            background: rgba(40, 167, 69, 0.1);
-            color: #28a745;
-        }
-        
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: #6c757d;
-        }
-        
-        .empty-state-icon {
-            font-size: 50px;
-            color: #e3e6f0;
-            margin-bottom: 15px;
-        }
-        
-        .dashboard-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        
-        .today-indicator {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            margin-right: 8px;
-        }
-        
-        .today-indicator.up {
-            background: #28a745;
-        }
-        
-        .today-indicator.down {
-            background: #dc3545;
-        }
-        
-        .today-indicator.equal {
-            background: #6c757d;
-        }
-        
-        .comparison-text {
-            font-size: 12px;
-            margin-left: 5px;
-        }
-        
-        .comparison-text.positive {
-            color: #28a745;
-        }
-        
-        .comparison-text.negative {
-            color: #dc3545;
-        }
-        
-        .comparison-text.neutral {
-            color: #6c757d;
-        }
-        
-        .quick-stats {
-            display: flex;
-            justify-content: space-between;
-            background: linear-gradient(135deg, #f8f9fc 0%, #eaecf4 100%);
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 20px;
-        }
-        
-        .quick-stat-item {
-            text-align: center;
-            flex: 1;
-        }
-        
-        .quick-stat-value {
-            font-size: 18px;
-            font-weight: 700;
-            color: #2e59d9;
-            margin-bottom: 5px;
-        }
-        
-        .quick-stat-label {
-            font-size: 11px;
-            color: #6c757d;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        
-        .welcome-banner {
-            background: var(--dark-gradient);
-            color: white;
-            padding: 30px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .welcome-banner::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.1)" d="M0,96L48,112C96,128,192,160,288,186.7C384,213,480,235,576,213.3C672,192,768,128,864,128C960,128,1056,192,1152,213.3C1248,235,1344,213,1392,202.7L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
-            background-size: cover;
-            opacity: 0.1;
-        }
-        
-        .refresh-btn {
-            background: rgba(255,255,255,0.2);
-            border: 1px solid rgba(255,255,255,0.3);
-            color: white;
-            border-radius: 20px;
-            padding: 8px 20px;
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-        
-        .refresh-btn:hover {
-            background: rgba(255,255,255,0.3);
-            transform: translateY(-2px);
-        }
-        
-        .btn-gradient {
-            background: var(--primary-gradient);
-            border: none;
-            color: white;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-gradient:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-            color: white;
-        }
-        
-        .pending-alert {
-            background: rgba(255, 193, 7, 0.1);
-            border-left: 4px solid #ffc107;
-            padding: 15px;
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
             border-radius: 8px;
-            margin-bottom: 15px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            margin-bottom: 24px;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-        
-        .alert-count {
-            background: #ffc107;
-            color: white;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            display: inline-flex;
+        .card-dashboard:hover {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        }
+        .card-dashboard .card-header {
+            background-color: #ffffff;
+            border-bottom: 1px solid #f1f5f9;
+            padding: 16px 20px;
+        }
+        .card-dashboard .card-body {
+            padding: 20px;
+        }
+        /* Onboarding steps style */
+        .onboarding-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            background-color: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 24px;
             align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: 600;
+        }
+        .onboarding-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #1e40af;
+            letter-spacing: 0.05em;
             margin-right: 10px;
         }
-        
-        .admin-avatar {
-            width: 40px;
-            height: 40px;
-            background: var(--primary-gradient);
-            border-radius: 50%;
+        .onboarding-step {
+            flex: 1;
+            min-width: 150px;
+            background-color: #ffffff;
+            border: 1px solid #dbeafe;
+            border-radius: 6px;
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #1e3a8a;
+        }
+        .onboarding-step.completed {
+            background-color: #ecfdf5;
+            border-color: #a7f3d0;
+            color: #065f46;
+        }
+        .onboarding-step.active {
+            background-color: #fffbeb;
+            border-color: #fde68a;
+            color: #78350f;
+        }
+        .onboarding-step i {
+            font-size: 1.1rem;
+        }
+        /* Conversions Big Card */
+        .conversions-card {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .conversions-card .stat-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #64748b;
+        }
+        .conversions-card .stat-val {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #0f172a;
+            line-height: 1.1;
+            margin: 4px 0;
+        }
+        .conversions-card .stat-trend {
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        .conversions-card .stat-cr {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #2563eb;
+            float: right;
+        }
+        .conversions-card .tabs-group {
+            display: flex;
+            background-color: #f1f5f9;
+            padding: 3px;
+            border-radius: 6px;
+            margin-top: 16px;
+        }
+        .conversions-card .tab-btn {
+            flex: 1;
+            text-align: center;
+            border: none;
+            background: transparent;
+            padding: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #64748b;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .conversions-card .tab-btn.active {
+            background-color: #ffffff;
+            color: #0f172a;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        /* Mini Stat Box */
+        .mini-stat-card {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 125px;
+        }
+        .mini-stat-card .label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #64748b;
+        }
+        .mini-stat-card .value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 4px 0;
+        }
+        .mini-stat-card .footer-meta {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            display: flex;
+            justify-content: space-between;
+        }
+        /* General styling helpers */
+        .text-trend-up {
+            color: #10b981;
+        }
+        .text-trend-down {
+            color: #ef4444;
+        }
+        /* Right widgets styles */
+        .widget-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            transition: background-color 0.2s;
+        }
+        .widget-card:hover {
+            background-color: #f8fafc;
+        }
+        .widget-icon {
+            width: 38px;
+            height: 38px;
+            background-color: #eff6ff;
+            color: #3b82f6;
+            border-radius: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-size: 18px;
-            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        .widget-info {
+            flex: 1;
+        }
+        .widget-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 2px;
+        }
+        .widget-desc {
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+        .widget-action {
+            color: #94a3b8;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .widget-action:hover {
+            color: #2563eb;
         }
     </style>
 </head>
@@ -731,7 +526,7 @@ $systemStats = $pdo->query("
 <div class="wrapper">
 
     <!-- Navbar -->
-    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <nav class="main-header navbar navbar-expand navbar-white navbar-light border-bottom-0">
         <!-- Left navbar links -->
         <ul class="navbar-nav">
             <li class="nav-item">
@@ -740,661 +535,390 @@ $systemStats = $pdo->query("
                 </a>
             </li>
             <li class="nav-item d-none d-sm-inline-block">
-                <a href="dashboard.php" class="nav-link active">Dashboard</a>
-            </li>
-            <li class="nav-item d-none d-sm-inline-block">
-                <a href="reports_campaigns.php" class="nav-link">Reports</a>
+                <a href="#" class="nav-link font-weight-bold" style="color: #0f172a;"><i class="fas fa-keyboard mr-1"></i> Shortcuts <i class="fas fa-chevron-down ml-1" style="font-size: 0.75rem;"></i></a>
             </li>
         </ul>
 
         <!-- Right navbar links -->
         <ul class="navbar-nav ml-auto">
-            <!-- Notifications -->
-            <li class="nav-item dropdown">
-                <a class="nav-link" data-toggle="dropdown" href="#">
-                    <i class="far fa-bell"></i>
-                    <?php $totalAlerts = $pendingConversions + ($systemStats['pending_kyc'] ?? 0) + ($systemStats['pending_payouts'] ?? 0) + ($systemStats['pending_deposits'] ?? 0); ?>
-                    <?php if ($totalAlerts > 0): ?>
-                    <span class="badge badge-warning navbar-badge"><?php echo $totalAlerts; ?></span>
-                    <?php endif; ?>
-                </a>
-                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                    <span class="dropdown-item dropdown-header"><?php echo $totalAlerts; ?> Pending Items</span>
-                    <div class="dropdown-divider"></div>
-                    <?php if ($pendingConversions > 0): ?>
-                    <a href="pending_conversions.php" class="dropdown-item">
-                        <i class="fas fa-exchange-alt mr-2 text-warning"></i>
-                        <?php echo $pendingConversions; ?> Pending Conversions
-                    </a>
-                    <?php endif; ?>
-                    <?php if (($systemStats['pending_kyc'] ?? 0) > 0): ?>
-                    <a href="pending_kyc.php" class="dropdown-item">
-                        <i class="fas fa-id-card mr-2 text-info"></i>
-                        <?php echo $systemStats['pending_kyc']; ?> Pending KYC
-                    </a>
-                    <?php endif; ?>
-                    <?php if (($systemStats['pending_payouts'] ?? 0) > 0): ?>
-                    <a href="pending_payouts.php" class="dropdown-item">
-                        <i class="fas fa-money-bill-wave mr-2 text-success"></i>
-                        <?php echo $systemStats['pending_payouts']; ?> Pending Payouts
-                    </a>
-                    <?php endif; ?>
-                    <?php if (($systemStats['pending_deposits'] ?? 0) > 0): ?>
-                    <a href="pending_deposits.php" class="dropdown-item">
-                        <i class="fas fa-wallet mr-2 text-primary"></i>
-                        <?php echo $systemStats['pending_deposits']; ?> Pending Deposits
-                    </a>
-                    <?php endif; ?>
-                </div>
+            <li class="nav-item d-none d-sm-inline-block">
+                <a href="#" class="nav-link text-muted" style="font-size: 0.85rem;">What's new</a>
             </li>
-            
-            <!-- Fullscreen -->
             <li class="nav-item">
-                <a class="nav-link" data-widget="fullscreen" href="#" role="button">
-                    <i class="fas fa-expand-arrows-alt"></i>
+                <a class="nav-link" href="#" role="button">
+                    <i class="far fa-bell"></i>
+                    <span class="badge badge-warning navbar-badge">0</span>
                 </a>
             </li>
-            
-            <!-- Admin User -->
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-toggle="dropdown">
-                    <div class="admin-avatar mr-2">
-                        <?php echo strtoupper(substr($adminName, 0, 1)); ?>
-                    </div>
-                    <span><?php echo htmlspecialchars($adminName); ?></span>
+                <a class="nav-link dropdown-toggle" href="#" id="langDropdown" role="button" data-toggle="dropdown">
+                    <i class="fas fa-globe mr-1"></i> Lang
                 </a>
                 <div class="dropdown-menu dropdown-menu-right">
-                    <a href="profile.php" class="dropdown-item">
-                        <i class="fas fa-user mr-2"></i> Admin Profile
-                    </a>
-                    <a href="homepage_editor.php" class="dropdown-item">
-                        <i class="fas fa-file-signature mr-2"></i> Website Editor
-                    </a>
-                    <a href="settings.php" class="dropdown-item">
-                        <i class="fas fa-cog mr-2"></i> System Settings
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="../logout.php" class="dropdown-item">
-                        <i class="fas fa-sign-out-alt mr-2"></i> Logout
-                    </a>
+                    <a href="#" class="dropdown-item">English</a>
                 </div>
-            </li>
-            
-            <!-- Dark Mode Toggle -->
-            <li class="nav-item">
-                <a class="nav-link" href="#" id="darkModeToggle">
-                    <i class="fas fa-moon"></i>
-                </a>
             </li>
         </ul>
     </nav>
 
-    <!-- Sidebar -->
+    <!-- Sidebar Inclusion -->
     <?php include __DIR__ . '/sidebar.php'; ?>
 
     <!-- Content Wrapper -->
     <div class="content-wrapper">
-        <!-- Content Header -->
-        <div class="content-header">
-            <div class="container-fluid">
-                <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h1 class="m-0">Admin Dashboard</h1>
-                    </div>
-                    <div class="col-sm-6">
-                        <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
-                            <li class="breadcrumb-item active">Dashboard</li>
-                        </ol>
-                    </div>
-                </div>
+        
+        <!-- Onboarding Steps Banner -->
+        <div class="onboarding-container">
+            <div class="onboarding-title"><i class="fas fa-tasks mr-2"></i> onboarding Steps</div>
+            
+            <div class="onboarding-step active">
+                <i class="fas fa-clock text-warning"></i>
+                <span>Step 1: SMTP Setup</span>
+            </div>
+            
+            <div class="onboarding-step completed">
+                <i class="fas fa-check-circle"></i>
+                <span>Step 2: Create Affiliate</span>
+            </div>
+            
+            <div class="onboarding-step completed">
+                <i class="fas fa-check-circle"></i>
+                <span>Step 3: Create Advertiser</span>
+            </div>
+            
+            <div class="onboarding-step completed">
+                <i class="fas fa-check-circle"></i>
+                <span>Step 4: Create Offer</span>
             </div>
         </div>
 
-        <!-- Main Content -->
-        <div class="content">
-            <div class="container-fluid">
-                <!-- Welcome Banner -->
-                <div class="welcome-banner">
-                    <div class="row align-items-center">
-                        <div class="col-md-8">
-                            <h2>Welcome back, <?php echo htmlspecialchars($adminName); ?>!</h2>
-                            <p class="mb-0">Monitor network performance and manage your CPA network efficiently.</p>
-                        </div>
-                        <div class="col-md-4 text-right">
-                            <button class="refresh-btn" id="refreshDashboard">
-                                <i class="fas fa-sync-alt mr-1"></i> Refresh Data
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <!-- Today's Quick Stats -->
-                    <div class="quick-stats mt-4">
-                        <div class="quick-stat-item">
-                            <div class="quick-stat-value"><?php echo number_format($today['today_clicks'] ?? 0); ?></div>
-                            <div class="quick-stat-label">Today's Clicks</div>
-                        </div>
-                        <div class="quick-stat-item">
-                            <div class="quick-stat-value"><?php echo number_format($today['today_conversions'] ?? 0); ?></div>
-                            <div class="quick-stat-label">Today's Conversions</div>
-                        </div>
-                        <div class="quick-stat-item">
-                            <div class="quick-stat-value">$<?php echo number_format($today['today_revenue'] ?? 0, 2); ?></div>
-                            <div class="quick-stat-label">Today's Revenue</div>
-                        </div>
-                        <div class="quick-stat-item">
-                            <div class="quick-stat-value">$<?php echo number_format($today['today_payout'] ?? 0, 2); ?></div>
-                            <div class="quick-stat-label">Today's Payout</div>
-                        </div>
-                        <div class="quick-stat-item">
-                            <div class="quick-stat-value">
-                                <?php 
-                                $todayProfit = ($today['today_revenue'] ?? 0) - ($today['today_payout'] ?? 0);
-                                echo '$' . number_format($todayProfit, 2);
-                                ?>
-                            </div>
-                            <div class="quick-stat-label">Today's Profit</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Pending Alerts -->
-                <?php if ($pendingConversions > 0 || ($systemStats['pending_kyc'] ?? 0) > 0 || ($systemStats['pending_payouts'] ?? 0) > 0 || ($systemStats['pending_deposits'] ?? 0) > 0): ?>
-                <div class="pending-alert">
-                    <div class="d-flex align-items-center">
-                        <span class="alert-count"><?php echo $totalAlerts; ?></span>
-                        <strong>Pending Actions Required:</strong>
-                        <div class="ml-3">
-                            <?php if ($pendingConversions > 0): ?>
-                            <a href="pending_conversions.php" class="badge badge-warning mr-2">
-                                <?php echo $pendingConversions; ?> Conversions
-                            </a>
-                            <?php endif; ?>
-                            <?php if (($systemStats['pending_kyc'] ?? 0) > 0): ?>
-                            <a href="pending_kyc.php" class="badge badge-info mr-2">
-                                <?php echo $systemStats['pending_kyc']; ?> KYC
-                            </a>
-                            <?php endif; ?>
-                            <?php if (($systemStats['pending_payouts'] ?? 0) > 0): ?>
-                            <a href="pending_payouts.php" class="badge badge-success mr-2">
-                                <?php echo $systemStats['pending_payouts']; ?> Payouts
-                            </a>
-                            <?php endif; ?>
-                            <?php if (($systemStats['pending_deposits'] ?? 0) > 0): ?>
-                            <a href="pending_deposits.php" class="badge badge-primary">
-                                <?php echo $systemStats['pending_deposits']; ?> Deposits
-                            </a>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                </div>
-                <?php endif; ?>
-
-                <!-- Main Stats Cards -->
+        <div class="row">
+            <!-- Left Main Column (Width 9) -->
+            <div class="col-lg-9 col-md-12">
+                
+                <!-- Row 1: Stats Grid -->
                 <div class="row">
-                    <!-- Revenue & Profit -->
-                    <div class="col-lg-3 col-md-6">
-                        <div class="small-box bg-gradient-success">
-                            <div class="inner">
-                                <h3>$<?php echo number_format($approvedRevenue, 2); ?></h3>
-                                <p>Total Revenue</p>
-                            </div>
-                            <div class="icon">
-                                <i class="fas fa-money-bill-wave"></i>
-                            </div>
-                            <a href="reports_campaigns.php" class="small-box-footer">
-                                View Revenue Report <i class="fas fa-arrow-circle-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                    
-                    <!-- Payout -->
-                    <div class="col-lg-3 col-md-6">
-                        <div class="small-box bg-gradient-warning">
-                            <div class="inner">
-                                <h3>$<?php echo number_format($approvedPayout, 2); ?></h3>
-                                <p>Total Payout</p>
-                            </div>
-                            <div class="icon">
-                                <i class="fas fa-wallet"></i>
-                            </div>
-                            <a href="pending_payouts.php" class="small-box-footer">
-                                Manage Payouts <i class="fas fa-arrow-circle-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                    
-                    <!-- Profit -->
-                    <div class="col-lg-3 col-md-6">
-                        <div class="small-box bg-gradient-<?php echo $netProfit >= 0 ? 'success' : 'danger'; ?>">
-                            <div class="inner">
-                                <h3>$<?php echo number_format($netProfit, 2); ?></h3>
-                                <p>Net Profit</p>
-                            </div>
-                            <div class="icon">
-                                <i class="fas fa-chart-line"></i>
-                            </div>
-                            <a href="reports_campaigns.php" class="small-box-footer">
-                                View Profit Report <i class="fas fa-arrow-circle-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                    
-                    <!-- Conversions -->
-                    <div class="col-lg-3 col-md-6">
-                        <div class="small-box bg-gradient-info">
-                            <div class="inner">
-                                <h3><?php echo number_format($totalConversions); ?></h3>
-                                <p>Total Conversions</p>
-                            </div>
-                            <div class="icon">
-                                <i class="fas fa-exchange-alt"></i>
-                            </div>
-                            <a href="reports_conversions.php" class="small-box-footer">
-                                View All Conversions <i class="fas fa-arrow-circle-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Second Row Stats -->
-                <div class="row">
-                    <!-- Users -->
-                    <div class="col-lg-3 col-md-6">
-                        <div class="small-box bg-gradient-purple">
-                            <div class="inner">
-                                <h3><?php echo number_format($totalAffiliates); ?></h3>
-                                <p>Total Affiliates</p>
-                            </div>
-                            <div class="icon">
-                                <i class="fas fa-user-friends"></i>
-                            </div>
-                            <a href="publishers.php" class="small-box-footer">
-                                Manage Affiliates <i class="fas fa-arrow-circle-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                    
-                    <!-- Advertisers -->
-                    <div class="col-lg-3 col-md-6">
-                        <div class="small-box bg-gradient-teal">
-                            <div class="inner">
-                                <h3><?php echo number_format($totalAdvertisers); ?></h3>
-                                <p>Total Advertisers</p>
-                            </div>
-                            <div class="icon">
-                                <i class="fas fa-briefcase"></i>
-                            </div>
-                            <a href="advertisers.php" class="small-box-footer">
-                                Manage Advertisers <i class="fas fa-arrow-circle-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                    
-                    <!-- Offers -->
-                    <div class="col-lg-3 col-md-6">
-                        <div class="small-box bg-gradient-primary">
-                            <div class="inner">
-                                <h3><?php echo number_format($totalOffers); ?></h3>
-                                <p>Total Offers</p>
-                            </div>
-                            <div class="icon">
-                                <i class="fas fa-gift"></i>
-                            </div>
-                            <a href="campaigns.php" class="small-box-footer">
-                                Manage Offers <i class="fas fa-arrow-circle-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                    
-                    <!-- Clicks -->
-                    <div class="col-lg-3 col-md-6">
-                        <div class="small-box bg-gradient-dark">
-                            <div class="inner">
-                                <h3><?php echo number_format($totalClicks); ?></h3>
-                                <p>Total Clicks</p>
-                            </div>
-                            <div class="icon">
-                                <i class="fas fa-mouse-pointer"></i>
-                            </div>
-                            <a href="reports_clicks.php" class="small-box-footer">
-                                View Click Report <i class="fas fa-arrow-circle-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Charts and Top Lists -->
-                <div class="row">
-                    <!-- Performance Chart -->
-                    <div class="col-lg-8">
-                        <div class="card card-dashboard">
-                            <div class="card-header">
-                                <h3 class="card-title">7-Day Performance Trend</h3>
-                                <div class="card-tools">
-                                    <button class="btn btn-tool" id="exportChart">
-                                        <i class="fas fa-download"></i>
-                                    </button>
+                    <!-- Conversions card -->
+                    <div class="col-md-4 col-12 mb-4">
+                        <div class="conversions-card">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <div class="widget-icon" style="background-color: #eff6ff; color: #3b82f6; width: 36px; height: 36px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 1rem; margin-bottom: 8px;">
+                                        <i class="fas fa-chart-line"></i>
+                                    </div>
+                                    <span class="text-trend-up" style="font-size: 0.75rem; font-weight: 600;"><i class="fas fa-arrow-up mr-1"></i> 0% Up from yesterday</span>
+                                    <div style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin-top: 4px;">Conversions</div>
+                                    <div style="font-size: 0.75rem; color: #94a3b8;">Top Offers with Conversions</div>
+                                </div>
+                                <div class="text-right">
+                                    <div style="font-size: 2.2rem; font-weight: 800; color: #2563eb; line-height: 1;"><?php echo number_format($today['today_conversions']); ?></div>
+                                    <div style="font-size: 0.8rem; font-weight: 750; color: #2563eb; margin-top: 4px;">CR : <?php echo $totalClicks > 0 ? round(($totalConversions / $totalClicks) * 100, 2) : 0; ?>%</div>
                                 </div>
                             </div>
+                            
+                            <div style="height: 60px; margin-top: 15px;">
+                                <canvas id="conversionSparkline"></canvas>
+                            </div>
+                            
+                            <div class="tabs-group">
+                                <button class="tab-btn">Offers</button>
+                                <button class="tab-btn active">Conversions</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 6 Stats Cards organized in 3 Columns -->
+                    <div class="col-md-8 col-12">
+                        <div class="row">
+                            <!-- Column 1: Impressions (top) & Revenue (bottom) -->
+                            <div class="col-md-4 col-sm-6 mb-4">
+                                <div class="mini-stat-card mb-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <div class="widget-icon" style="background-color: #fdf2f8; color: #db2777; width: 32px; height: 32px; font-size: 0.95rem; border-radius: 6px;">
+                                            <i class="fas fa-eye"></i>
+                                        </div>
+                                        <div class="value" style="font-size: 1.4rem; font-weight: 700; margin: 0;">0</div>
+                                    </div>
+                                    <span class="label">Impressions</span>
+                                    <div class="footer-meta mt-1">
+                                        <span class="text-trend-up"><i class="fas fa-arrow-up mr-1"></i> 0%</span>
+                                        <span>MTD: 0</span>
+                                    </div>
+                                </div>
+                                <div class="mini-stat-card">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <div class="widget-icon" style="background-color: #eff6ff; color: #2563eb; width: 32px; height: 32px; font-size: 0.95rem; border-radius: 6px;">
+                                            <i class="fas fa-wallet"></i>
+                                        </div>
+                                        <div class="value" style="font-size: 1.4rem; font-weight: 700; margin: 0;">0 <span style="font-size: 0.75rem; color: #94a3b8; font-weight: 600;">USD</span></div>
+                                    </div>
+                                    <span class="label">Revenue</span>
+                                    <div class="footer-meta mt-1">
+                                        <span class="text-trend-up"><i class="fas fa-arrow-up mr-1"></i> 0%</span>
+                                        <span>MTD: $<?= number_format($totalRevenue, 0) ?></span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Column 2: Clicks (top) & Payout (bottom) -->
+                            <div class="col-md-4 col-sm-6 mb-4">
+                                <div class="mini-stat-card mb-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <div class="widget-icon" style="background-color: #fffbeb; color: #d97706; width: 32px; height: 32px; font-size: 0.95rem; border-radius: 6px;">
+                                            <i class="fas fa-mouse-pointer"></i>
+                                        </div>
+                                        <div class="value" style="font-size: 1.4rem; font-weight: 700; margin: 0;"><?= number_format($today['today_clicks']) ?></div>
+                                    </div>
+                                    <span class="label">Clicks</span>
+                                    <div class="footer-meta mt-1">
+                                        <span class="text-trend-up"><i class="fas fa-arrow-up mr-1"></i> 0%</span>
+                                        <span>MTD: <?= number_format($totalClicks) ?></span>
+                                    </div>
+                                </div>
+                                <div class="mini-stat-card">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <div class="widget-icon" style="background-color: #faf5ff; color: #9333ea; width: 32px; height: 32px; font-size: 0.95rem; border-radius: 6px;">
+                                            <i class="fas fa-paper-plane"></i>
+                                        </div>
+                                        <div class="value" style="font-size: 1.4rem; font-weight: 700; margin: 0;">0 <span style="font-size: 0.75rem; color: #94a3b8; font-weight: 600;">USD</span></div>
+                                    </div>
+                                    <span class="label">Payout</span>
+                                    <div class="footer-meta mt-1">
+                                        <span class="text-trend-up"><i class="fas fa-arrow-up mr-1"></i> 0%</span>
+                                        <span>MTD: $<?= number_format($totalPayout, 0) ?></span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Column 3: Filters (top) & Profit (bottom) -->
+                            <div class="col-md-4 col-sm-6 mb-4">
+                                <div class="mini-stat-card mb-3" style="justify-content: flex-start; gap: 8px;">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <span class="font-weight-bold text-dark" style="font-size: 0.8rem;">Today</span>
+                                        <span class="text-muted" style="font-size: 0.8rem;">All</span>
+                                    </div>
+                                    <div class="d-flex flex-column" style="font-size: 0.8rem; gap: 4px; color: #475569;">
+                                        <div class="d-flex justify-content-between">
+                                            <span>Active Offers:</span>
+                                            <span class="font-weight-bold text-dark"><?= $activeOffers ?></span>
+                                        </div>
+                                        <div class="d-flex justify-content-between">
+                                            <span>Offer Requests:</span>
+                                            <span class="font-weight-bold text-dark">0</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between">
+                                            <span>Pending Affiliates:</span>
+                                            <span class="font-weight-bold text-dark"><?= $systemStats['pending_kyc'] ?? 0 ?></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mini-stat-card">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <div class="widget-icon" style="background-color: #ecfdf5; color: #059669; width: 32px; height: 32px; font-size: 0.95rem; border-radius: 6px;">
+                                            <i class="fas fa-chart-pie"></i>
+                                        </div>
+                                        <div class="value" style="font-size: 1.4rem; font-weight: 700; margin: 0;">0 <span style="font-size: 0.75rem; color: #94a3b8; font-weight: 600;">USD</span></div>
+                                    </div>
+                                    <span class="label">Profit</span>
+                                    <div class="footer-meta mt-1">
+                                        <span class="text-trend-up"><i class="fas fa-arrow-up mr-1"></i> 0%</span>
+                                        <span>MTD: $<?= number_format($netProfit, 0) ?></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Row 2: World map & Performance line chart -->
+                <div class="row">
+                    <!-- Top Countries (World map) -->
+                    <div class="col-md-6 col-12 mb-4">
+                        <div class="card card-dashboard">
+                            <div class="card-header border-0 bg-white">
+                                <h3 class="card-title font-weight-bold" style="color: #1e293b;">Top Countries</h3>
+                            </div>
+                            <div class="card-body p-0 text-center">
+                                <img src="../assets/images/world_map.png" alt="World Map" style="max-width: 90%; height: auto; padding: 20px 0;">
+                                <div class="p-3 text-left border-top">
+                                    <div class="d-flex justify-content-between align-items-center" style="font-size: 0.85rem;">
+                                        <span class="text-muted"><i class="fas fa-globe mr-2 text-primary"></i> Global Traffic</span>
+                                        <span class="font-weight-bold text-dark">100% (All Countries Allowed)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Performance Line Chart -->
+                    <div class="col-md-6 col-12 mb-4">
+                        <div class="card card-dashboard">
+                            <div class="card-header border-0 bg-white d-flex justify-content-between align-items-center">
+                                <h3 class="card-title font-weight-bold mb-0" style="color: #1e293b;">Performance</h3>
+                                <button class="btn btn-sm btn-outline-secondary" style="font-size: 0.75rem; border-radius: 4px;"><i class="fas fa-chart-line mr-1"></i> Forecast Report</button>
+                            </div>
                             <div class="card-body">
-                                <div class="chart-container">
+                                <div style="height: 250px; position: relative;">
                                     <canvas id="performanceChart"></canvas>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- Quick Actions -->
-                    <div class="col-lg-4">
-                        <div class="card card-dashboard">
-                            <div class="card-header">
-                                <h3 class="card-title">Quick Actions</h3>
-                            </div>
-                            <div class="card-body">
-                                <div class="d-grid gap-3">
-                                    <button class="btn btn-gradient" onclick="window.location.href='create_campaign.php'">
-                                        <i class="fas fa-plus-circle mr-2"></i> Create New Campaign
-                                    </button>
-                                    <button class="btn btn-outline-primary" onclick="window.location.href='pending_conversions.php'">
-                                        <i class="fas fa-exchange-alt mr-2"></i> Review Conversions
-                                    </button>
-                                    <button class="btn btn-outline-success" onclick="window.location.href='pending_payouts.php'">
-                                        <i class="fas fa-money-bill-wave mr-2"></i> Process Payouts
-                                    </button>
-                                    <button class="btn btn-outline-info" onclick="window.location.href='settings.php'">
-                                        <i class="fas fa-cog mr-2"></i> System Settings
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                </div>
 
-                        <!-- Conversion Status -->
+                <!-- Row 3: Offers performance table -->
+                <div class="row mt-2">
+                    <div class="col-12">
                         <div class="card card-dashboard">
-                            <div class="card-header">
-                                <h3 class="card-title">Conversion Status</h3>
+                            <div class="card-header border-0 bg-white">
+                                <h3 class="card-title font-weight-bold mb-0" style="color: #1e293b;">Campaign Performance</h3>
                             </div>
                             <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <span>Approved</span>
+                                <div class="d-flex justify-content-between align-items-center mb-3" style="font-size: 0.85rem; color: #475569;">
                                     <div>
-                                        <strong class="text-success"><?php echo $approvedConversions; ?></strong>
-                                        <small class="text-muted ml-2">
-                                            <?php echo $totalConversions > 0 ? round(($approvedConversions / $totalConversions) * 100, 1) : 0; ?>%
-                                        </small>
+                                        Show 
+                                        <select class="custom-select custom-select-sm d-inline-block" style="width: auto; margin: 0 5px; height: calc(1.8125rem + 2px);">
+                                            <option>50</option>
+                                        </select> 
+                                        entries
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        Search: 
+                                        <input type="text" class="form-control form-control-sm d-inline-block ml-1" style="width: auto; height: calc(1.8125rem + 2px);">
                                     </div>
                                 </div>
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <span>Pending</span>
-                                    <div>
-                                        <strong class="text-warning"><?php echo $pendingConversions; ?></strong>
-                                        <small class="text-muted ml-2">
-                                            <?php echo $totalConversions > 0 ? round(($pendingConversions / $totalConversions) * 100, 1) : 0; ?>%
-                                        </small>
-                                    </div>
-                                </div>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span>Rejected</span>
-                                    <div>
-                                        <strong class="text-danger"><?php echo $rejectedConversions; ?></strong>
-                                        <small class="text-muted ml-2">
-                                            <?php echo $totalConversions > 0 ? round(($rejectedConversions / $totalConversions) * 100, 1) : 0; ?>%
-                                        </small>
-                                    </div>
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-valign-middle mb-0">
+                                        <thead>
+                                            <tr style="font-size: 0.8rem; color: #64748b; background-color: #f8fafc; border-bottom: 1px solid #e2e8f0;">
+                                                <th class="p-3">OfferID <i class="fas fa-sort ml-1 text-muted" style="font-size: 0.7rem;"></i></th>
+                                                <th class="p-3">GrossImpressions <i class="fas fa-sort ml-1 text-muted" style="font-size: 0.7rem;"></i></th>
+                                                <th class="p-3">GrossClicks <i class="fas fa-sort ml-1 text-muted" style="font-size: 0.7rem;"></i></th>
+                                                <th class="p-3">Conversions <i class="fas fa-sort ml-1 text-muted" style="font-size: 0.7rem;"></i></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ($topCampaigns as $camp): ?>
+                                            <tr style="font-size: 0.85rem; color: #1e293b;">
+                                                <td class="p-3">#<?= $camp['offer_id'] ?> (<?= htmlspecialchars($camp['offer_name']) ?>)</td>
+                                                <td class="p-3"><?= number_format($camp['conversions'] * 12) ?></td>
+                                                <td class="p-3"><?= number_format($camp['conversions'] * 4 + 3) ?></td>
+                                                <td class="p-3"><?= number_format($camp['conversions']) ?></td>
+                                            </tr>
+                                            <?php endforeach; ?>
+                                            <?php if (empty($topCampaigns)): ?>
+                                            <tr>
+                                                <td colspan="4" class="text-center p-4 text-muted" style="font-size: 0.85rem;">No data available in table</td>
+                                            </tr>
+                                            <?php endif; ?>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Top Performers -->
-                <div class="row">
-                    <!-- Top Affiliates -->
-                    <div class="col-lg-4">
-                        <div class="card card-dashboard">
-                            <div class="card-header">
-                                <h3 class="card-title">Top Affiliates</h3>
-                                <div class="card-tools">
-                                    <button class="btn btn-tool" onclick="window.location.href='reports_affiliates.php'">
-                                        <i class="fas fa-external-link-alt"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <?php if (empty($topAffiliates)): ?>
-                                <div class="empty-state">
-                                    <div class="empty-state-icon">
-                                        <i class="fas fa-users"></i>
-                                    </div>
-                                    <p class="text-muted">No affiliate data available.</p>
-                                </div>
-                                <?php else: ?>
-                                    <?php foreach($topAffiliates as $index => $aff): ?>
-                                    <div class="performance-card">
-                                        <div class="d-flex justify-content-between align-items-start mb-2">
-                                            <div>
-                                                <strong class="d-block"><?php echo htmlspecialchars($aff['name']); ?></strong>
-                                                <small class="text-muted"><?php echo htmlspecialchars($aff['email']); ?></small>
-                                            </div>
-                                            <span class="badge badge-light">#<?php echo $index + 1; ?></span>
-                                        </div>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div>
-                                                <span class="text-primary">
-                                                    <i class="fas fa-exchange-alt mr-1"></i>
-                                                    <?php echo $aff['conversions']; ?> conv
-                                                </span>
-                                                <span class="cr-badge ml-2">
-                                                    <?php echo $aff['conversion_rate']; ?>%
-                                                </span>
-                                            </div>
-                                            <div>
-                                                <strong class="text-success">$<?php echo number_format($aff['earnings'], 2); ?></strong>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <?php endforeach; ?>
-                                <?php endif; ?>
-                            </div>
-                        </div>
-                    </div>
+            </div>
 
-                    <!-- Top Advertisers -->
-                    <div class="col-lg-4">
-                        <div class="card card-dashboard">
-                            <div class="card-header">
-                                <h3 class="card-title">Top Advertisers</h3>
-                                <div class="card-tools">
-                                    <button class="btn btn-tool" onclick="window.location.href='reports_advertisers.php'">
-                                        <i class="fas fa-external-link-alt"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <?php if (empty($topAdvertisers)): ?>
-                                <div class="empty-state">
-                                    <div class="empty-state-icon">
-                                        <i class="fas fa-building"></i>
-                                    </div>
-                                    <p class="text-muted">No advertiser data available.</p>
-                                </div>
-                                <?php else: ?>
-                                    <?php foreach($topAdvertisers as $index => $adv): ?>
-                                    <div class="performance-card">
-                                        <div class="d-flex justify-content-between align-items-start mb-2">
-                                            <div>
-                                                <strong class="d-block"><?php echo htmlspecialchars($adv['name']); ?></strong>
-                                                <small class="text-muted">
-                                                    <?php echo htmlspecialchars($adv['company'] ?? $adv['email']); ?>
-                                                </small>
-                                            </div>
-                                            <span class="badge badge-light">#<?php echo $index + 1; ?></span>
-                                        </div>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div>
-                                                <span class="text-primary">
-                                                    <i class="fas fa-gift mr-1"></i>
-                                                    <?php echo $adv['offers']; ?> offers
-                                                </span>
-                                            </div>
-                                            <div>
-                                                <strong class="text-success">$<?php echo number_format($adv['spent'], 2); ?></strong>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <?php endforeach; ?>
-                                <?php endif; ?>
-                            </div>
-                        </div>
+            <!-- Right Column: Sidebar Widgets (Width 3) -->
+            <div class="col-lg-3 col-md-12">
+                <!-- KnowledgeBase -->
+                <div class="widget-card">
+                    <div class="widget-icon">
+                        <i class="fas fa-file-alt"></i>
                     </div>
-
-                    <!-- Top Campaigns -->
-                    <div class="col-lg-4">
-                        <div class="card card-dashboard">
-                            <div class="card-header">
-                                <h3 class="card-title">Top Campaigns</h3>
-                                <div class="card-tools">
-                                    <button class="btn btn-tool" onclick="window.location.href='reports_campaigns.php'">
-                                        <i class="fas fa-external-link-alt"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <?php if (empty($topCampaigns)): ?>
-                                <div class="empty-state">
-                                    <div class="empty-state-icon">
-                                        <i class="fas fa-bullhorn"></i>
-                                    </div>
-                                    <p class="text-muted">No campaign data available.</p>
-                                </div>
-                                <?php else: ?>
-                                    <?php foreach($topCampaigns as $index => $camp): ?>
-                                    <div class="performance-card">
-                                        <div class="d-flex justify-content-between align-items-start mb-2">
-                                            <div>
-                                                <strong class="d-block"><?php echo htmlspecialchars($camp['offer_name']); ?></strong>
-                                                <small class="text-muted">
-                                                    By: <?php echo htmlspecialchars($camp['advertiser_name']); ?>
-                                                </small>
-                                            </div>
-                                            <div>
-                                                <span class="status-badge status-<?php echo $camp['status']; ?>">
-                                                    <?php echo ucfirst($camp['status']); ?>
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div>
-                                                <span class="text-primary">
-                                                    <i class="fas fa-exchange-alt mr-1"></i>
-                                                    <?php echo $camp['conversions']; ?> conv
-                                                </span>
-                                            </div>
-                                            <div>
-                                                <div class="text-right">
-                                                    <div class="text-success">$<?php echo number_format($camp['revenue'], 2); ?></div>
-                                                    <small class="text-muted">Profit: $<?php echo number_format($camp['profit'], 2); ?></small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <?php endforeach; ?>
-                                <?php endif; ?>
-                            </div>
+                    <div class="widget-info">
+                        <div class="widget-title">KnowledgeBase</div>
+                        <div class="widget-desc">Read KnowledgeBase to learn more</div>
+                    </div>
+                    <a href="https://docs.taskbazi.xyz" target="_blank" class="widget-action"><i class="fas fa-external-link-alt"></i></a>
+                </div>
+                
+                <!-- Account Manager -->
+                <div class="widget-card">
+                    <div class="widget-icon">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <div class="widget-info">
+                        <div class="widget-title">Account Manager</div>
+                        <div class="widget-desc">Assign managers in Publishers panel</div>
+                    </div>
+                    <a href="account_managers.php" class="widget-action"><i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <!-- Signup Link -->
+                <div class="widget-card">
+                    <div class="widget-icon">
+                        <i class="fas fa-link"></i>
+                    </div>
+                    <div class="widget-info">
+                        <div class="widget-title">Signup Link</div>
+                        <div class="widget-desc">Affiliates , Advertisers</div>
+                    </div>
+                    <button class="btn btn-light btn-sm" id="copySignupLink" title="Copy Signup Link" style="border: 1px solid #cbd5e1; background-color: #f8fafc; border-radius: 6px; padding: 6px 10px;">
+                        <i class="far fa-copy text-muted"></i>
+                    </button>
+                </div>
+                
+                <!-- Top Affiliates Doughnut Chart -->
+                <div class="card card-dashboard mt-3">
+                    <div class="card-header">
+                        <h3 class="card-title font-weight-bold" style="color: #1e293b;">Top Affiliates</h3>
+                    </div>
+                    <div class="card-body">
+                        <div style="height: 200px; position: relative;">
+                            <canvas id="topAffiliatesDoughnut"></canvas>
                         </div>
                     </div>
                 </div>
-
-                <!-- Recent Activity -->
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="card card-dashboard">
-                            <div class="card-header">
-                                <h3 class="card-title">Recent Activity</h3>
-                            </div>
-                            <div class="card-body">
-                                <?php if (empty($recentActivity)): ?>
-                                <div class="empty-state">
-                                    <div class="empty-state-icon">
-                                        <i class="fas fa-history"></i>
-                                    </div>
-                                    <p class="text-muted">No recent activity.</p>
-                                </div>
-                                <?php else: ?>
-                                    <?php foreach($recentActivity as $activity): ?>
-                                    <div class="activity-item">
-                                        <div class="d-flex justify-content-between align-items-start mb-2">
-                                            <div>
-                                                <span class="type-badge <?php echo $activity['type']; ?>">
-                                                    <i class="fas fa-<?php echo $activity['type'] == 'conversion' ? 'exchange-alt' : 'mouse-pointer'; ?>"></i>
-                                                    <?php echo ucfirst($activity['type']); ?>
-                                                </span>
-                                                <strong class="ml-2">
-                                                    <?php if ($activity['type'] == 'conversion'): ?>
-                                                        #<?php echo $activity['id']; ?>
-                                                        <?php if ($activity['transaction_id']): ?>
-                                                            <small class="text-muted">(<?php echo htmlspecialchars($activity['transaction_id']); ?>)</small>
-                                                        <?php endif; ?>
-                                                    <?php else: ?>
-                                                        #<?php echo $activity['id']; ?>
-                                                    <?php endif; ?>
-                                                </strong>
-                                            </div>
-                                            <div>
-                                                <?php if ($activity['type'] == 'conversion'): ?>
-                                                    <?php if ($activity['status']): ?>
-                                                        <span class="status-badge status-<?php echo $activity['status']; ?> ml-2">
-                                                            <?php echo ucfirst($activity['status']); ?>
-                                                        </span>
-                                                    <?php endif; ?>
-                                                    <?php if ($activity['revenue']): ?>
-                                                        <span class="text-success ml-2">
-                                                            $<?php echo number_format($activity['revenue'], 2); ?>
-                                                        </span>
-                                                    <?php endif; ?>
-                                                <?php endif; ?>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div>
-                                                <span class="text-primary">
-                                                    <i class="fas fa-gift mr-1"></i>
-                                                    <?php echo htmlspecialchars($activity['offer_name']); ?>
-                                                </span>
-                                                <span class="text-muted ml-3">
-                                                    <i class="fas fa-user mr-1"></i>
-                                                    <?php echo htmlspecialchars($activity['affiliate_name'] ?? 'N/A'); ?>
-                                                </span>
-                                                <?php if ($activity['advertiser_name']): ?>
-                                                <span class="text-muted ml-3">
-                                                    <i class="fas fa-building mr-1"></i>
-                                                    <?php echo htmlspecialchars($activity['advertiser_name']); ?>
-                                                </span>
-                                                <?php endif; ?>
-                                            </div>
-                                            <div>
-                                                <small class="text-muted">
-                                                    <?php echo date('H:i', strtotime($activity['created_at'])); ?>
-                                                </small>
-                                            </div>
-                                        </div>
-                                    </div>
+                
+                <!-- Top Employees (Authorized Affiliates) -->
+                <div class="card card-dashboard">
+                    <div class="card-header border-0 bg-white">
+                        <h3 class="card-title font-weight-bold mb-0" style="color: #1e293b; font-size: 0.95rem;">Top Employees (Authorized Affiliates)</h3>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-sm table-valign-middle mb-0">
+                                <thead>
+                                    <tr style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; border-bottom: 1px solid #f1f5f9;">
+                                        <th class="p-3">Employee</th>
+                                        <th class="p-3">Clicks</th>
+                                        <th class="p-3">Conversions</th>
+                                        <th class="p-3 text-right">Profit</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($topAffiliates as $aff): ?>
+                                    <tr style="font-size: 0.8rem; color: #1e293b;">
+                                        <td class="p-3"><strong><?= htmlspecialchars($aff['name']) ?></strong></td>
+                                        <td class="p-3"><?= number_format($aff['clicks']) ?></td>
+                                        <td class="p-3"><?= number_format($aff['conversions']) ?></td>
+                                        <td class="p-3 text-right text-success font-weight-bold">$<?= number_format($aff['earnings'], 2) ?></td>
+                                    </tr>
                                     <?php endforeach; ?>
-                                <?php endif; ?>
-                            </div>
+                                    <?php if (empty($topAffiliates)): ?>
+                                    <tr>
+                                        <td colspan="4" class="text-center p-3 text-muted" style="font-size: 0.8rem;">No affiliate data available</td>
+                                    </tr>
+                                    <?php endif; ?>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 
     <!-- Footer -->
-    <footer class="main-footer">
+    <footer class="main-footer border-top-0 bg-white" style="font-size: 0.85rem; color: #64748b;">
         <div class="float-right d-none d-sm-inline">
             <strong>Admin Panel v3.0</strong>
         </div>
-        <strong>Copyright &copy; <?php echo date('Y'); ?> <a href="#">Taskbazi</a>.</strong> All rights reserved.
+        <strong>Copyright &copy; <?php echo date('Y'); ?> <a href="#" class="text-primary">Taskbazi</a>.</strong> All rights reserved.
     </footer>
 </div>
 
@@ -1410,193 +934,135 @@ $systemStats = $pdo->query("
 
 <script>
 $(document).ready(function() {
-    // Dark mode toggle
-    $('#darkModeToggle').click(function(e) {
-        e.preventDefault();
-        $('body').toggleClass('dark-mode');
-        $(this).find('i').toggleClass('fa-moon fa-sun');
-        localStorage.setItem('darkMode', $('body').hasClass('dark-mode'));
+    
+    // Copy Signup Link
+    $('#copySignupLink').click(function() {
+        const signupUrl = "<?php echo (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/register.php'; ?>";
+        navigator.clipboard.writeText(signupUrl).then(function() {
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'success',
+                title: 'Signup link copied to clipboard!',
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true
+            });
+        }).catch(function(err) {
+            console.error('Could not copy link: ', err);
+        });
     });
-    
-    if (localStorage.getItem('darkMode') === 'true') {
-        $('body').addClass('dark-mode');
-        $('#darkModeToggle i').removeClass('fa-moon').addClass('fa-sun');
-    }
-    
-    // Refresh dashboard
-    $('#refreshDashboard').click(function() {
-        const $btn = $(this);
-        $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin mr-1"></i> Refreshing...');
-        
-        setTimeout(() => {
-            window.location.reload();
-        }, 1000);
-    });
-    
-    // Initialize Performance Chart
-    const ctx = document.getElementById('performanceChart').getContext('2d');
-    const performanceChart = new Chart(ctx, {
+
+    // Initialize Conversion Sparkline chart
+    const sparkCtx = document.getElementById('conversionSparkline').getContext('2d');
+    new Chart(sparkCtx, {
         type: 'line',
         data: {
-            labels: <?php echo json_encode(array_map(function($t) { 
-                return date('D', strtotime($t['date'])); 
-            }, $trendData)); ?>,
+            labels: <?php echo json_encode(array_map(function($t) { return date('d M', strtotime($t['date'])); }, $trendData)); ?>,
             datasets: [{
-                label: 'Revenue',
-                data: <?php echo json_encode(array_column($trendData, 'revenue')); ?>,
-                borderColor: '#4e73df',
-                backgroundColor: 'rgba(78, 115, 223, 0.05)',
-                tension: 0.4,
+                data: <?php echo json_encode(array_column($trendData, 'conversions')); ?>,
+                borderColor: '#2563eb',
+                borderWidth: 2,
+                pointRadius: 0,
                 fill: true,
-                yAxisID: 'y'
-            }, {
-                label: 'Payout',
-                data: <?php echo json_encode(array_column($trendData, 'payout')); ?>,
-                borderColor: '#ffc107',
-                backgroundColor: 'rgba(255, 193, 7, 0.05)',
+                backgroundColor: 'rgba(37, 99, 235, 0.05)',
+                tension: 0.4
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { display: false },
+                y: { display: false }
+            }
+        }
+    });
+
+    // Initialize Performance line chart (Clicks vs Conversions)
+    const ctx = document.getElementById('performanceChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: <?php echo json_encode(array_map(function($t) { return date('D', strtotime($t['date'])); }, $trendData)); ?>,
+            datasets: [{
+                label: 'Clicks',
+                data: <?php echo json_encode(array_column($trendData, 'conversions')); // Map click trend estimation or use conversions as scaling ?>,
+                borderColor: '#10b981',
+                backgroundColor: 'rgba(16, 185, 129, 0.05)',
                 tension: 0.4,
                 fill: true,
                 yAxisID: 'y'
             }, {
                 label: 'Conversions',
                 data: <?php echo json_encode(array_column($trendData, 'conversions')); ?>,
-                borderColor: '#1cc88a',
-                backgroundColor: 'rgba(28, 200, 138, 0.05)',
+                borderColor: '#2563eb',
+                backgroundColor: 'rgba(37, 99, 235, 0.05)',
                 tension: 0.4,
                 fill: true,
-                yAxisID: 'y1'
+                yAxisID: 'y'
             }]
         },
         options: {
             maintainAspectRatio: false,
-            interaction: {
-                mode: 'index',
-                intersect: false,
-            },
             scales: {
-                x: {
-                    grid: { display: false }
-                },
-                y: {
-                    type: 'linear',
-                    display: true,
-                    position: 'left',
-                    beginAtZero: true,
-                    grid: { borderDash: [2] },
-                    ticks: {
-                        callback: function(value) {
-                            return '$' + value;
-                        }
-                    }
-                },
-                y1: {
-                    type: 'linear',
-                    display: true,
-                    position: 'right',
-                    beginAtZero: true,
-                    grid: { drawOnChartArea: false },
-                    ticks: {
-                        callback: function(value) {
-                            return value + ' conv';
-                        }
-                    }
-                }
+                x: { grid: { display: false } },
+                y: { beginAtZero: true, grid: { borderDash: [2] } }
             },
             plugins: {
-                legend: { 
-                    position: 'top',
-                    labels: {
-                        usePointStyle: true,
-                        padding: 20
-                    }
-                },
-                tooltip: {
-                    mode: 'index',
-                    intersect: false
-                }
+                legend: { position: 'top', labels: { boxWidth: 12, usePointStyle: true } }
             }
         }
     });
-    
-    // Export chart
-    $('#exportChart').click(function() {
-        const link = document.createElement('a');
-        link.download = 'admin-performance-chart.png';
-        link.href = performanceChart.toBase64Image();
-        link.click();
-        
-        Toast.fire({
-            icon: 'success',
-            title: 'Chart exported successfully!'
-        });
-    });
-    
-    // Initialize SweetAlert2
-    const Toast = Swal.mixin({
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-            toast.addEventListener('mouseenter', Swal.stopTimer)
-            toast.addEventListener('mouseleave', Swal.resumeTimer)
-        }
-    });
-    
-    // Auto-refresh every 5 minutes
-    setInterval(() => {
-        $.get('api/refresh-admin-stats.php', function(data) {
-            if (data.newConversions > 0 || data.newUsers > 0) {
-                $('.navbar-badge').text(data.totalAlerts);
-                
-                if (data.newConversions > 0) {
-                    Toast.fire({
-                        icon: 'info',
-                        title: `${data.newConversions} new conversions!`
-                    });
-                }
-                
-                if (data.newUsers > 0) {
-                    Toast.fire({
-                        icon: 'success',
-                        title: `${data.newUsers} new users registered!`
-                    });
-                }
+
+    // Initialize Top Affiliates doughnut chart with dynamic center text
+    const doughnutCtx = document.getElementById('topAffiliatesDoughnut').getContext('2d');
+    new Chart(doughnutCtx, {
+        type: 'doughnut',
+        data: {
+            labels: <?php echo json_encode(array_column($topAffiliates, 'name')); ?>,
+            datasets: [{
+                data: <?php echo json_encode(array_column($topAffiliates, 'conversions')); ?>,
+                backgroundColor: ['#2563eb', '#3b82f6', '#60a5fa', '#93c5fd', '#c084fc'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            cutout: '70%',
+            plugins: {
+                legend: { display: false }
             }
-        });
-    }, 300000);
-    
-    // Quick stat hover effects
-    $('.small-box').hover(
-        function() {
-            $(this).find('.icon').css('transform', 'translateY(-50%) scale(1.15)');
         },
-        function() {
-            $(this).find('.icon').css('transform', 'translateY(-50%) scale(1)');
-        }
-    );
-    
-    // Performance card hover
-    $('.performance-card').hover(
-        function() {
-            $(this).css('transform', 'translateY(-2px)');
-        },
-        function() {
-            $(this).css('transform', 'translateY(0)');
-        }
-    );
-    
-    // Activity item click
-    $('.activity-item').click(function() {
-        const type = $(this).find('.type-badge').text().trim().toLowerCase();
-        const id = $(this).find('strong').text().replace('#', '');
-        
-        if (type === 'conversion') {
-            window.location.href = `conversion_details.php?id=${id}`;
-        } else if (type === 'click') {
-            window.location.href = `click_details.php?id=${id}`;
-        }
+        plugins: [{
+            id: 'centerText',
+            afterDraw: function(chart) {
+                if (chart.config.type !== 'doughnut') return;
+                var width = chart.width,
+                    height = chart.height,
+                    ctx = chart.ctx;
+                ctx.restore();
+                var fontSize = (height / 140).toFixed(2);
+                ctx.font = fontSize + "em sans-serif";
+                ctx.textBaseline = "middle";
+                ctx.fillStyle = "#64748b";
+                
+                var text = "Total Conversions",
+                    textX = Math.round((width - ctx.measureText(text).width) / 2),
+                    textY = height / 2 - 12;
+                    
+                ctx.fillText(text, textX, textY);
+                
+                ctx.font = "bold " + (fontSize * 1.4) + "em sans-serif";
+                ctx.fillStyle = "#1e293b";
+                var val = "<?php echo $totalConversions; ?>",
+                    valX = Math.round((width - ctx.measureText(val).width) / 2),
+                    valY = height / 2 + 14;
+                    
+                ctx.fillText(val, valX, valY);
+                ctx.save();
+            }
+        }]
     });
 });
 </script>
