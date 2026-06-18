@@ -96,6 +96,34 @@ $adminName = $_SESSION['user_name'] ?? 'Admin';
     .main-sidebar .sidebar {
         padding-bottom: 75px !important; /* space for footer profile */
     }
+
+    /* Premium layout overrides for all pages including this sidebar */
+    body {
+        font-family: 'Inter', sans-serif !important;
+        background-color: #f8fafc !important;
+    }
+    .content-wrapper {
+        background-color: #f8fafc !important;
+    }
+    .card, .card-dashboard {
+        background-color: #ffffff !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 8px !important;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+    }
+    .card-header {
+        background-color: #ffffff !important;
+        border-bottom: 1px solid #f1f5f9 !important;
+    }
+    .table thead th, .table-dashboard thead th {
+        background-color: #f8fafc !important;
+        color: #475569 !important;
+        font-weight: 600 !important;
+        border-bottom: 1px solid #e2e8f0 !important;
+        font-size: 0.8rem !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.05em !important;
+    }
     
     /* Chevron Rotation transitions for collapsible treeview */
     .nav-item.has-treeview > .nav-link .right {
